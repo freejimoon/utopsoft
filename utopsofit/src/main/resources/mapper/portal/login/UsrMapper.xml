@@ -48,4 +48,27 @@
         WHERE usr_id = #{usrId}
     </update>
 
+    <!-- 마지막 로그인이 inactiveDays일 이상 경과한 미잠금 사용자 조회 -->
+    <select id="selectInactiveUsrs" resultMap="UsrResult">
+        SELECT usr_id, usr_nm, last_login_dt, lock_yn, use_yn
+        FROM   usr
+        WHERE  use_yn       = 'Y'
+          AND  lock_yn      = 'N'
+          AND  last_login_dt IS NOT NULL
+          AND  last_login_dt &lt; DATE_SUB(NOW(), INTERVAL #{inactiveDays} DAY)
+        ORDER BY last_login_dt ASC
+    </select>
+
+    <!-- 마지막 로그인이 inactiveDays일 이상 경과한 사용자 일괄 잠금 -->
+    <update id="lockInactiveUsrs">
+        UPDATE usr
+        SET    lock_yn     = 'Y',
+               updated_at  = NOW(),
+               updated_by  = 'BATCH'
+        WHERE  use_yn       = 'Y'
+          AND  lock_yn      = 'N'
+          AND  last_login_dt IS NOT NULL
+          AND  last_login_dt &lt; DATE_SUB(NOW(), INTERVAL #{inactiveDays} DAY)
+    </update>
+
 </mapper>
