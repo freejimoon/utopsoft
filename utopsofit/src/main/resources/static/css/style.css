@@ -932,6 +932,43 @@ textarea.form-control {
 .footer-copy  { margin-top: 2px; color: #cbd5e1; }
 
 /* =====================================================
+   앱 클라이언트 관리
+   ===================================================== */
+
+/* 입력 + 버튼 가로 배치 */
+.input-with-btn { display: flex; gap: 8px; align-items: center; }
+.input-with-btn .form-control { flex: 1; }
+
+/* 중복확인 결과 메시지 */
+#idCheckMsg { font-size: .78rem; margin-top: 4px; display: block; }
+
+/* 경고 안내 문구 */
+.warn-text {
+  margin-top: 12px; font-size: .82rem;
+  color: #f59e0b; line-height: 1.5;
+}
+.warn-text-danger {
+  font-size: .88rem; color: #ef4444;
+  margin-bottom: 16px; line-height: 1.6;
+}
+
+/* 시크릿 표시 모달 폭 */
+.modal-box.modal-secret { max-width: 520px; }
+
+/* 코드 블록 (appId / secret 표시) */
+.code-box {
+  font-size: .88rem; background: #f1f5f9;
+  padding: 4px 8px; border-radius: 4px;
+  word-break: break-all;
+}
+
+/* readonly 입력 필드 */
+.form-control[readonly] { background: #f8fafc; }
+
+/* 검색 입력 최소 너비 */
+.search-input-wide { min-width: 200px; }
+
+/* =====================================================
    유틸리티
    ===================================================== */
 

@@ -143,6 +143,12 @@
               관리자 계정 관리
             </a>
           </li>
+          <li>
+            <a href="${ctx}/system/app-client/list"
+               class="nav-sub-link" data-nav-key="system-app-client-list">
+              앱 클라이언트 관리
+            </a>
+          </li>
         </ul>
       </li>
 
