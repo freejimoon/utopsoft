@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-UtopsofitApplication<utopsofit>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.utopsofit.project.UtopsofitApplication",
+            "projectName": "utopsofit",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
