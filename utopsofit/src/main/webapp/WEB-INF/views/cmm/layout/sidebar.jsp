@@ -137,6 +137,12 @@
               앱 버전 관리
             </a>
           </li>
+          <li>
+            <a href="${ctx}/system/admin/list"
+               class="nav-sub-link" data-nav-key="system-admin-list">
+              관리자 계정 관리
+            </a>
+          </li>
         </ul>
       </li>
 

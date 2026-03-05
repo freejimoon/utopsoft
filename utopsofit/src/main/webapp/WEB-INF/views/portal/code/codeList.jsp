@@ -65,13 +65,14 @@
 
   var DT_LANG = {
     processing:   '처리중...',
-    search:       '검색:',
+    search:       '',
+    searchPlaceholder: '검색...',
     lengthMenu:   '_MENU_ 건씩 보기',
-    info:         '전체 _TOTAL_건 중 _START_ - _END_',
-    infoEmpty:    '데이터 없음',
+    info:         '_TOTAL_건 중 _START_ – _END_',
+    infoEmpty:    '0건',
     infoFiltered: '(전체 _MAX_건 중 필터링)',
     zeroRecords:  '등록된 코드가 없습니다.',
-    paginate:     { first:'처음', previous:'이전', next:'다음', last:'마지막' }
+    paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
   };
 
   function csrf() {

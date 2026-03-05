@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
@@ -17,7 +17,6 @@
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
 <div class="page-content">
 
-  <!-- 페이지 헤더 -->
   <div class="page-header">
     <div>
       <h1>문의 관리</h1>
@@ -25,7 +24,6 @@
     </div>
   </div>
 
-  <!-- 검색 박스 -->
   <div class="search-box">
     <div class="search-item">
       <span class="search-label">상태</span>
@@ -47,7 +45,6 @@
     </div>
   </div>
 
-  <!-- 목록 테이블 -->
   <table class="code-table" id="inquiryTable">
     <thead>
       <tr>
@@ -62,9 +59,8 @@
     </thead>
   </table>
 
-</div><!-- /page-content -->
+</div>
 
-<!-- ===================== 문의 상세 모달 ===================== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box modal-sm">
     <div class="modal-header">
@@ -72,8 +68,6 @@
       <button type="button" class="modal-close" id="btnModalClose">&times;</button>
     </div>
     <div class="modal-body">
-
-      <!-- 기본 정보 -->
       <table class="form-table">
         <tr>
           <th>제목</th>
@@ -92,19 +86,12 @@
           <td id="dCreatedAt" colspan="3"></td>
         </tr>
       </table>
-
-      <hr style="border:none;border-top:1px solid #e5e7eb;margin:14px 0;">
-
-      <!-- 문의 내용 -->
-      <p style="font-size:.82rem;font-weight:600;color:#6b7280;margin-bottom:6px;">문의 내용</p>
-      <div id="dContent" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:12px;min-height:80px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;"></div>
-
-      <hr style="border:none;border-top:1px solid #e5e7eb;margin:14px 0;">
-
-      <!-- 답변 내용 -->
-      <p style="font-size:.82rem;font-weight:600;color:#6b7280;margin-bottom:6px;">답변 내용</p>
+      <hr style="border:none;border-top:1px solid #e9ecef;margin:14px 0;">
+      <p style="font-size:.82rem;font-weight:600;color:#6c757d;margin-bottom:6px;">문의 내용</p>
+      <div id="dContent" style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:8px;padding:12px;min-height:80px;font-size:.9rem;line-height:1.6;white-space:pre-wrap;"></div>
+      <hr style="border:none;border-top:1px solid #e9ecef;margin:14px 0;">
+      <p style="font-size:.82rem;font-weight:600;color:#6c757d;margin-bottom:6px;">답변 내용</p>
       <textarea id="dReplyContent" class="form-control" rows="5" placeholder="답변 내용을 입력하세요..."></textarea>
-
       <input type="hidden" id="dInqNo">
     </div>
     <div class="modal-footer">
@@ -117,18 +104,16 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-const ctx  = '${ctx}';
-const csrf = {
+var ctx  = '${ctx}';
+var csrf = {
   header: $('meta[name="_csrf_header"]').attr('content'),
   token:  $('meta[name="_csrf"]').attr('content')
 };
 
-/* ── DataTables 초기화 ────────────────────────────────── */
-let table;
+var table;
 
 function loadTable() {
   if (table) { table.destroy(); $('#inquiryTable tbody').empty(); }
-
   $.get(ctx + '/board/inquiry/list/json', {
     searchStatus:  $('#filterStatus').val(),
     searchKeyword: $('#filterKeyword').val()
@@ -137,7 +122,7 @@ function loadTable() {
     table = $('#inquiryTable').DataTable({
       data: data,
       columns: [
-        { data: 'inqNo',       className: 'dt-center' },
+        { data: 'inqNo', className: 'dt-center' },
         { data: 'title',
           render: function(d, t, row) {
             return '<a href="javascript:void(0)" class="link-title" data-no="' + row.inqNo + '">' + d + '</a>';
@@ -160,35 +145,25 @@ function loadTable() {
           render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
         }
       ],
-      language: {
-        emptyTable: '데이터가 없습니다.', info: '_TOTAL_ 건 중 _START_ - _END_',
-        infoEmpty: '0 건', lengthMenu: '_MENU_ 건씩 보기',
-        search: '검색:', zeroRecords: '검색 결과가 없습니다.',
-        paginate: { first: '«', previous: '‹', next: '›', last: '»' }
-      },
       order: [[0, 'desc']],
-      pageLength: 20
+      pageLength: 10
     });
   })
   .fail(function(xhr) {
     console.error('[문의 목록 조회 실패]', xhr.status, xhr.responseText);
-    alert('데이터 조회 중 오류가 발생했습니다. 콘솔을 확인하세요.');
+    alert('데이터 조회 중 오류가 발생했습니다.');
   });
 }
 
-/* ── 검색 버튼 ──────────────────────────────────────── */
 $('#btnSearch').on('click', loadTable);
-$('#filterKeyword').on('keydown', e => { if (e.key === 'Enter') loadTable(); });
-$('#btnReset').on('click', () => {
-  $('#filterStatus').val('');
-  $('#filterKeyword').val('');
-  loadTable();
+$('#filterKeyword').on('keydown', function(e) { if (e.key === 'Enter') loadTable(); });
+$('#btnReset').on('click', function() {
+  $('#filterStatus').val(''); $('#filterKeyword').val(''); loadTable();
 });
 
-/* ── 제목 클릭 → 상세 모달 ─────────────────────────── */
-$(document).on('click', '.link-title', function () {
-  const inqNo = $(this).data('no');
-  $.get(ctx + '/board/inquiry/one', { inqNo }, data => {
+$(document).on('click', '.link-title', function() {
+  var inqNo = $(this).data('no');
+  $.get(ctx + '/board/inquiry/one', { inqNo: inqNo }, function(data) {
     $('#dInqNo').val(data.inqNo);
     $('#dTitle').text(data.title);
     var statusNm = data.inqStatusNm || data.inqStatus || '-';
@@ -200,8 +175,6 @@ $(document).on('click', '.link-title', function () {
     $('#dCreatedAt').text(data.createdAt ? data.createdAt.replace('T', ' ').substring(0, 16) : '-');
     $('#dContent').text(data.content || '');
     $('#dReplyContent').val(data.replyContent || '');
-
-    /* 답변 완료 시 textarea 읽기전용 처리 */
     if (data.inqStatus === 'DONE') {
       $('#dReplyContent').prop('readonly', true);
       $('#btnReply').hide();
@@ -209,41 +182,31 @@ $(document).on('click', '.link-title', function () {
       $('#dReplyContent').prop('readonly', false);
       $('#btnReply').show();
     }
-
     openModal();
   });
 });
 
-/* ── 답변 등록 ──────────────────────────────────────── */
-$('#btnReply').on('click', () => {
-  const replyContent = $('#dReplyContent').val().trim();
+$('#btnReply').on('click', function() {
+  var replyContent = $('#dReplyContent').val().trim();
   if (!replyContent) { alert('답변 내용을 입력하세요.'); return; }
-
   $.ajax({
-    url: ctx + '/board/inquiry/reply',
-    method: 'POST',
+    url: ctx + '/board/inquiry/reply', method: 'POST',
     contentType: 'application/json',
-    beforeSend: xhr => xhr.setRequestHeader(csrf.header, csrf.token),
-    data: JSON.stringify({ inqNo: $('#dInqNo').val(), replyContent }),
-    success: res => {
-      if (res.result === 'success') {
-        closeModal();
-        loadTable();
-      } else {
-        alert('처리 중 오류가 발생했습니다.');
-      }
+    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
+    data: JSON.stringify({ inqNo: $('#dInqNo').val(), replyContent: replyContent }),
+    success: function(res) {
+      if (res.result === 'success') { closeModal(); loadTable(); }
+      else { alert('처리 중 오류가 발생했습니다.'); }
     }
   });
 });
 
-/* ── 모달 열기/닫기 ─────────────────────────────────── */
 function openModal()  { $('#modalOverlay').addClass('open'); }
 function closeModal() { $('#modalOverlay').removeClass('open'); }
 
 $('#btnClose, #btnModalClose').on('click', closeModal);
-$('#modalOverlay').on('click', e => { if ($(e.target).is('#modalOverlay')) closeModal(); });
+$('#modalOverlay').on('click', function(e) { if ($(e.target).is('#modalOverlay')) closeModal(); });
 
-/* ── 초기 로드 ──────────────────────────────────────── */
 $(document).ready(loadTable);
 </script>
 </body>

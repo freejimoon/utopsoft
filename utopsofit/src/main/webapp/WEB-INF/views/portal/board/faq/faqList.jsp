@@ -170,7 +170,7 @@ function loadTable() {
         paginate: { first: '«', previous: '‹', next: '›', last: '»' }
       },
       order: [[1, 'asc']],
-      pageLength: 20
+      pageLength: 10
     });
   })
   .fail(function(xhr) {

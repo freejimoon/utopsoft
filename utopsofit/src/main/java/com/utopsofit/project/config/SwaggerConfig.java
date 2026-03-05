@@ -25,7 +25,8 @@ public class SwaggerConfig {
                         .version("v1.0.0")
                         .description("앱 서비스 연동 API 문서\n\n" +
                                 "- **공지사항**: 앱 공지사항 목록 조회\n" +
-                                "- **문의**: 앱 회원 문의 목록 조회 / 등록")
+                                "- **문의**: 앱 회원 문의 목록 조회 / 등록\n" +
+                                "- **FAQ**: 카테고리·키워드 검색 + 페이징 목록 조회 / 단건 조회")
                         .contact(new Contact()
                                 .name("Utopsoft 개발팀")
                                 .email("dev@utopsoft.com")))
@@ -39,7 +40,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("app-api")
                 .displayName("앱 API")
-                .pathsToMatch("/api/**", "/board/notice/**")
+                .pathsToMatch("/api/**")
                 .build();
     }
 }

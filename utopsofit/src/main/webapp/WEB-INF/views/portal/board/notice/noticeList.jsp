@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
@@ -17,7 +17,6 @@
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
 <div class="page-content">
 
-  <!-- 페이지 헤더 -->
   <div class="page-header">
     <div>
       <h1>공지사항 관리</h1>
@@ -29,7 +28,6 @@
     </div>
   </div>
 
-  <!-- 검색 박스 -->
   <div class="search-box">
     <div class="search-item">
       <span class="search-label">분류</span>
@@ -51,7 +49,6 @@
     </div>
   </div>
 
-  <!-- 목록 테이블 -->
   <table class="code-table" id="noticeTable">
     <thead>
       <tr>
@@ -66,9 +63,8 @@
     </thead>
   </table>
 
-</div><!-- /page-content -->
+</div>
 
-<!-- ===================== 공지사항 등록/수정 모달 ===================== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box modal-sm">
     <div class="modal-header">
@@ -79,7 +75,7 @@
       <table class="form-table">
         <tr>
           <th>순번</th>
-          <td><input type="text" id="fNoticeNo" class="form-control" readonly style="background:#f3f4f6;width:80px;"></td>
+          <td><input type="text" id="fNoticeNo" class="form-control" readonly style="width:80px;"></td>
           <th>상단고정</th>
           <td>
             <label class="auth-child-item">
@@ -125,12 +121,10 @@ var csrf = {
   token:  $('meta[name="_csrf"]').attr('content')
 };
 
-/* ── DataTables 초기화 ─────────────────────────────── */
 var table;
 
 function loadTable() {
   if (table) { table.destroy(); $('#noticeTable tbody').empty(); }
-
   $.get(ctx + '/board/notice/list/json', {
     type:    $('#filterType').val(),
     keyword: $('#filterKeyword').val()
@@ -144,7 +138,7 @@ function loadTable() {
             return '<input type="checkbox" class="chk-row" data-no="' + row.noticeNo + '">';
           }
         },
-        { data: 'noticeNo',    className: 'dt-center' },
+        { data: 'noticeNo', className: 'dt-center' },
         { data: 'noticeTypeNm', className: 'dt-center', defaultContent: '-',
           render: function(d, t, row) {
             var cls = row.noticeType === 'URGENT' ? 'badge-danger'
@@ -155,11 +149,13 @@ function loadTable() {
         },
         { data: 'title',
           render: function(d, t, row) {
-            var pin = row.pinYn === 'Y' ? '<span class="badge badge-warning" style="margin-right:4px;">고정</span>' : '';
-            return pin + '<a href="javascript:void(0)" class="link-title" data-no="' + row.noticeNo + '">' + d + '</a>';
+            var pin = row.pinYn === 'Y'
+              ? '<span class="badge badge-warning" style="margin-right:4px;">고정</span>' : '';
+            return pin + '<a href="javascript:void(0)" class="link-title" data-no="'
+              + row.noticeNo + '">' + d + '</a>';
           }
         },
-        { data: 'pinYn',    className: 'dt-center',
+        { data: 'pinYn', className: 'dt-center',
           render: function(d) { return d === 'Y' ? '✔' : '-'; }
         },
         { data: 'createdBy',  className: 'dt-center', defaultContent: '-' },
@@ -167,14 +163,8 @@ function loadTable() {
           render: function(d) { return d ? d.replace('T',' ').substring(0,16) : '-'; }
         }
       ],
-      language: {
-        emptyTable: '등록된 공지사항이 없습니다.', info: '_TOTAL_ 건 중 _START_ - _END_',
-        infoEmpty: '0 건', lengthMenu: '_MENU_ 건씩 보기',
-        search: '검색:', zeroRecords: '검색 결과가 없습니다.',
-        paginate: { first: '«', previous: '‹', next: '›', last: '»' }
-      },
       order: [[1, 'desc']],
-      pageLength: 20
+      pageLength: 10
     });
   })
   .fail(function(xhr) {
@@ -182,28 +172,19 @@ function loadTable() {
   });
 }
 
-/* ── 전체선택 ─────────────────────────────────────── */
 $('#chkAll').on('change', function() {
   $('.chk-row').prop('checked', $(this).is(':checked'));
 });
-
-/* ── 검색 ─────────────────────────────────────────── */
 $('#btnSearch').on('click', loadTable);
 $('#filterKeyword').on('keydown', function(e) { if (e.key === 'Enter') loadTable(); });
 $('#btnReset').on('click', function() {
-  $('#filterType').val('');
-  $('#filterKeyword').val('');
-  loadTable();
+  $('#filterType').val(''); $('#filterKeyword').val(''); loadTable();
 });
 
-/* ── 추가 버튼 ────────────────────────────────────── */
 $('#btnAdd').on('click', function() {
-  clearForm();
-  $('#modalTitle').text('공지사항 등록');
-  openModal();
+  clearForm(); $('#modalTitle').text('공지사항 등록'); openModal();
 });
 
-/* ── 제목 클릭 → 수정 모달 ────────────────────────── */
 $(document).on('click', '.link-title', function() {
   var noticeNo = $(this).data('no');
   $.get(ctx + '/board/notice/one', { noticeNo: noticeNo }, function(data) {
@@ -217,34 +198,27 @@ $(document).on('click', '.link-title', function() {
   });
 });
 
-/* ── 삭제 버튼 ────────────────────────────────────── */
 $('#btnDelete').on('click', function() {
   var checked = $('.chk-row:checked');
   if (checked.length === 0) { alert('삭제할 항목을 선택하세요.'); return; }
   if (!confirm(checked.length + '건을 삭제하시겠습니까?')) return;
-
   var promises = [];
   checked.each(function() {
     var no = $(this).data('no');
-    promises.push(
-      $.ajax({
-        url: ctx + '/board/notice/delete',
-        method: 'POST',
-        beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
-        data: { noticeNo: no }
-      })
-    );
+    promises.push($.ajax({
+      url: ctx + '/board/notice/delete', method: 'POST',
+      beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
+      data: { noticeNo: no }
+    }));
   });
   $.when.apply($, promises).done(function() { loadTable(); });
 });
 
-/* ── 저장 버튼 ────────────────────────────────────── */
 $('#btnSave').on('click', function() {
   var title   = $('#fTitle').val().trim();
   var content = $('#fContent').val().trim();
   if (!title)   { alert('제목을 입력하세요.'); return; }
   if (!content) { alert('내용을 입력하세요.'); return; }
-
   var noticeNo = $('#fNoticeNo').val();
   var payload  = {
     noticeNo:   noticeNo ? Number(noticeNo) : null,
@@ -253,13 +227,11 @@ $('#btnSave').on('click', function() {
     content:    content,
     pinYn:      $('#fPinYn').is(':checked') ? 'Y' : 'N'
   };
-
   $.ajax({
-    url:         ctx + '/board/notice/save',
-    method:      'POST',
+    url: ctx + '/board/notice/save', method: 'POST',
     contentType: 'application/json',
-    beforeSend:  function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
-    data:        JSON.stringify(payload),
+    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
+    data: JSON.stringify(payload),
     success: function(res) {
       if (res.result === 'success') { closeModal(); loadTable(); }
       else { alert('처리 중 오류가 발생했습니다.'); }
@@ -267,24 +239,16 @@ $('#btnSave').on('click', function() {
   });
 });
 
-/* ── 모달 열기/닫기 ──────────────────────────────── */
 function openModal()  { $('#modalOverlay').addClass('open'); }
 function closeModal() { $('#modalOverlay').removeClass('open'); }
-
-function clearForm() {
-  $('#fNoticeNo').val('');
-  $('#fNoticeType').val('GENERAL');
-  $('#fTitle').val('');
-  $('#fContent').val('');
-  $('#fPinYn').prop('checked', false);
+function clearForm()  {
+  $('#fNoticeNo').val(''); $('#fNoticeType').val('GENERAL');
+  $('#fTitle').val(''); $('#fContent').val(''); $('#fPinYn').prop('checked', false);
 }
 
 $('#btnClose, #btnModalClose').on('click', closeModal);
-$('#modalOverlay').on('click', function(e) {
-  if ($(e.target).is('#modalOverlay')) closeModal();
-});
+$('#modalOverlay').on('click', function(e) { if ($(e.target).is('#modalOverlay')) closeModal(); });
 
-/* ── 초기 로드 ───────────────────────────────────── */
 $(document).ready(loadTable);
 </script>
 </body>

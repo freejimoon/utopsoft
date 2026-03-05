@@ -12,6 +12,30 @@
 <script src="${ctx}/js/jquery-3.7.0.min.js"></script>
 <script src="${ctx}/js/jquery.dataTables.min.js"></script>
 <script>
+/* ── DataTables 전역 기본값 ─────────────────────────────
+   dom : '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>'
+   l = lengthMenu, f = filter, t = table, i = info, p = paginate
+   ─────────────────────────────────────────────────────── */
+if (typeof $.fn.dataTable !== 'undefined') {
+  $.extend(true, $.fn.dataTable.defaults, {
+    dom:        '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>',
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    autoWidth:  false,
+    language: {
+      lengthMenu:   '_MENU_  건씩 보기',
+      search:       '',
+      searchPlaceholder: '검색...',
+      info:         '_TOTAL_건 중 _START_ – _END_',
+      infoEmpty:    '0건',
+      infoFiltered: '(전체 _MAX_건 중)',
+      zeroRecords:  '검색 결과가 없습니다.',
+      emptyTable:   '데이터가 없습니다.',
+      paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
+    }
+  });
+}
+
 $(function () {
 
   var STORAGE_KEY = 'utop_sidebar_collapsed';
@@ -29,6 +53,12 @@ $(function () {
     var isCollapsed = $sidebar.toggleClass('collapsed').hasClass('collapsed');
     $main.toggleClass('collapsed', isCollapsed);
     localStorage.setItem(STORAGE_KEY, isCollapsed ? '1' : '0');
+    /* CSS transition(280ms) 완료 후 DataTables 컬럼 너비 재계산 */
+    setTimeout(function () {
+      if (typeof $.fn.dataTable !== 'undefined') {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+      }
+    }, 300);
   });
 
   /* ── 그룹 open 상태 저장/복원 ── */
