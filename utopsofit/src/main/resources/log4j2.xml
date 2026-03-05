@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_DIR">logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- 콘솔 출력 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- 전체 로그 파일 (일별 롤링) -->
+        <RollingFile name="FileAppender"
+                     fileName="${LOG_DIR}/utopsofit.log"
+                     filePattern="${LOG_DIR}/utopsofit-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <!-- SQL 전용 로그 파일 -->
+        <RollingFile name="SqlAppender"
+                     fileName="${LOG_DIR}/sql.log"
+                     filePattern="${LOG_DIR}/sql-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="20MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 애플리케이션 로그 -->
+        <Logger name="com.utopsofit" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <!-- MyBatis SQL 로그 (DEBUG: SQL 출력, TRACE: 파라미터·결과 출력) -->
+        <Logger name="com.utopsofit.project.portal" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+        <Logger name="org.mybatis" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+        <Logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+        <!-- MyBatis Mapper SQL 실행 로그 -->
+        <Logger name="com.utopsofit.project.portal.code.dao" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+        <Logger name="com.utopsofit.project.portal.login.dao" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+
+        <!-- P6Spy SQL 로그 -->
+        <Logger name="p6spy" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="SqlAppender"/>
+        </Logger>
+
+        <!-- HikariCP 커넥션 풀 로그 -->
+        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <!-- Spring Security 로그 -->
+        <Logger name="org.springframework.security" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <!-- Spring Framework 로그 -->
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+
+        <!-- Root 로그 -->
+        <Root level="WARN">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

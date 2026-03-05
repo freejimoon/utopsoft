@@ -1,0 +1,326 @@
+2026-03-05 09:16:08.581 [restartedMain] DEBUG org.apache.ibatis.logging.LogFactory - Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2026-03-05 09:16:08.589 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\code\dao\ComCodeMapper.class]
+2026-03-05 09:16:08.589 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\login\dao\UsrMapper.class]
+2026-03-05 09:16:08.589 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\AppVersionMapper.class]
+2026-03-05 09:16:08.589 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\UsrAuthMapper.class]
+2026-03-05 09:16:08.590 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'comCodeMapper' and 'com.utopsofit.project.portal.code.dao.ComCodeMapper' mapperInterface
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'comCodeMapper'.
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrMapper' and 'com.utopsofit.project.portal.login.dao.UsrMapper' mapperInterface
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrMapper'.
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'appVersionMapper' and 'com.utopsofit.project.portal.system.dao.AppVersionMapper' mapperInterface
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'appVersionMapper'.
+2026-03-05 09:16:08.592 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrAuthMapper' and 'com.utopsofit.project.portal.system.dao.UsrAuthMapper' mapperInterface
+2026-03-05 09:16:08.593 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrAuthMapper'.
+2026-03-05 09:16:09.218 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\code\ComCodeMapper.xml]'
+2026-03-05 09:16:09.224 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\login\UsrMapper.xml]'
+2026-03-05 09:16:09.230 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\AppVersionMapper.xml]'
+2026-03-05 09:16:09.235 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\UsrAuthMapper.xml]'
+2026-03-05 09:16:12.698 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:12.702 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f4d7939] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:13.010 [http-nio-8080-exec-6] INFO  p6spy - 6ms | SELECT 1
+2026-03-05 09:16:13.017 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1615162924 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:13.020 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.selectUsrById - ==>  Preparing: SELECT usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd, use_yn, pwd_chg_dt, last_login_dt, login_fail_cnt, lock_yn, created_at, created_by, updated_at, updated_by FROM usr WHERE usr_id = ?
+2026-03-05 09:16:13.036 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.selectUsrById - ==> Parameters: admin(String)
+2026-03-05 09:16:13.040 [http-nio-8080-exec-6] INFO  p6spy - 3ms | SELECT usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd,
+               use_yn, pwd_chg_dt, last_login_dt, login_fail_cnt, lock_yn,
+               created_at, created_by, updated_at, updated_by
+        FROM usr
+        WHERE usr_id = 'admin'
+2026-03-05 09:16:13.053 [http-nio-8080-exec-6] TRACE com.utopsofit.project.portal.login.dao.UsrMapper.selectUsrById - <==    Columns: usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd, use_yn, pwd_chg_dt, last_login_dt, login_fail_cnt, lock_yn, created_at, created_by, updated_at, updated_by
+2026-03-05 09:16:13.055 [http-nio-8080-exec-6] TRACE com.utopsofit.project.portal.login.dao.UsrMapper.selectUsrById - <==        Row: admin, 관리자, $2a$10$5ebp4S9bz/O1oxO9SZJcleCFiHSfMTkdnmMX/6Gycsu4Tar3zQmBq, admin@utopsoft.com, 010-1111-0001, 시스템팀, ADMIN, Y, null, 2026-03-04 18:24:25, 0, N, 2026-03-03 16:38:39, system, 2026-03-04 18:24:25, null
+2026-03-05 09:16:13.060 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.selectUsrById - <==      Total: 1
+2026-03-05 09:16:13.063 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f4d7939]
+2026-03-05 09:16:13.136 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:13.136 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@64a83c1b] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:13.137 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1367814388 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:13.137 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLastLogin - ==>  Preparing: UPDATE usr SET last_login_dt = NOW(), login_fail_cnt = 0 WHERE usr_id = ?
+2026-03-05 09:16:13.137 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLastLogin - ==> Parameters: admin(String)
+2026-03-05 09:16:13.143 [http-nio-8080-exec-6] INFO  p6spy - 6ms | UPDATE usr
+        SET last_login_dt = NOW(),
+            login_fail_cnt = 0
+        WHERE usr_id = 'admin'
+2026-03-05 09:16:13.144 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLastLogin - <==    Updates: 1
+2026-03-05 09:16:13.144 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@64a83c1b]
+2026-03-05 09:16:13.144 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:13.144 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@11d64d19] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:13.144 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@772716893 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:13.145 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLoginFailCnt - ==>  Preparing: UPDATE usr SET login_fail_cnt = ? WHERE usr_id = ?
+2026-03-05 09:16:13.146 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLoginFailCnt - ==> Parameters: 0(Integer), admin(String)
+2026-03-05 09:16:13.148 [http-nio-8080-exec-6] INFO  p6spy - 1ms | UPDATE usr
+        SET login_fail_cnt = 0
+        WHERE usr_id = 'admin'
+2026-03-05 09:16:13.148 [http-nio-8080-exec-6] DEBUG com.utopsofit.project.portal.login.dao.UsrMapper.updateLoginFailCnt - <==    Updates: 1
+2026-03-05 09:16:13.148 [http-nio-8080-exec-6] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@11d64d19]
+2026-03-05 09:16:15.980 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:15.981 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@58832552] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:15.981 [http-nio-8080-exec-10] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:16:15.982 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@883370255 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:15.982 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:16:15.982 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: APP_TYPE(String)
+2026-03-05 09:16:15.983 [http-nio-8080-exec-10] INFO  p6spy - 0ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'APP_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:16:15.983 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:16:15.984 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, ANDROID, 안드로이드, 안드로이드 앱 (Google Play / ONE Store), Y, 1, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:16:15.985 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, IOS, iOS, Apple App Store 앱, Y, 2, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:16:15.985 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 2
+2026-03-05 09:16:15.985 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@58832552]
+2026-03-05 09:16:15.985 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:15.985 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4387ca83] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:15.986 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1586906359 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:15.986 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:16:15.986 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: STORE_TYPE(String)
+2026-03-05 09:16:15.988 [http-nio-8080-exec-10] INFO  p6spy - 2ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'STORE_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:16:15.988 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:16:15.988 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, GOOGLE_PLAY, 구글 플레이, Google Play Store, Y, 1, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:16:15.989 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, APP_STORE, 앱 스토어, Apple App Store, Y, 2, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:16:15.989 [http-nio-8080-exec-10] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, ONE_STORE, 원스토어, 원스토어 (국내), Y, 3, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:16:15.989 [http-nio-8080-exec-10] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 3
+2026-03-05 09:16:15.990 [http-nio-8080-exec-10] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4387ca83]
+2026-03-05 09:16:16.157 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:16:16.157 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@109ee47f] was not registered for synchronization because synchronization is not active
+2026-03-05 09:16:16.169 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1997947863 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@4b69d894] will not be managed by Spring
+2026-03-05 09:16:16.169 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==>  Preparing: SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code, v.release_dt, v.force_update_yn, v.use_yn, v.note, v.created_at, v.created_by, v.updated_at, v.updated_by, at_cd.code_nm AS app_type_nm, st_cd.code_nm AS store_type_nm FROM app_version v LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE' AND at_cd.code = v.app_type LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:16:16.170 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==> Parameters: 
+2026-03-05 09:16:16.172 [http-nio-8080-exec-5] INFO  p6spy - 1ms | SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+               v.release_dt, v.force_update_yn, v.use_yn, v.note,
+               v.created_at, v.created_by, v.updated_at, v.updated_by,
+               at_cd.code_nm AS app_type_nm,
+               st_cd.code_nm AS store_type_nm
+        FROM app_version v
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+          
+        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:16:16.172 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==    Columns: version_no, app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_at, created_by, updated_at, updated_by, app_type_nm, store_type_nm
+2026-03-05 09:16:16.173 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 3, ANDROID, GOOGLE_PLAY, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:16:16.174 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 2, ANDROID, GOOGLE_PLAY, 1.0.1, 101, 2025-02-01, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:16:16.174 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 1, ANDROID, GOOGLE_PLAY, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:16:16.175 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 5, ANDROID, ONE_STORE, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:16:16.175 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 4, ANDROID, ONE_STORE, 1.0.0, 100, 2025-01-01, N, Y, 원스토어 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:16:16.176 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 8, IOS, APP_STORE, 1.1.0, 110, 2025-05-10, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:16:16.176 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 7, IOS, APP_STORE, 1.0.1, 101, 2025-02-10, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:16:16.177 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 6, IOS, APP_STORE, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:16:16.177 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==      Total: 8
+2026-03-05 09:16:16.177 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@109ee47f]
+2026-03-05 09:17:50.842 [UtopsoftPool:housekeeper] INFO  p6spy - 1ms | SELECT 1
+2026-03-05 09:18:03.790 [UtopsoftPool:housekeeper] INFO  p6spy - 3ms | SELECT 1
+2026-03-05 09:18:09.904 [UtopsoftPool:housekeeper] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:19:28.507 [UtopsoftPool:housekeeper] INFO  p6spy - 1ms | SELECT 1
+2026-03-05 09:19:54.572 [UtopsoftPool:housekeeper] INFO  p6spy - 4ms | SELECT 1
+2026-03-05 09:20:06.681 [UtopsoftPool:housekeeper] INFO  p6spy - 4ms | SELECT 1
+2026-03-05 09:21:06.172 [UtopsoftPool:housekeeper] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:21:45.351 [UtopsoftPool:housekeeper] INFO  p6spy - 4ms | SELECT 1
+2026-03-05 09:22:03.455 [UtopsoftPool:housekeeper] INFO  p6spy - 3ms | SELECT 1
+2026-03-05 09:22:43.834 [UtopsoftPool:housekeeper] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:23:36.130 [UtopsoftPool:housekeeper] INFO  p6spy - 3ms | SELECT 1
+2026-03-05 09:24:00.232 [UtopsoftPool:housekeeper] INFO  p6spy - 3ms | SELECT 1
+2026-03-05 09:24:21.499 [UtopsoftPool:housekeeper] INFO  p6spy - 2ms | SELECT 1
+2026-03-05 09:25:26.907 [UtopsoftPool:housekeeper] INFO  p6spy - 1ms | SELECT 1
+2026-03-05 09:25:57.005 [UtopsoftPool:housekeeper] INFO  p6spy - 1ms | SELECT 1
+2026-03-05 09:25:59.384 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\code\dao\ComCodeMapper.class]
+2026-03-05 09:25:59.384 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\login\dao\UsrMapper.class]
+2026-03-05 09:25:59.384 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\AppVersionMapper.class]
+2026-03-05 09:25:59.384 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\UsrAuthMapper.class]
+2026-03-05 09:25:59.384 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'comCodeMapper' and 'com.utopsofit.project.portal.code.dao.ComCodeMapper' mapperInterface
+2026-03-05 09:25:59.385 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'comCodeMapper'.
+2026-03-05 09:25:59.385 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrMapper' and 'com.utopsofit.project.portal.login.dao.UsrMapper' mapperInterface
+2026-03-05 09:25:59.386 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrMapper'.
+2026-03-05 09:25:59.386 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'appVersionMapper' and 'com.utopsofit.project.portal.system.dao.AppVersionMapper' mapperInterface
+2026-03-05 09:25:59.387 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'appVersionMapper'.
+2026-03-05 09:25:59.387 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrAuthMapper' and 'com.utopsofit.project.portal.system.dao.UsrAuthMapper' mapperInterface
+2026-03-05 09:25:59.388 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrAuthMapper'.
+2026-03-05 09:25:59.564 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\code\ComCodeMapper.xml]'
+2026-03-05 09:25:59.572 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\login\UsrMapper.xml]'
+2026-03-05 09:25:59.578 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\AppVersionMapper.xml]'
+2026-03-05 09:25:59.585 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\UsrAuthMapper.xml]'
+2026-03-05 09:26:10.337 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:10.338 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@636023fb] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:10.351 [http-nio-8080-exec-3] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:26:10.352 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1867996359 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:10.352 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:10.352 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: APP_TYPE(String)
+2026-03-05 09:26:10.354 [http-nio-8080-exec-3] INFO  p6spy - 1ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'APP_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:10.354 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:10.354 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, ANDROID, 안드로이드, 안드로이드 앱 (Google Play / ONE Store), Y, 1, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:10.354 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, IOS, iOS, Apple App Store 앱, Y, 2, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 2
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@636023fb]
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@55bd2018] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@507311996 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:10.355 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: STORE_TYPE(String)
+2026-03-05 09:26:10.356 [http-nio-8080-exec-3] INFO  p6spy - 0ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'STORE_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:10.356 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:10.356 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, GOOGLE_PLAY, 구글 플레이, Google Play Store, Y, 1, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:10.357 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, APP_STORE, 앱 스토어, Apple App Store, Y, 2, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:10.357 [http-nio-8080-exec-3] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, ONE_STORE, 원스토어, 원스토어 (국내), Y, 3, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:10.357 [http-nio-8080-exec-3] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 3
+2026-03-05 09:26:10.357 [http-nio-8080-exec-3] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@55bd2018]
+2026-03-05 09:26:10.576 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:10.576 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1da99a1a] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:10.577 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1487603659 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:10.577 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==>  Preparing: SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code, v.release_dt, v.force_update_yn, v.use_yn, v.note, v.created_at, v.created_by, v.updated_at, v.updated_by, at_cd.code_nm AS app_type_nm, st_cd.code_nm AS store_type_nm FROM app_version v LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE' AND at_cd.code = v.app_type LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:10.577 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==> Parameters: 
+2026-03-05 09:26:10.579 [http-nio-8080-exec-5] INFO  p6spy - 1ms | SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+               v.release_dt, v.force_update_yn, v.use_yn, v.note,
+               v.created_at, v.created_by, v.updated_at, v.updated_by,
+               at_cd.code_nm AS app_type_nm,
+               st_cd.code_nm AS store_type_nm
+        FROM app_version v
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+          
+        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:10.579 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==    Columns: version_no, app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_at, created_by, updated_at, updated_by, app_type_nm, store_type_nm
+2026-03-05 09:26:10.579 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 3, ANDROID, GOOGLE_PLAY, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:10.580 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 2, ANDROID, GOOGLE_PLAY, 1.0.1, 101, 2025-02-01, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:10.581 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 1, ANDROID, GOOGLE_PLAY, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:10.581 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 5, ANDROID, ONE_STORE, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:10.581 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 4, ANDROID, ONE_STORE, 1.0.0, 100, 2025-01-01, N, Y, 원스토어 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:10.581 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 8, IOS, APP_STORE, 1.1.0, 110, 2025-05-10, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:10.581 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 7, IOS, APP_STORE, 1.0.1, 101, 2025-02-10, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:10.582 [http-nio-8080-exec-5] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 6, IOS, APP_STORE, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:10.582 [http-nio-8080-exec-5] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==      Total: 8
+2026-03-05 09:26:10.582 [http-nio-8080-exec-5] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1da99a1a]
+2026-03-05 09:26:11.217 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.217 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5142385f] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.218 [http-nio-8080-exec-7] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:26:11.218 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1538937647 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.219 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:11.219 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: APP_TYPE(String)
+2026-03-05 09:26:11.220 [http-nio-8080-exec-7] INFO  p6spy - 0ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'APP_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:11.220 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:11.220 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, ANDROID, 안드로이드, 안드로이드 앱 (Google Play / ONE Store), Y, 1, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:11.220 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, IOS, iOS, Apple App Store 앱, Y, 2, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 2
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5142385f]
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5ef89574] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@803999560 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:11.221 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: STORE_TYPE(String)
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] INFO  p6spy - 0ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'STORE_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, GOOGLE_PLAY, 구글 플레이, Google Play Store, Y, 1, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, APP_STORE, 앱 스토어, Apple App Store, Y, 2, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, ONE_STORE, 원스토어, 원스토어 (국내), Y, 3, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 3
+2026-03-05 09:26:11.222 [http-nio-8080-exec-7] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5ef89574]
+2026-03-05 09:26:11.252 [http-nio-8080-exec-2] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.252 [http-nio-8080-exec-2] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7dfff60b] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.253 [http-nio-8080-exec-2] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@2042658156 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.253 [http-nio-8080-exec-2] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==>  Preparing: SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code, v.release_dt, v.force_update_yn, v.use_yn, v.note, v.created_at, v.created_by, v.updated_at, v.updated_by, at_cd.code_nm AS app_type_nm, st_cd.code_nm AS store_type_nm FROM app_version v LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE' AND at_cd.code = v.app_type LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:11.253 [http-nio-8080-exec-2] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==> Parameters: 
+2026-03-05 09:26:11.254 [http-nio-8080-exec-2] INFO  p6spy - 1ms | SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+               v.release_dt, v.force_update_yn, v.use_yn, v.note,
+               v.created_at, v.created_by, v.updated_at, v.updated_by,
+               at_cd.code_nm AS app_type_nm,
+               st_cd.code_nm AS store_type_nm
+        FROM app_version v
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+          
+        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:11.254 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==    Columns: version_no, app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_at, created_by, updated_at, updated_by, app_type_nm, store_type_nm
+2026-03-05 09:26:11.255 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 3, ANDROID, GOOGLE_PLAY, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.255 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 2, ANDROID, GOOGLE_PLAY, 1.0.1, 101, 2025-02-01, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.255 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 1, ANDROID, GOOGLE_PLAY, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.255 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 5, ANDROID, ONE_STORE, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:11.255 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 4, ANDROID, ONE_STORE, 1.0.0, 100, 2025-01-01, N, Y, 원스토어 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:11.256 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 8, IOS, APP_STORE, 1.1.0, 110, 2025-05-10, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.256 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 7, IOS, APP_STORE, 1.0.1, 101, 2025-02-10, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.256 [http-nio-8080-exec-2] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 6, IOS, APP_STORE, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.256 [http-nio-8080-exec-2] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==      Total: 8
+2026-03-05 09:26:11.256 [http-nio-8080-exec-2] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7dfff60b]
+2026-03-05 09:26:11.563 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.564 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6bbf0aa0] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.564 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1870697231 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.564 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:11.564 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: APP_TYPE(String)
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] INFO  p6spy - 1ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'APP_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, ANDROID, 안드로이드, 안드로이드 앱 (Google Play / ONE Store), Y, 1, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: APP_TYPE, IOS, iOS, Apple App Store 앱, Y, 2, null, null, null, 2026-03-04 18:15:09, null, null, null
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 2
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6bbf0aa0]
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@89baeb4] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@459427597 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.566 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==>  Preparing: SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by FROM com_code WHERE grp_cd = ? ORDER BY sort_ord, code
+2026-03-05 09:26:11.567 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - ==> Parameters: STORE_TYPE(String)
+2026-03-05 09:26:11.567 [http-nio-8080-exec-1] INFO  p6spy - 0ms | SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+        FROM com_code
+        WHERE grp_cd = 'STORE_TYPE'
+        ORDER BY sort_ord, code
+2026-03-05 09:26:11.567 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==    Columns: grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
+2026-03-05 09:26:11.567 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, GOOGLE_PLAY, 구글 플레이, Google Play Store, Y, 1, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.568 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, APP_STORE, 앱 스토어, Apple App Store, Y, 2, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.568 [http-nio-8080-exec-1] TRACE com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==        Row: STORE_TYPE, ONE_STORE, 원스토어, 원스토어 (국내), Y, 3, null, null, null, 2026-03-04 18:15:11, null, null, null
+2026-03-05 09:26:11.568 [http-nio-8080-exec-1] DEBUG com.utopsofit.project.portal.code.dao.ComCodeMapper.selectCodeListByGrp - <==      Total: 3
+2026-03-05 09:26:11.568 [http-nio-8080-exec-1] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@89baeb4]
+2026-03-05 09:26:11.599 [http-nio-8080-exec-8] DEBUG org.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+2026-03-05 09:26:11.599 [http-nio-8080-exec-8] DEBUG org.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@708827a9] was not registered for synchronization because synchronization is not active
+2026-03-05 09:26:11.600 [http-nio-8080-exec-8] DEBUG org.mybatis.spring.transaction.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1958194528 wrapping com.p6spy.engine.wrapper.ConnectionWrapper@46157fc6] will not be managed by Spring
+2026-03-05 09:26:11.600 [http-nio-8080-exec-8] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==>  Preparing: SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code, v.release_dt, v.force_update_yn, v.use_yn, v.note, v.created_at, v.created_by, v.updated_at, v.updated_by, at_cd.code_nm AS app_type_nm, st_cd.code_nm AS store_type_nm FROM app_version v LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE' AND at_cd.code = v.app_type LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:11.600 [http-nio-8080-exec-8] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - ==> Parameters: 
+2026-03-05 09:26:11.601 [http-nio-8080-exec-8] INFO  p6spy - 1ms | SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+               v.release_dt, v.force_update_yn, v.use_yn, v.note,
+               v.created_at, v.created_by, v.updated_at, v.updated_by,
+               at_cd.code_nm AS app_type_nm,
+               st_cd.code_nm AS store_type_nm
+        FROM app_version v
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+          
+        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+2026-03-05 09:26:11.601 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==    Columns: version_no, app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_at, created_by, updated_at, updated_by, app_type_nm, store_type_nm
+2026-03-05 09:26:11.602 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 3, ANDROID, GOOGLE_PLAY, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.602 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 2, ANDROID, GOOGLE_PLAY, 1.0.1, 101, 2025-02-01, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.602 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 1, ANDROID, GOOGLE_PLAY, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 구글 플레이
+2026-03-05 09:26:11.602 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 5, ANDROID, ONE_STORE, 1.1.0, 110, 2025-05-01, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 4, ANDROID, ONE_STORE, 1.0.0, 100, 2025-01-01, N, Y, 원스토어 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, 안드로이드, 원스토어
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 8, IOS, APP_STORE, 1.1.0, 110, 2025-05-10, Y, Y, 보안 패치 필수 업데이트, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 7, IOS, APP_STORE, 1.0.1, 101, 2025-02-10, N, Y, 버그 수정, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] TRACE com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==        Row: 6, IOS, APP_STORE, 1.0.0, 100, 2025-01-01, N, Y, 최초 출시, 2026-03-04 18:15:15, admin, 2026-03-04 18:15:15, null, iOS, 앱 스토어
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] DEBUG com.utopsofit.project.portal.system.dao.AppVersionMapper.selectList - <==      Total: 8
+2026-03-05 09:26:11.603 [http-nio-8080-exec-8] DEBUG org.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@708827a9]
+2026-03-05 09:28:00.068 [UtopsoftPool:housekeeper] INFO  p6spy - 2ms | SELECT 1
+2026-03-05 09:28:01.246 [UtopsoftPool:housekeeper] INFO  p6spy - 2ms | SELECT 1
+2026-03-05 09:28:05.903 [UtopsoftPool:housekeeper] INFO  p6spy - 0ms | SELECT 1
+2026-03-05 09:29:23.415 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\code\dao\ComCodeMapper.class]
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\login\dao\UsrMapper.class]
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\AppVersionMapper.class]
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Identified candidate component class: file [C:\workspace\utopsoft\utopsofit\target\classes\com\utopsofit\project\portal\system\dao\UsrAuthMapper.class]
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'comCodeMapper' and 'com.utopsofit.project.portal.code.dao.ComCodeMapper' mapperInterface
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'comCodeMapper'.
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrMapper' and 'com.utopsofit.project.portal.login.dao.UsrMapper' mapperInterface
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrMapper'.
+2026-03-05 09:29:23.416 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'appVersionMapper' and 'com.utopsofit.project.portal.system.dao.AppVersionMapper' mapperInterface
+2026-03-05 09:29:23.417 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'appVersionMapper'.
+2026-03-05 09:29:23.417 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Creating MapperFactoryBean with name 'usrAuthMapper' and 'com.utopsofit.project.portal.system.dao.UsrAuthMapper' mapperInterface
+2026-03-05 09:29:23.417 [restartedMain] DEBUG org.mybatis.spring.mapper.ClassPathMapperScanner - Enabling autowire by type for MapperFactoryBean with name 'usrAuthMapper'.
+2026-03-05 09:29:23.542 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\code\ComCodeMapper.xml]'
+2026-03-05 09:29:23.545 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\login\UsrMapper.xml]'
+2026-03-05 09:29:23.549 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\AppVersionMapper.xml]'
+2026-03-05 09:29:23.553 [restartedMain] DEBUG org.mybatis.spring.SqlSessionFactoryBean - Parsed mapper file: 'file [C:\workspace\utopsoft\utopsofit\target\classes\mapper\portal\system\UsrAuthMapper.xml]'

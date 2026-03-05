@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.utopsofit.project.portal.login.dao.UsrMapper">
+
+    <resultMap id="UsrResult" type="com.utopsofit.project.portal.login.domain.Usr">
+        <id  property="usrId"        column="usr_id"/>
+        <result property="usrNm"         column="usr_nm"/>
+        <result property="usrPw"         column="usr_pw"/>
+        <result property="email"         column="email"/>
+        <result property="phone"         column="phone"/>
+        <result property="deptNm"        column="dept_nm"/>
+        <result property="roleCd"        column="role_cd"/>
+        <result property="useYn"         column="use_yn"/>
+        <result property="pwdChgDt"      column="pwd_chg_dt"/>
+        <result property="lastLoginDt"   column="last_login_dt"/>
+        <result property="loginFailCnt"  column="login_fail_cnt"/>
+        <result property="lockYn"        column="lock_yn"/>
+        <result property="createdAt"     column="created_at"/>
+        <result property="createdBy"     column="created_by"/>
+        <result property="updatedAt"     column="updated_at"/>
+        <result property="updatedBy"     column="updated_by"/>
+    </resultMap>
+
+    <select id="selectUsrById" resultMap="UsrResult">
+        SELECT usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd,
+               use_yn, pwd_chg_dt, last_login_dt, login_fail_cnt, lock_yn,
+               created_at, created_by, updated_at, updated_by
+        FROM usr
+        WHERE usr_id = #{usrId}
+    </select>
+
+    <update id="updateLastLogin">
+        UPDATE usr
+        SET last_login_dt = NOW(),
+            login_fail_cnt = 0
+        WHERE usr_id = #{usrId}
+    </update>
+
+    <update id="updateLoginFailCnt">
+        UPDATE usr
+        SET login_fail_cnt = #{loginFailCnt}
+        WHERE usr_id = #{usrId}
+    </update>
+
+    <update id="updateLockYn">
+        UPDATE usr
+        SET lock_yn = #{lockYn}
+        WHERE usr_id = #{usrId}
+    </update>
+
+</mapper>

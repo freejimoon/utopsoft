@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.utopsofit.project.portal.system.dao.AppVersionMapper">
+
+    <resultMap id="AppVersionResult" type="com.utopsofit.project.portal.system.domain.AppVersionVO">
+        <id  property="versionNo"     column="version_no"/>
+        <result property="appType"        column="app_type"/>
+        <result property="storeType"      column="store_type"/>
+        <result property="version"        column="version"/>
+        <result property="appCode"        column="app_code"/>
+        <result property="releaseDt"      column="release_dt"/>
+        <result property="forceUpdateYn"  column="force_update_yn"/>
+        <result property="useYn"          column="use_yn"/>
+        <result property="note"           column="note"/>
+        <result property="createdAt"      column="created_at"/>
+        <result property="createdBy"      column="created_by"/>
+        <result property="updatedAt"      column="updated_at"/>
+        <result property="updatedBy"      column="updated_by"/>
+        <!-- 공통코드 명칭 -->
+        <result property="appTypeNm"      column="app_type_nm"/>
+        <result property="storeTypeNm"    column="store_type_nm"/>
+    </resultMap>
+
+    <!-- 목록 조회 (공통코드 명칭 LEFT JOIN) -->
+    <select id="selectList" resultMap="AppVersionResult">
+        SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+               v.release_dt, v.force_update_yn, v.use_yn, v.note,
+               v.created_at, v.created_by, v.updated_at, v.updated_by,
+               at_cd.code_nm AS app_type_nm,
+               st_cd.code_nm AS store_type_nm
+        FROM app_version v
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+        <where>
+            <if test="searchAppType   != null and searchAppType   != ''">
+                AND v.app_type   = #{searchAppType}
+            </if>
+            <if test="searchStoreType != null and searchStoreType != ''">
+                AND v.store_type = #{searchStoreType}
+            </if>
+        </where>
+        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+    </select>
+
+    <!-- 단건 조회 -->
+    <select id="selectByPk" resultMap="AppVersionResult">
+        SELECT version_no, app_type, store_type, version, app_code,
+               release_dt, force_update_yn, use_yn, note,
+               created_at, created_by, updated_at, updated_by
+        FROM app_version
+        WHERE version_no = #{versionNo}
+    </select>
+
+    <!-- 등록 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="versionNo">
+        INSERT INTO app_version
+            (app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_by)
+        VALUES
+            (#{appType}, #{storeType}, #{version}, #{appCode}, #{releaseDt}, #{forceUpdateYn}, #{useYn}, #{note}, #{createdBy})
+    </insert>
+
+    <!-- 수정 -->
+    <update id="update">
+        UPDATE app_version
+        SET app_type        = #{appType},
+            store_type      = #{storeType},
+            version         = #{version},
+            app_code        = #{appCode},
+            release_dt      = #{releaseDt},
+            force_update_yn = #{forceUpdateYn},
+            use_yn          = #{useYn},
+            note            = #{note},
+            updated_by      = #{updatedBy}
+        WHERE version_no = #{versionNo}
+    </update>
+
+    <!-- 삭제 -->
+    <delete id="delete">
+        DELETE FROM app_version WHERE version_no = #{versionNo}
+    </delete>
+
+</mapper>
