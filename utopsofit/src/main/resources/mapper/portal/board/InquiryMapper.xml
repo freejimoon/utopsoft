@@ -35,6 +35,9 @@
                LEFT JOIN member   m ON i.member_no  = m.member_no
                LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS' AND c.code = i.inq_status
         <where>
+            <if test="memberNo != null">
+                AND i.member_no = #{memberNo}
+            </if>
             <if test="searchStatus != null and searchStatus != ''">
                 AND i.inq_status = #{searchStatus}
             </if>
@@ -69,6 +72,12 @@
                LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS' AND c.code = i.inq_status
         WHERE  i.inq_no = #{inqNo}
     </select>
+
+    <!-- 문의 등록 (앱 API) -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="inqNo">
+        INSERT INTO inquiry (member_no, title, content, inq_status)
+        VALUES (#{memberNo}, #{title}, #{content}, 'WAIT')
+    </insert>
 
     <!-- 답변 등록 -->
     <update id="updateReply">

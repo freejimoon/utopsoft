@@ -87,6 +87,12 @@
         </div>
         <ul class="nav-sub">
           <li>
+            <a href="${ctx}/board/notice/list"
+               class="nav-sub-link" data-nav-key="board-notice-list">
+              공지사항
+            </a>
+          </li>
+          <li>
             <a href="${ctx}/board/inquiry/list"
                class="nav-sub-link" data-nav-key="board-inquiry-list">
               문의 관리
@@ -95,7 +101,7 @@
           <li>
             <a href="${ctx}/board/faq/list"
                class="nav-sub-link" data-nav-key="board-faq-list">
-              FAQ 관리
+              FAQ
             </a>
           </li>
           <li>
@@ -132,6 +138,16 @@
             </a>
           </li>
         </ul>
+      </li>
+
+      <!-- API 문서 (Swagger) -->
+      <li class="nav-item nav-item-bottom">
+        <a href="${ctx}/swagger-ui/index.html" target="_blank" class="nav-link">
+          <svg class="nav-svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 0 1 .633 1.265l-4 12a1 1 0 1 1-1.898-.632l4-12a1 1 0 0 1 1.265-.633zM5.707 6.293a1 1 0 0 1 0 1.414L3.414 10l2.293 2.293a1 1 0 1 1-1.414 1.414l-3-3a1 1 0 0 1 0-1.414l3-3a1 1 0 0 1 1.414 0zm8.586 0a1 1 0 0 1 1.414 0l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 1 1-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 0 1 0-1.414z" clip-rule="evenodd"/>
+          </svg>
+          <span>API 문서</span>
+        </a>
       </li>
 
     </ul>

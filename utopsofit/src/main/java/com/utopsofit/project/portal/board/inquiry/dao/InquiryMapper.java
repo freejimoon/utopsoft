@@ -17,4 +17,6 @@ public interface InquiryMapper {
     InquiryVO selectOne(@Param("inqNo") Long inqNo);
 
     int updateReply(InquiryVO vo);
+
+    int insert(InquiryVO vo);
 }

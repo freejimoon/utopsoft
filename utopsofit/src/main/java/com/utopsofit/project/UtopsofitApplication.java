@@ -10,7 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@MapperScan(basePackages = "com.utopsofit.project.portal", annotationClass = Mapper.class)
+@MapperScan(
+    basePackages   = {"com.utopsofit.project.portal", "com.utopsofit.project.api"},
+    annotationClass = Mapper.class
+)
 public class UtopsofitApplication extends SpringBootServletInitializer {
 
 	@Override

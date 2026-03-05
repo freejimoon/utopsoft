@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.utopsofit.project.portal.board.notice.dao.NoticeMapper">
+
+    <resultMap id="NoticeResult" type="com.utopsofit.project.portal.board.notice.domain.NoticeVO">
+        <id  property="noticeNo"      column="notice_no"/>
+        <result property="title"        column="title"/>
+        <result property="content"      column="content"/>
+        <result property="noticeType"   column="notice_type"/>
+        <result property="noticeTypeNm" column="notice_type_nm"/>
+        <result property="pinYn"        column="pin_yn"/>
+        <result property="viewCnt"      column="view_cnt"/>
+        <result property="createdAt"    column="created_at"/>
+        <result property="createdBy"    column="created_by"/>
+        <result property="updatedAt"    column="updated_at"/>
+        <result property="updatedBy"    column="updated_by"/>
+    </resultMap>
+
+    <!-- 공지사항 목록 -->
+    <select id="selectList" resultMap="NoticeResult">
+        SELECT n.notice_no,
+               n.title,
+               n.content,
+               n.notice_type,
+               c.code_nm AS notice_type_nm,
+               n.pin_yn,
+               n.view_cnt,
+               n.created_at,
+               n.created_by
+        FROM   notice n
+               LEFT JOIN com_code c ON c.grp_cd = 'NOTICE_TYPE' AND c.code = n.notice_type
+        WHERE  n.use_yn = 'Y'
+        <if test="searchType != null and searchType != ''">
+            AND n.notice_type = #{searchType}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND n.title LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY n.pin_yn DESC, n.notice_no DESC
+    </select>
+
+    <!-- 단건 조회 -->
+    <select id="selectOne" resultMap="NoticeResult">
+        SELECT n.notice_no,
+               n.title,
+               n.content,
+               n.notice_type,
+               c.code_nm AS notice_type_nm,
+               n.pin_yn,
+               n.view_cnt,
+               n.created_at,
+               n.created_by
+        FROM   notice n
+               LEFT JOIN com_code c ON c.grp_cd = 'NOTICE_TYPE' AND c.code = n.notice_type
+        WHERE  n.notice_no = #{noticeNo}
+    </select>
+
+    <!-- 등록 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="noticeNo">
+        INSERT INTO notice (title, content, notice_type, pin_yn, use_yn, created_by)
+        VALUES (#{title}, #{content}, #{noticeType}, #{pinYn}, 'Y', #{createdBy})
+    </insert>
+
+    <!-- 수정 -->
+    <update id="update">
+        UPDATE notice
+        SET    title       = #{title},
+               content     = #{content},
+               notice_type = #{noticeType},
+               pin_yn      = #{pinYn},
+               updated_by  = #{updatedBy},
+               updated_at  = NOW()
+        WHERE  notice_no   = #{noticeNo}
+    </update>
+
+    <!-- 삭제 (논리 삭제) -->
+    <update id="delete">
+        UPDATE notice
+        SET    use_yn = 'N',
+               updated_at = NOW()
+        WHERE  notice_no = #{noticeNo}
+    </update>
+
+</mapper>

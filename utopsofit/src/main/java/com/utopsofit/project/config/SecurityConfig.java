@@ -28,8 +28,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/login/process", "/css/**", "/js/**", "/images/**", "/error",
-                                 "/WEB-INF/**").permitAll()
+                .requestMatchers(
+                        "/login", "/login/process",
+                        "/css/**", "/js/**", "/images/**",
+                        "/error", "/WEB-INF/**",
+                        /* Swagger UI */
+                        "/swagger-ui/**", "/swagger-ui.html",
+                        "/v3/api-docs/**", "/v3/api-docs",
+                        /* 앱 API (추후 JWT 인증 추가 예정) */
+                        "/api/**",
+                        "/board/notice/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
