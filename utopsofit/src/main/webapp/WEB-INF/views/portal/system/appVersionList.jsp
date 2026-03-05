@@ -144,8 +144,6 @@
   </div>
 </div>
 
-<script src="${ctx}/js/jquery-3.7.0.min.js"></script>
-<script src="${ctx}/js/jquery.dataTables.min.js"></script>
 <script>
 (function () {
   var ctx       = '${ctx}';

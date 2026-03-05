@@ -1,0 +1,250 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
+<html>
+<head>
+<title>문의 관리</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="_csrf"        content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
+<link rel="stylesheet" href="${ctx}/css/style.css">
+<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+</head>
+<body>
+<%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
+<div class="page-content">
+
+  <!-- 페이지 헤더 -->
+  <div class="page-header">
+    <div>
+      <h1>문의 관리</h1>
+      <p class="page-desc">회원이 등록한 문의를 조회하고 답변을 관리합니다.</p>
+    </div>
+  </div>
+
+  <!-- 검색 박스 -->
+  <div class="search-box">
+    <div class="search-item">
+      <span class="search-label">상태</span>
+      <select id="filterStatus" class="search-select">
+        <option value="">전체</option>
+        <c:forEach var="code" items="${statusCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
+      </select>
+    </div>
+    <div class="search-divider"></div>
+    <div class="search-item">
+      <span class="search-label">검색</span>
+      <input type="text" id="filterKeyword" class="search-input" placeholder="제목, 계정, 닉네임 검색" style="min-width:220px;">
+    </div>
+    <div class="search-btns">
+      <button type="button" class="btn btn-primary" id="btnSearch">조회</button>
+      <button type="button" class="btn btn-outline" id="btnReset">초기화</button>
+    </div>
+  </div>
+
+  <!-- 목록 테이블 -->
+  <table class="code-table" id="inquiryTable">
+    <thead>
+      <tr>
+        <th style="width:60px;">No</th>
+        <th>제목</th>
+        <th style="width:180px;">등록계정</th>
+        <th style="width:130px;">닉네임</th>
+        <th style="width:150px;">등록일시</th>
+        <th style="width:90px;">상태</th>
+        <th style="width:150px;">변경일시</th>
+      </tr>
+    </thead>
+  </table>
+
+</div><!-- /page-content -->
+
+<!-- ===================== 문의 상세 모달 ===================== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box modal-sm">
+    <div class="modal-header">
+      <span>문의 상세</span>
+      <button type="button" class="modal-close" id="btnModalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- 기본 정보 -->
+      <table class="form-table">
+        <tr>
+          <th>제목</th>
+          <td id="dTitle"></td>
+          <th>상태</th>
+          <td id="dStatus"></td>
+        </tr>
+        <tr>
+          <th>등록 계정</th>
+          <td id="dEmail"></td>
+          <th>닉네임</th>
+          <td id="dNickname"></td>
+        </tr>
+        <tr>
+          <th>등록일시</th>
+          <td id="dCreatedAt" colspan="3"></td>
+        </tr>
+      </table>
+
+      <hr style="border:none;border-top:1px solid #e5e7eb;margin:14px 0;">
+
+      <!-- 문의 내용 -->
+      <p style="font-size:.82rem;font-weight:600;color:#6b7280;margin-bottom:6px;">문의 내용</p>
+      <div id="dContent" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:12px;min-height:80px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;"></div>
+
+      <hr style="border:none;border-top:1px solid #e5e7eb;margin:14px 0;">
+
+      <!-- 답변 내용 -->
+      <p style="font-size:.82rem;font-weight:600;color:#6b7280;margin-bottom:6px;">답변 내용</p>
+      <textarea id="dReplyContent" class="form-control" rows="5" placeholder="답변 내용을 입력하세요..."></textarea>
+
+      <input type="hidden" id="dInqNo">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" id="btnClose">닫기</button>
+      <button type="button" class="btn btn-primary" id="btnReply">답변 등록</button>
+    </div>
+  </div>
+</div>
+
+<%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
+
+<script>
+const ctx  = '${ctx}';
+const csrf = {
+  header: $('meta[name="_csrf_header"]').attr('content'),
+  token:  $('meta[name="_csrf"]').attr('content')
+};
+
+/* ── DataTables 초기화 ────────────────────────────────── */
+let table;
+
+function loadTable() {
+  if (table) { table.destroy(); $('#inquiryTable tbody').empty(); }
+
+  $.get(ctx + '/board/inquiry/list/json', {
+    searchStatus:  $('#filterStatus').val(),
+    searchKeyword: $('#filterKeyword').val()
+  })
+  .done(function(data) {
+    table = $('#inquiryTable').DataTable({
+      data: data,
+      columns: [
+        { data: 'inqNo',       className: 'dt-center' },
+        { data: 'title',
+          render: function(d, t, row) {
+            return '<a href="javascript:void(0)" class="link-title" data-no="' + row.inqNo + '">' + d + '</a>';
+          }
+        },
+        { data: 'memberEmail',  className: 'dt-center', defaultContent: '-' },
+        { data: 'memberNm',     className: 'dt-center', defaultContent: '-' },
+        { data: 'createdAt',    className: 'dt-center',
+          render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
+        },
+        { data: 'inqStatusNm',  className: 'dt-center', defaultContent: '-',
+          render: function(d, t, row) {
+            var nm = d || row.inqStatus || '-';
+            return row.inqStatus === 'DONE'
+              ? '<span class="badge badge-success">' + nm + '</span>'
+              : '<span class="badge badge-warning">' + nm + '</span>';
+          }
+        },
+        { data: 'updatedAt',    className: 'dt-center',
+          render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
+        }
+      ],
+      language: {
+        emptyTable: '데이터가 없습니다.', info: '_TOTAL_ 건 중 _START_ - _END_',
+        infoEmpty: '0 건', lengthMenu: '_MENU_ 건씩 보기',
+        search: '검색:', zeroRecords: '검색 결과가 없습니다.',
+        paginate: { first: '«', previous: '‹', next: '›', last: '»' }
+      },
+      order: [[0, 'desc']],
+      pageLength: 20
+    });
+  })
+  .fail(function(xhr) {
+    console.error('[문의 목록 조회 실패]', xhr.status, xhr.responseText);
+    alert('데이터 조회 중 오류가 발생했습니다. 콘솔을 확인하세요.');
+  });
+}
+
+/* ── 검색 버튼 ──────────────────────────────────────── */
+$('#btnSearch').on('click', loadTable);
+$('#filterKeyword').on('keydown', e => { if (e.key === 'Enter') loadTable(); });
+$('#btnReset').on('click', () => {
+  $('#filterStatus').val('');
+  $('#filterKeyword').val('');
+  loadTable();
+});
+
+/* ── 제목 클릭 → 상세 모달 ─────────────────────────── */
+$(document).on('click', '.link-title', function () {
+  const inqNo = $(this).data('no');
+  $.get(ctx + '/board/inquiry/one', { inqNo }, data => {
+    $('#dInqNo').val(data.inqNo);
+    $('#dTitle').text(data.title);
+    var statusNm = data.inqStatusNm || data.inqStatus || '-';
+    $('#dStatus').html(data.inqStatus === 'DONE'
+      ? '<span class="badge badge-success">' + statusNm + '</span>'
+      : '<span class="badge badge-warning">' + statusNm + '</span>');
+    $('#dEmail').text(data.memberEmail || '-');
+    $('#dNickname').text(data.memberNm || '-');
+    $('#dCreatedAt').text(data.createdAt ? data.createdAt.replace('T', ' ').substring(0, 16) : '-');
+    $('#dContent').text(data.content || '');
+    $('#dReplyContent').val(data.replyContent || '');
+
+    /* 답변 완료 시 textarea 읽기전용 처리 */
+    if (data.inqStatus === 'DONE') {
+      $('#dReplyContent').prop('readonly', true);
+      $('#btnReply').hide();
+    } else {
+      $('#dReplyContent').prop('readonly', false);
+      $('#btnReply').show();
+    }
+
+    openModal();
+  });
+});
+
+/* ── 답변 등록 ──────────────────────────────────────── */
+$('#btnReply').on('click', () => {
+  const replyContent = $('#dReplyContent').val().trim();
+  if (!replyContent) { alert('답변 내용을 입력하세요.'); return; }
+
+  $.ajax({
+    url: ctx + '/board/inquiry/reply',
+    method: 'POST',
+    contentType: 'application/json',
+    beforeSend: xhr => xhr.setRequestHeader(csrf.header, csrf.token),
+    data: JSON.stringify({ inqNo: $('#dInqNo').val(), replyContent }),
+    success: res => {
+      if (res.result === 'success') {
+        closeModal();
+        loadTable();
+      } else {
+        alert('처리 중 오류가 발생했습니다.');
+      }
+    }
+  });
+});
+
+/* ── 모달 열기/닫기 ─────────────────────────────────── */
+function openModal()  { $('#modalOverlay').addClass('open'); }
+function closeModal() { $('#modalOverlay').removeClass('open'); }
+
+$('#btnClose, #btnModalClose').on('click', closeModal);
+$('#modalOverlay').on('click', e => { if ($(e.target).is('#modalOverlay')) closeModal(); });
+
+/* ── 초기 로드 ──────────────────────────────────────── */
+$(document).ready(loadTable);
+</script>
+</body>
+</html>

@@ -74,6 +74,39 @@
         </ul>
       </li>
 
+      <!-- 게시판 관리 그룹 -->
+      <li class="nav-group <c:if test="${fn:contains(reqUri, '/board')}">open</c:if>">
+        <div class="nav-group-header">
+          <svg class="nav-svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5zm3 1h10v1H5V6zm0 3h10v1H5V9zm0 3h6v1H5v-1z"/>
+          </svg>
+          <span>게시판 관리</span>
+          <svg class="nav-arrow" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <ul class="nav-sub">
+          <li>
+            <a href="${ctx}/board/inquiry/list"
+               class="nav-sub-link" data-nav-key="board-inquiry-list">
+              문의 관리
+            </a>
+          </li>
+          <li>
+            <a href="${ctx}/board/faq/list"
+               class="nav-sub-link" data-nav-key="board-faq-list">
+              FAQ 관리
+            </a>
+          </li>
+          <li>
+            <a href="${ctx}/board/terms/list"
+               class="nav-sub-link" data-nav-key="board-terms-list">
+              약관 관리
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <!-- 시스템 설정 그룹 -->
       <li class="nav-group <c:if test="${fn:contains(reqUri, '/system')}">open</c:if>">
         <div class="nav-group-header">

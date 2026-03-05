@@ -73,7 +73,8 @@ INSERT INTO `menu` (`menu_no`, `parent_menu_no`, `menu_nm`, `menu_url`, `menu_ty
 (1, NULL, '대시보드(홈)',  '/',    'LINK',  1, 'Y', 'admin'),
 (2, NULL, '공통코드 관리', NULL,  'GROUP', 2, 'Y', 'admin'),
 (3, NULL, '사용자 관리',   NULL,  'GROUP', 3, 'Y', 'admin'),
-(4, NULL, '시스템 설정',   NULL,  'GROUP', 4, 'Y', 'admin');
+(4, NULL, '시스템 설정',   NULL,  'GROUP', 4, 'Y', 'admin'),
+(5, NULL, '게시판 관리',   NULL,  'GROUP', 5, 'Y', 'admin');
 
 -- 2depth: 공통코드 관리 하위
 INSERT INTO `menu` (`menu_no`, `parent_menu_no`, `menu_nm`, `menu_url`, `menu_type`, `sort_ord`, `use_yn`, `created_by`) VALUES
@@ -88,3 +89,9 @@ INSERT INTO `menu` (`menu_no`, `parent_menu_no`, `menu_nm`, `menu_url`, `menu_ty
 INSERT INTO `menu` (`menu_no`, `parent_menu_no`, `menu_nm`, `menu_url`, `menu_type`, `sort_ord`, `use_yn`, `created_by`) VALUES
 (30, 4, '관리자 권한 관리', '/system/auth/list',    'LINK', 1, 'Y', 'admin'),
 (31, 4, '앱 버전 관리',     '/system/version/list', 'LINK', 2, 'Y', 'admin');
+
+-- 2depth: 게시판 관리 하위
+INSERT INTO `menu` (`menu_no`, `parent_menu_no`, `menu_nm`, `menu_url`, `menu_type`, `sort_ord`, `use_yn`, `created_by`) VALUES
+(40, 5, '문의 관리', '/board/inquiry/list', 'LINK', 1, 'Y', 'admin'),
+(41, 5, 'FAQ 관리',  '/board/faq/list',     'LINK', 2, 'Y', 'admin'),
+(42, 5, '약관 관리', '/board/terms/list',   'LINK', 3, 'Y', 'admin');

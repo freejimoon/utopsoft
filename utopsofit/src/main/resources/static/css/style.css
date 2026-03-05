@@ -494,7 +494,9 @@ button.link-btn:hover {
   font-weight: 600;
 }
 .badge-active   { background: #d1fae5; color: #065f46; }
+.badge-success  { background: #d1fae5; color: #065f46; }
 .badge-inactive { background: #fee2e2; color: #991b1b; }
+.badge-danger   { background: #fee2e2; color: #991b1b; }
 .badge-primary  { background: #dbeafe; color: #1e40af; }
 .badge-warning  { background: #fef9c3; color: #854d0e; }
 .badge-default  { background: #f1f5f9; color: #64748b; }

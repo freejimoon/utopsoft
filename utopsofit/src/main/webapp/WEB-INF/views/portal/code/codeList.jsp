@@ -56,8 +56,6 @@
 </div>
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
-<script src="${ctx}/js/jquery-3.7.0.min.js"></script>
-<script src="${ctx}/js/jquery.dataTables.min.js"></script>
 <script>
 (function () {
   var grpCd     = '${grp.grpCd}';
