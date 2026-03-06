@@ -4,6 +4,7 @@ import com.utopsofit.project.cmm.filter.JwtAuthFilter;
 import com.utopsofit.project.portal.login.service.LoginFailureHandler;
 import com.utopsofit.project.portal.login.service.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    @Value("${springdoc.api-docs.enabled:true}")
+    private boolean swaggerEnabled;
+
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthFilter       jwtAuthFilter;
@@ -42,21 +46,25 @@ public class SecurityConfig {
             )
             /* JWT 필터: UsernamePasswordAuthenticationFilter 앞에 실행 */
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
+            .authorizeHttpRequests(auth -> {
+                /* Swagger UI 경로는 활성화된 환경에서만 허용 */
+                if (swaggerEnabled) {
+                    auth.requestMatchers(
+                            "/swagger-ui/**", "/swagger-ui.html",
+                            "/v3/api-docs/**", "/v3/api-docs"
+                    ).permitAll();
+                }
+                auth.requestMatchers(
                         "/login", "/login/process",
                         "/css/**", "/js/**", "/images/**",
                         "/error", "/WEB-INF/**",
-                        /* Swagger UI */
-                        "/swagger-ui/**", "/swagger-ui.html",
-                        "/v3/api-docs/**", "/v3/api-docs",
                         /* 토큰 발급 / 검증은 인증 불필요 */
                         "/api/token", "/api/token/verify"
                 ).permitAll()
                 /* /api/faq/** 등 나머지 API 는 JWT 인증 필요 */
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().authenticated()
-            )
+                    .requestMatchers("/api/**").authenticated()
+                    .anyRequest().authenticated();
+            })
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login/process")

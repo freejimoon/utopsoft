@@ -10,11 +10,14 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
- * Swagger / OpenAPI 설정
+ * Swagger / OpenAPI 설정 — local 환경에서만 활성화
  * UI 접근: http://localhost:22020/swagger-ui/index.html
+ * prod 프로파일에서는 springdoc.api-docs.enabled=false 로 완전 비활성화
  */
+@Profile("!prod")
 @Configuration
 public class SwaggerConfig {
 
