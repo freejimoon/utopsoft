@@ -12,6 +12,66 @@
 <script src="${ctx}/js/jquery-3.7.0.min.js"></script>
 <script src="${ctx}/js/jquery.dataTables.min.js"></script>
 <script>
+/* ── 전역 CSRF ───────────────────────────────────────────
+   CSRF meta 태그(head.jsp)에서 읽어 모든 POST ajax에 자동 주입
+   ─────────────────────────────────────────────────────── */
+var CSRF_HEADER = $('meta[name="_csrf_header"]').attr('content');
+var CSRF_TOKEN  = $('meta[name="_csrf"]').attr('content');
+var CSRF_PARAM  = $('meta[name="_csrf_param"]').attr('content');
+
+if (CSRF_HEADER && CSRF_TOKEN) {
+  $.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+      if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+        xhr.setRequestHeader(CSRF_HEADER, CSRF_TOKEN);
+      }
+    }
+  });
+}
+
+/* ── 배지 유틸리티 ───────────────────────────────────────
+   코드값 → badge CSS 클래스 매핑
+   ─────────────────────────────────────────────────────── */
+var BADGE_CLS = {
+  ACTIVE:    'badge-success',
+  PAID:      'badge-success',
+  DONE:      'badge-success',
+  GROUP:     'badge-indigo',
+  VIP:       'badge-indigo',
+  EVENT:     'badge-primary',
+  EXPIRED:   'badge-danger',
+  CANCELED:  'badge-danger',
+  WITHDRAWN: 'badge-danger',
+  URGENT:    'badge-danger',
+  PAUSED:    'badge-warning',
+  GOLD:      'badge-warning',
+  WAIT:      'badge-warning',
+  FREE:      'badge-default',
+  NONE:      'badge-default',
+  NORMAL:    'badge-default',
+  SILVER:    'badge-default'
+};
+
+function badgeHtml(code, nm) {
+  var cls = BADGE_CLS[code] || 'badge-default';
+  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
+}
+
+/* ── 날짜 포맷 유틸리티 ──────────────────────────────────
+   fmtDt('2024-01-01T12:00:00', 10) → '2024-01-01'
+   fmtDt('2024-01-01T12:00:00', 16) → '2024-01-01 12:00'
+   ─────────────────────────────────────────────────────── */
+function fmtDt(d, len) {
+  return d ? d.replace('T', ' ').substring(0, len || 16) : '-';
+}
+
+/* ── 모달 유틸리티 ───────────────────────────────────────
+   openModal()           → #modalOverlay
+   openModal('#myModal') → #myModal
+   ─────────────────────────────────────────────────────── */
+function openModal(sel)  { $(sel || '#modalOverlay').addClass('open'); }
+function closeModal(sel) { $(sel || '#modalOverlay').removeClass('close').removeClass('open'); }
+
 /* ── DataTables 전역 기본값 ─────────────────────────────
    dom : '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>'
    l = lengthMenu, f = filter, t = table, i = info, p = paginate
@@ -23,14 +83,14 @@ if (typeof $.fn.dataTable !== 'undefined') {
     lengthMenu: [10, 25, 50, 100],
     autoWidth:  false,
     language: {
-      lengthMenu:   '_MENU_  건씩 보기',
+      lengthMenu:   '_MENU_ 건씩 보기',
       search:       '',
       searchPlaceholder: '검색...',
-      info:         '_TOTAL_건 중 _START_ – _END_',
-      infoEmpty:    '0건',
+      info:         '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+      infoEmpty:    '데이터 없음',
       infoFiltered: '(전체 _MAX_건 중)',
       zeroRecords:  '검색 결과가 없습니다.',
-      emptyTable:   '데이터가 없습니다.',
+      emptyTable:   '조회된 데이터가 없습니다.',
       paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
     }
   });
@@ -112,11 +172,9 @@ $(function () {
   });
 
   /* ── CSRF 자동 주입 (form[method=post]) ── */
-  var csrfParam = $('meta[name="_csrf_param"]').attr('content');
-  var csrfToken = $('meta[name="_csrf"]').attr('content');
-  if (csrfParam && csrfToken) {
+  if (CSRF_PARAM && CSRF_TOKEN) {
     $('form[method="post"]').append(
-      $('<input>').attr({ type: 'hidden', name: csrfParam, value: csrfToken })
+      $('<input>').attr({ type: 'hidden', name: CSRF_PARAM, value: CSRF_TOKEN })
     );
   }
 

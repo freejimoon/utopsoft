@@ -5,19 +5,12 @@
 <html>
 <head>
 <title>약관 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
 <div class="page-content">
 
-  <!-- 페이지 헤더 -->
   <div class="page-header">
     <div>
       <h1>약관 관리</h1>
@@ -28,7 +21,6 @@
     </div>
   </div>
 
-  <!-- 검색 박스 -->
   <div class="search-box">
     <div class="search-item">
       <span class="search-label">구분</span>
@@ -55,7 +47,6 @@
     </div>
   </div>
 
-  <!-- 목록 테이블 -->
   <table class="code-table" id="termsTable">
     <thead>
       <tr>
@@ -69,9 +60,8 @@
     </thead>
   </table>
 
-</div><!-- /page-content -->
+</div>
 
-<!-- ===================== 약관 등록/수정 모달 ===================== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box modal-lg">
     <div class="modal-header">
@@ -114,8 +104,7 @@
         <tr>
           <th>내용 <span class="req">*</span></th>
           <td colspan="3">
-            <textarea id="fContent" class="form-control" rows="14"
-                      placeholder="약관 내용을 입력하세요..."></textarea>
+            <textarea id="fContent" class="form-control" rows="14" placeholder="약관 내용을 입력하세요..."></textarea>
           </td>
         </tr>
       </table>
@@ -131,18 +120,11 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-var ctx  = '${ctx}';
-var csrf = {
-  header: $('meta[name="_csrf_header"]').attr('content'),
-  token:  $('meta[name="_csrf"]').attr('content')
-};
-
-/* ── DataTables 초기화 ─────────────────────────────── */
+var ctx = '${ctx}';
 var table;
 
 function loadTable() {
   if (table) { table.destroy(); $('#termsTable tbody').empty(); }
-
   $.get(ctx + '/board/terms/list/json', {
     appType:   $('#filterAppType').val(),
     termsType: $('#filterTermsType').val()
@@ -166,7 +148,7 @@ function loadTable() {
         },
         { data: 'version',     className: 'dt-center' },
         { data: 'createdAt',   className: 'dt-center',
-          render: function(d) { return d ? d.replace('T', ' ').substring(0, 10) : '-'; }
+          render: function(d) { return fmtDt(d, 10); }
         },
         { data: null, className: 'dt-center', orderable: false,
           render: function(d, t, row) {
@@ -175,39 +157,21 @@ function loadTable() {
           }
         }
       ],
-      autoWidth: false,
-      order: [[0, 'asc']],
-      pageLength: 10,
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[0, 'asc']]
     });
   })
-  .fail(function(xhr) {
-    console.error('[약관 목록 조회 실패]', xhr.status, xhr.responseText);
-  });
+  .fail(function(xhr) { console.error('[약관 목록 조회 실패]', xhr.status, xhr.responseText); });
 }
 
-/* ── 검색 ─────────────────────────────────────────── */
 $('#btnSearch').on('click', loadTable);
 $('#btnReset').on('click', function() {
-  $('#filterAppType').val('');
-  $('#filterTermsType').val('');
-  loadTable();
+  $('#filterAppType').val(''); $('#filterTermsType').val(''); loadTable();
 });
 
-/* ── 추가 버튼 ────────────────────────────────────── */
 $('#btnAdd').on('click', function() {
-  clearForm();
-  $('#modalTitle').text('약관 등록');
-  openModal();
+  clearForm(); $('#modalTitle').text('약관 등록'); openModal();
 });
 
-/* ── 수정 버튼 (테이블 행) ─────────────────────────── */
 $(document).on('click', '.btn-edit', function() {
   var termsNo = $(this).data('no');
   $.get(ctx + '/board/terms/one', { termsNo: termsNo }, function(data) {
@@ -222,39 +186,30 @@ $(document).on('click', '.btn-edit', function() {
   });
 });
 
-/* ── 저장 버튼 ────────────────────────────────────── */
 $('#btnSave').on('click', function() {
   var version = $('#fVersion').val();
   var content = $('#fContent').val().trim();
   if (!version || version < 1) { alert('버전을 입력하세요.'); return; }
   if (!content)                { alert('내용을 입력하세요.'); return; }
-
   var termsNo = $('#fTermsNo').val();
   var payload = {
-    termsNo:    termsNo ? Number(termsNo) : null,
-    appTypeCd:  $('#fAppType').val(),
-    termsTypeCd:$('#fTermsType').val(),
-    requiredYn: $('#fRequiredYn').val(),
-    version:    Number(version),
-    content:    content
+    termsNo:     termsNo ? Number(termsNo) : null,
+    appTypeCd:   $('#fAppType').val(),
+    termsTypeCd: $('#fTermsType').val(),
+    requiredYn:  $('#fRequiredYn').val(),
+    version:     Number(version),
+    content:     content
   };
-
   $.ajax({
-    url:         ctx + '/board/terms/save',
-    method:      'POST',
+    url: ctx + '/board/terms/save', method: 'POST',
     contentType: 'application/json',
-    beforeSend:  function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
-    data:        JSON.stringify(payload),
+    data: JSON.stringify(payload),
     success: function(res) {
       if (res.result === 'success') { closeModal(); loadTable(); }
       else { alert('처리 중 오류가 발생했습니다.'); }
     }
   });
 });
-
-/* ── 모달 열기/닫기 ──────────────────────────────── */
-function openModal()  { $('#modalOverlay').addClass('open'); }
-function closeModal() { $('#modalOverlay').removeClass('open'); }
 
 function clearForm() {
   $('#fTermsNo').val('');
@@ -266,11 +221,8 @@ function clearForm() {
 }
 
 $('#btnClose, #btnModalClose').on('click', closeModal);
-$('#modalOverlay').on('click', function(e) {
-  if ($(e.target).is('#modalOverlay')) closeModal();
-});
+$('#modalOverlay').on('click', function(e) { if ($(e.target).is('#modalOverlay')) closeModal(); });
 
-/* ── 초기 로드 ───────────────────────────────────── */
 $(document).ready(loadTable);
 </script>
 </body>

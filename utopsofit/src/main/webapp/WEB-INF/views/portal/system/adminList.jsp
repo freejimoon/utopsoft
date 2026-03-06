@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>관리자 계정 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -165,11 +159,7 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-var ctx  = '${ctx}';
-var csrf = {
-  header: $('meta[name="_csrf_header"]').attr('content'),
-  token:  $('meta[name="_csrf"]').attr('content')
-};
+var ctx = '${ctx}';
 var isNew = true;
 var idChecked = false;
 var table;
@@ -198,13 +188,13 @@ function loadTable() {
           }
         },
         { data: 'createdAt', className: 'dt-center',
-          render: function(d) { return d ? d.replace('T',' ').substring(0,10) : '-'; }
+          render: function(d) { return fmtDt(d, 10); }
         },
         { data: 'pwdChgDt',  className: 'dt-center',
           render: function(d) { return d ? d : '<span style="color:#94a3b8;">미변경</span>'; }
         },
         { data: 'updatedAt', className: 'dt-center',
-          render: function(d) { return d ? d.replace('T',' ').substring(0,10) : '-'; }
+          render: function(d) { return fmtDt(d, 10); }
         },
         { data: null, className: 'dt-center', orderable: false,
           render: function(d, t, row) {
@@ -213,16 +203,7 @@ function loadTable() {
           }
         }
       ],
-      autoWidth: false,
-      order: [[4, 'desc']],
-      pageLength: 10,
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[4, 'desc']]
     });
   })
   .fail(function(xhr) { console.error('[관리자 목록 조회 실패]', xhr.status); });
@@ -239,7 +220,7 @@ $('#btnAdd').on('click', function() {
   isNew = true; idChecked = false; clearForm();
   $('#fUsrId').prop('readonly', false);
   $('#btnCheckId').show();
-  $('#idCheckMsg').text('').css('color','');
+  $('#idCheckMsg').text('').css('color', '');
   $('#modalTitle').text('새 관리자 등록');
   openModal('#adminModal');
 });
@@ -266,7 +247,6 @@ $(document).on('click', '.btn-delete', function() {
   if (!confirm('[' + usrId + '] 계정을 삭제하시겠습니까?')) return;
   $.ajax({
     url: ctx + '/system/admin/delete', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { usrId: usrId },
     success: function() { loadTable(); }
   });
@@ -296,7 +276,6 @@ $('#btnSave').on('click', function() {
   if (!roleCd)             { alert('관리자 역할을 선택하세요.'); return; }
   $.ajax({
     url: ctx + '/system/admin/save', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { usrId: usrId, usrNm: usrNm, usrPw: $('#fUsrPw').val(),
             email: $('#fEmail').val().trim(), roleCd: roleCd, useYn: $('#fUseYn').val() },
     success: function() { closeModal('#adminModal'); loadTable(); }
@@ -307,19 +286,16 @@ $('#btnPwSave').on('click', function() {
   var usrId = $('#pwTargetId').text();
   $.ajax({
     url: ctx + '/system/admin/reset-password', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { usrId: usrId, newPassword: $('#fNewPw').val() },
     success: function(msg) { alert(msg); closeModal('#pwModal'); }
   });
 });
 
 $('#btnPwClose, #btnPwModalClose').on('click', function() { closeModal('#pwModal'); });
-$('#pwModal').on('click', function(e) { if ($(e.target).is('#pwModal')) closeModal('#pwModal'); });
+$('#pwModal').on('click',    function(e) { if ($(e.target).is('#pwModal'))    closeModal('#pwModal'); });
 $('#btnClose, #btnModalClose').on('click', function() { closeModal('#adminModal'); });
 $('#adminModal').on('click', function(e) { if ($(e.target).is('#adminModal')) closeModal('#adminModal'); });
 
-function openModal(sel)  { $(sel).addClass('open'); }
-function closeModal(sel) { $(sel).removeClass('open'); }
 function clearForm() {
   $('#fUsrId').val(''); $('#fUsrNm').val(''); $('#fUsrPw').val('');
   $('#fEmail').val(''); $('#fRoleCd').val(''); $('#fUseYn').val('Y');

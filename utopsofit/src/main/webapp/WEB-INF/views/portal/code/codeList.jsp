@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>공통코드 관리 - ${grp.grpNm}</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -58,29 +52,16 @@
 
 <script>
 (function () {
-  var grpCd     = '${grp.grpCd}';
-  var ctx       = '${ctx}';
-  var csrfParam = $('meta[name="_csrf_param"]').attr('content');
-  var csrfToken = $('meta[name="_csrf"]').attr('content');
+  var grpCd = '${grp.grpCd}';
+  var ctx   = '${ctx}';
 
-  var DT_LANG = {
-    emptyTable: '조회된 데이터가 없습니다.',
-    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-    infoEmpty:  '데이터 없음',
-    lengthMenu: '_MENU_ 건씩 보기',
-    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
-  };
-
-  function csrf() {
-    return '<input type="hidden" name="' + csrfParam + '" value="' + csrfToken + '">';
+  function csrfInput() {
+    return '<input type="hidden" name="' + CSRF_PARAM + '" value="' + CSRF_TOKEN + '">';
   }
 
   $('#codeTable').DataTable({
     processing: true,
-    autoWidth: false,
-    pageLength: 10,
     ajax: { url: ctx + '/code/list/json', data: { grpCd: grpCd }, dataSrc: '' },
-    language: DT_LANG,
     columns: [
       { data: 'code' },
       { data: 'codeNm' },
@@ -101,7 +82,7 @@
             '<form method="post" action="' + ctx + '/code/form" style="display:inline;">' +
             '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
             '<input type="hidden" name="code"  value="' + row.code  + '">' +
-            csrf() +
+            csrfInput() +
             '<button type="submit" class="btn btn-sm btn-outline">수정</button></form>';
 
           var del =
@@ -109,7 +90,7 @@
             ' onsubmit="return confirm(\'삭제하시겠습니까?\');">' +
             '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
             '<input type="hidden" name="code"  value="' + row.code  + '">' +
-            csrf() +
+            csrfInput() +
             '<button type="submit" class="btn btn-sm btn-danger">삭제</button></form>';
 
           return edit + ' ' + del;

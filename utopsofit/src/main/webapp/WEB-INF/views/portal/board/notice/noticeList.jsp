@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>공지사항 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -115,22 +109,8 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-var ctx  = '${ctx}';
-var csrf = {
-  header: $('meta[name="_csrf_header"]').attr('content'),
-  token:  $('meta[name="_csrf"]').attr('content')
-};
-
+var ctx = '${ctx}';
 var table;
-var BADGE_CLS = {
-  URGENT:'badge-danger', EVENT:'badge-primary',
-  ACTIVE:'badge-success', EXPIRED:'badge-danger', CANCELED:'badge-danger',
-  WAIT:'badge-default', DONE:'badge-success'
-};
-function badgeHtml(code, nm) {
-  var cls = BADGE_CLS[code] || 'badge-default';
-  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
-}
 
 function loadTable() {
   if (table) { table.destroy(); $('#noticeTable tbody').empty(); }
@@ -162,26 +142,15 @@ function loadTable() {
         { data: 'pinYn', className: 'dt-center',
           render: function(d) { return d === 'Y' ? '✔' : '-'; }
         },
-        { data: 'createdBy',  className: 'dt-center', defaultContent: '-' },
-        { data: 'createdAt',  className: 'dt-center',
-          render: function(d) { return d ? d.replace('T',' ').substring(0,16) : '-'; }
+        { data: 'createdBy', className: 'dt-center', defaultContent: '-' },
+        { data: 'createdAt', className: 'dt-center',
+          render: function(d) { return fmtDt(d, 16); }
         }
       ],
-      autoWidth: false,
-      order: [[1, 'desc']],
-      pageLength: 10,
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[1, 'desc']]
     });
   })
-  .fail(function(xhr) {
-    console.error('[공지사항 목록 조회 실패]', xhr.status, xhr.responseText);
-  });
+  .fail(function(xhr) { console.error('[공지사항 목록 조회 실패]', xhr.status, xhr.responseText); });
 }
 
 $('#chkAll').on('change', function() {
@@ -217,11 +186,7 @@ $('#btnDelete').on('click', function() {
   var promises = [];
   checked.each(function() {
     var no = $(this).data('no');
-    promises.push($.ajax({
-      url: ctx + '/board/notice/delete', method: 'POST',
-      beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
-      data: { noticeNo: no }
-    }));
+    promises.push($.ajax({ url: ctx + '/board/notice/delete', method: 'POST', data: { noticeNo: no } }));
   });
   $.when.apply($, promises).done(function() { loadTable(); });
 });
@@ -233,16 +198,15 @@ $('#btnSave').on('click', function() {
   if (!content) { alert('내용을 입력하세요.'); return; }
   var noticeNo = $('#fNoticeNo').val();
   var payload  = {
-    noticeNo:   noticeNo ? Number(noticeNo) : null,
+    noticeNo: noticeNo ? Number(noticeNo) : null,
     noticeCd: $('#fNoticeType').val(),
-    title:      title,
-    content:    content,
-    pinYn:      $('#fPinYn').is(':checked') ? 'Y' : 'N'
+    title:    title,
+    content:  content,
+    pinYn:    $('#fPinYn').is(':checked') ? 'Y' : 'N'
   };
   $.ajax({
     url: ctx + '/board/notice/save', method: 'POST',
     contentType: 'application/json',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: JSON.stringify(payload),
     success: function(res) {
       if (res.result === 'success') { closeModal(); loadTable(); }
@@ -251,9 +215,7 @@ $('#btnSave').on('click', function() {
   });
 });
 
-function openModal()  { $('#modalOverlay').addClass('open'); }
-function closeModal() { $('#modalOverlay').removeClass('open'); }
-function clearForm()  {
+function clearForm() {
   $('#fNoticeNo').val('');
   $('#fNoticeType').val($('#fNoticeType option:first').val());
   $('#fTitle').val(''); $('#fContent').val(''); $('#fPinYn').prop('checked', false);

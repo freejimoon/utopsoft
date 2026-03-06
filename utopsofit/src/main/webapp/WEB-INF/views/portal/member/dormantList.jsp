@@ -5,10 +5,7 @@
 <html>
 <head>
 <title>휴면 회원</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -78,17 +75,6 @@
 <script>
 var ctx = '${ctx}';
 var table;
-var BADGE_CLS = {
-  ACTIVE:'badge-success', PAID:'badge-success',
-  GROUP:'badge-indigo',
-  EXPIRED:'badge-danger', CANCELED:'badge-danger', WITHDRAWN:'badge-danger',
-  PAUSED:'badge-warning',
-  FREE:'badge-default', NONE:'badge-default'
-};
-function badgeHtml(code, nm) {
-  var cls = BADGE_CLS[code] || 'badge-default';
-  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
-}
 var rowNum = 0;
 
 function loadTable() {
@@ -103,27 +89,26 @@ function loadTable() {
   }).done(function(data) {
     table = $('#dormantTable').DataTable({
       data: data,
-      autoWidth: false,
-      pageLength: 10,
       columns: [
         { data: null, className: 'dt-center', render: function() { return ++rowNum; } },
-        { data: 'memberId',      className: 'dt-center', defaultContent: '-' },
-        { data: 'memberNm',      className: 'dt-center', defaultContent: '-' },
-        { data: 'email',         defaultContent: '-' },
-        { data: 'socialCd',     className: 'dt-center', render: function(d, t, row) { return row.socialNm || d || '-'; } },
-        { data: 'membershipCd', className: 'dt-center', render: function(d, t, row) { return badgeHtml(d, row.membershipNm); } },
-        { data: 'groupNm',       className: 'dt-center', defaultContent: '-' },
-        { data: 'joinDt',        className: 'dt-center', render: function(d) { return d ? d.replace('T',' ').substring(0,10) : '-'; } },
-        { data: 'updatedAt',     className: 'dt-center', render: function(d) { return d ? d.replace('T',' ').substring(0,16) : '-'; } }
+        { data: 'memberId',     className: 'dt-center', defaultContent: '-' },
+        { data: 'memberNm',     className: 'dt-center', defaultContent: '-' },
+        { data: 'email',        defaultContent: '-' },
+        { data: 'socialCd',    className: 'dt-center',
+          render: function(d, t, row) { return row.socialNm || d || '-'; }
+        },
+        { data: 'membershipCd', className: 'dt-center',
+          render: function(d, t, row) { return badgeHtml(d, row.membershipNm); }
+        },
+        { data: 'groupNm',      className: 'dt-center', defaultContent: '-' },
+        { data: 'joinDt',       className: 'dt-center',
+          render: function(d) { return fmtDt(d, 10); }
+        },
+        { data: 'updatedAt',    className: 'dt-center',
+          render: function(d) { return fmtDt(d, 16); }
+        }
       ],
-      order: [[8, 'desc']],
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[8, 'desc']]
     });
   }).fail(function(xhr) { console.error('[휴면회원 오류]', xhr.status); });
 }

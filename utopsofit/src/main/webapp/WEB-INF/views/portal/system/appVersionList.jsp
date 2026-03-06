@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>앱 버전 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -27,7 +21,6 @@
     </div>
   </div>
 
-  <!-- 검색 박스 -->
   <div class="search-box">
     <div class="search-item">
       <span class="search-label">앱 구분</span>
@@ -125,8 +118,7 @@
           <th>필수 업데이트</th>
           <td>
             <label class="auth-child-item">
-              <input type="checkbox" id="fForceUpdate">
-              필수 업데이트
+              <input type="checkbox" id="fForceUpdate"> 필수 업데이트
             </label>
           </td>
         </tr>
@@ -146,22 +138,10 @@
 
 <script>
 (function () {
-  var ctx       = '${ctx}';
-  var csrfParam = $('meta[name="_csrf_param"]').attr('content');
-  var csrfToken = $('meta[name="_csrf"]').attr('content');
-
-  var DT_LANG = {
-    emptyTable: '조회된 데이터가 없습니다.',
-    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-    infoEmpty:  '데이터 없음',
-    lengthMenu: '_MENU_ 건씩 보기',
-    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
-  };
+  var ctx = '${ctx}';
 
   var table = $('#versionTable').DataTable({
     processing: true,
-    autoWidth: false,
-    pageLength: 10,
     ajax: {
       url:     ctx + '/system/version/list/json',
       dataSrc: '',
@@ -173,7 +153,6 @@
       }
     },
     order: [[0, 'asc'], [1, 'asc'], [5, 'desc']],
-    language: DT_LANG,
     columns: [
       { data: 'appTypeNm',    defaultContent: '' },
       { data: 'storeTypeNm', defaultContent: '' },
@@ -200,22 +179,19 @@
     ]
   });
 
-  /* ── 조회 ── */
   $('#btnSearch').on('click', function () { table.ajax.reload(); });
   $('#btnReset').on('click', function () {
     $('#filterAppType, #filterStoreType').val('');
     table.ajax.reload();
   });
 
-  /* ── 등록 버튼 ── */
   $('#btnAdd').on('click', function () {
     resetForm();
     $('#modalTitle').text('앱 버전 등록');
     $('#modalSubTitle').text('새 버전을 등록합니다.');
-    openModal();
+    openVersionModal();
   });
 
-  /* ── 수정 버튼 ── */
   $(document).on('click', '.btn-edit', function () {
     var no = $(this).data('no');
     $.get(ctx + '/system/version/one', { versionNo: no }, function (data) {
@@ -229,24 +205,21 @@
       $('#fNote').val(data.note || '');
       $('#modalTitle').text('앱 버전 수정');
       $('#modalSubTitle').text('버전 정보를 수정합니다.');
-      openModal();
+      openVersionModal();
     });
   });
 
-  /* ── 삭제 버튼 ── */
   $(document).on('click', '.btn-del', function () {
     if (!confirm('삭제하시겠습니까?')) return;
     var no = $(this).data('no');
     $.ajax({
-      url: ctx + '/system/version/delete',
-      method: 'POST',
-      data: { versionNo: no, [csrfParam]: csrfToken },
+      url: ctx + '/system/version/delete', method: 'POST',
+      data: { versionNo: no },
       success: function () { table.ajax.reload(null, false); },
       error:   function () { alert('삭제 중 오류가 발생했습니다.'); }
     });
   });
 
-  /* ── 저장 ── */
   $('#modalSave').on('click', function () {
     var appType   = $('#fAppType').val();
     var storeType = $('#fStoreType').val();
@@ -258,47 +231,38 @@
     if (!version)   { alert('버전을 입력하세요.'); return; }
     if (!releaseDt) { alert('공개일을 선택하세요.'); return; }
 
-    var data = {
-      versionNo:     $('#fVersionNo').val() || null,
-      appCd:        appType,
-      storeCd:      storeType,
-      version:        version,
-      appCode:        $.trim($('#fAppCode').val()),
-      releaseDt:      releaseDt,
-      forceUpdateYn:  $('#fForceUpdate').is(':checked') ? 'Y' : 'N',
-      useYn:          'Y',
-      note:           $.trim($('#fNote').val()),
-      [csrfParam]:    csrfToken
-    };
-
     $.ajax({
-      url:    ctx + '/system/version/save',
-      method: 'POST',
-      data:   data,
-      success: function () {
-        closeModal();
-        table.ajax.reload(null, false);
+      url: ctx + '/system/version/save', method: 'POST',
+      data: {
+        versionNo:    $('#fVersionNo').val() || null,
+        appCd:        appType,
+        storeCd:      storeType,
+        version:      version,
+        appCode:      $.trim($('#fAppCode').val()),
+        releaseDt:    releaseDt,
+        forceUpdateYn: $('#fForceUpdate').is(':checked') ? 'Y' : 'N',
+        useYn:        'Y',
+        note:         $.trim($('#fNote').val())
       },
-      error: function () { alert('저장 중 오류가 발생했습니다.'); }
+      success: function () { closeVersionModal(); table.ajax.reload(null, false); },
+      error:   function () { alert('저장 중 오류가 발생했습니다.'); }
     });
   });
 
-  /* ── 모달 제어 ── */
-  function openModal()  { $('#versionModal').addClass('open'); }
-  function closeModal() { $('#versionModal').removeClass('open'); }
-  function resetForm()  {
+  function openVersionModal()  { $('#versionModal').addClass('open'); }
+  function closeVersionModal() { $('#versionModal').removeClass('open'); }
+  function resetForm() {
     $('#fVersionNo, #fVersion, #fAppCode, #fNote').val('');
     $('#fAppType, #fStoreType').val('');
     $('#fForceUpdate').prop('checked', false);
     $('#fReleaseDt').val(new Date().toISOString().slice(0, 10));
   }
 
-  $('#modalClose, #modalCancel').on('click', closeModal);
+  $('#modalClose, #modalCancel').on('click', closeVersionModal);
   $('#versionModal').on('click', function (e) {
-    if ($(e.target).is('#versionModal')) closeModal();
+    if ($(e.target).is('#versionModal')) closeVersionModal();
   });
 
-  /* 등록 시 기본 공개일 = 오늘 */
   $('#fReleaseDt').val(new Date().toISOString().slice(0, 10));
 
 })();

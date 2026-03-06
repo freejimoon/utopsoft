@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>관리자 권한 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -92,29 +86,14 @@
 
 <script>
 (function () {
-  var ctx       = '${ctx}';
-  var csrfParam = $('meta[name="_csrf_param"]').attr('content');
-  var csrfToken = $('meta[name="_csrf"]').attr('content');
+  var ctx          = '${ctx}';
   var currentUsrId = '';
 
-  var DT_LANG = {
-    emptyTable: '조회된 데이터가 없습니다.',
-    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-    infoEmpty:  '데이터 없음',
-    lengthMenu: '_MENU_ 건씩 보기',
-    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
-  };
-
-  /* ── DataTable 초기화 ── */
   $('#usrTable').DataTable({
-    autoWidth: false,
-    pageLength: 10,
     order: [[0, 'asc']],
-    columnDefs: [{ orderable: false, targets: 5 }],
-    language: DT_LANG
+    columnDefs: [{ orderable: false, targets: 5 }]
   });
 
-  /* ── 권한 관리 버튼 → 모달 ── */
   $(document).on('click', '.btn-auth-open', function () {
     currentUsrId = $(this).data('usr-id');
     $('#modalUsrNm').text($(this).data('usr-nm'));
@@ -198,29 +177,26 @@
     $('#chkAll').prop('checked', total > 0 && total === checked);
   }
 
-  /* ── 저장 ── */
   $('#modalSave').on('click', function () {
     var menuNos = [];
     $('.chk-menu:checked').each(function () { menuNos.push($(this).data('menu-no')); });
     $.ajax({
-      url: ctx + '/system/auth/save',
-      method: 'POST',
-      data: { usrId: currentUsrId, menuNos: menuNos, [csrfParam]: csrfToken },
+      url: ctx + '/system/auth/save', method: 'POST',
+      data: { usrId: currentUsrId, menuNos: menuNos, [CSRF_PARAM]: CSRF_TOKEN },
       traditional: true,
-      success: function () { closeModal(); alert('저장되었습니다.'); },
+      success: function () { closeAuthModal(); alert('저장되었습니다.'); },
       error:   function () { alert('저장 중 오류가 발생했습니다.'); }
     });
   });
 
-  /* ── 모달 닫기 ── */
-  function closeModal() {
+  function closeAuthModal() {
     $('#authModal').removeClass('open');
     $('#menuTree').empty();
     currentUsrId = '';
   }
-  $('#modalClose, #modalCancel').on('click', closeModal);
+  $('#modalClose, #modalCancel').on('click', closeAuthModal);
   $('#authModal').on('click', function (e) {
-    if ($(e.target).is('#authModal')) closeModal();
+    if ($(e.target).is('#authModal')) closeAuthModal();
   });
 
 })();

@@ -5,10 +5,7 @@
 <html>
 <head>
 <title>단체 회원</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -62,15 +59,6 @@
 <script>
 var ctx = '${ctx}';
 var table;
-var BADGE_CLS = {
-  ACTIVE:'badge-success', PAID:'badge-success', GROUP:'badge-indigo',
-  EXPIRED:'badge-danger', CANCELED:'badge-danger', WITHDRAWN:'badge-danger',
-  PAUSED:'badge-warning', FREE:'badge-default', NONE:'badge-default'
-};
-function badgeHtml(code, nm) {
-  var cls = BADGE_CLS[code] || 'badge-default';
-  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
-}
 var rowNum = 0;
 
 function loadTable() {
@@ -82,8 +70,6 @@ function loadTable() {
   }).done(function(data) {
     table = $('#groupMemberTable').DataTable({
       data: data,
-      autoWidth: false,
-      pageLength: 10,
       columns: [
         { data: null, className: 'dt-center', render: function() { return ++rowNum; } },
         { data: 'groupNm',          defaultContent: '-' },
@@ -92,9 +78,8 @@ function loadTable() {
         { data: 'managerEmail',     defaultContent: '-' },
         { data: 'currentMemberCnt', className: 'dt-center',
           render: function(d, t, row) {
-            var used  = row.currentMemberCnt != null ? row.currentMemberCnt : 0;
-            var total = row.maxMemberCnt     != null ? row.maxMemberCnt     : 0;
-            return used + ' / ' + total;
+            return (row.currentMemberCnt != null ? row.currentMemberCnt : 0) +
+                   ' / ' + (row.maxMemberCnt != null ? row.maxMemberCnt : 0);
           }
         },
         { data: 'contractStartDt', className: 'dt-center',
@@ -106,14 +91,7 @@ function loadTable() {
           render: function(d, t, row) { return badgeHtml(d, row.contractStatusNm); }
         }
       ],
-      order: [[0, 'asc']],
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[0, 'asc']]
     });
   }).fail(function(xhr) { console.error('[단체회원 오류]', xhr.status); });
 }

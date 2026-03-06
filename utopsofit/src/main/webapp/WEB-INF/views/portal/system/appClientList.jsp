@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>앱 클라이언트 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -186,15 +180,10 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-var ctx  = '${ctx}';
-var csrf = {
-  header: $('meta[name="_csrf_header"]').attr('content'),
-  token:  $('meta[name="_csrf"]').attr('content')
-};
+var ctx = '${ctx}';
 var table;
 var idChecked = false;
 
-/* ── 목록 로드 ──────────────────────────────────── */
 function loadTable() {
   if (table) { table.destroy(); $('#appClientTable tbody').empty(); }
   $.get(ctx + '/system/app-client/list/json', {
@@ -215,10 +204,10 @@ function loadTable() {
         },
         { data: 'memo',      defaultContent: '-' },
         { data: 'createdAt', className: 'dt-center',
-          render: function(d) { return d ? d.replace('T',' ').substring(0,10) : '-'; }
+          render: function(d) { return fmtDt(d, 10); }
         },
         { data: 'updatedAt', className: 'dt-center',
-          render: function(d) { return d ? d.replace('T',' ').substring(0,10) : '-'; }
+          render: function(d) { return fmtDt(d, 10); }
         },
         { data: null, className: 'dt-center', orderable: false,
           render: function(d, t, row) {
@@ -228,16 +217,7 @@ function loadTable() {
           }
         }
       ],
-      autoWidth: false,
-      order: [[4, 'desc']],
-      pageLength: 10,
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[4, 'desc']]
     });
   }).fail(function(xhr) { console.error('[앱 클라이언트 목록 오류]', xhr.status); });
 }
@@ -245,16 +225,14 @@ function loadTable() {
 $('#btnSearch').on('click', loadTable);
 $('#filterKeyword').on('keydown', function(e) { if (e.key === 'Enter') loadTable(); });
 $('#btnReset').on('click', function() {
-  $('#filterUseYn').val(''); $('#filterKeyword').val('');
-  loadTable();
+  $('#filterUseYn').val(''); $('#filterKeyword').val(''); loadTable();
 });
 
-/* ── 신규 발급 ──────────────────────────────────── */
 $('#btnAdd').on('click', function() {
   idChecked = false;
   $('#fAppId').val('').prop('readonly', false);
   $('#fAppNm').val(''); $('#fUseYn').val('Y'); $('#fMemo').val('');
-  $('#idCheckMsg').text('').css('color','');
+  $('#idCheckMsg').text('').css('color', '');
   openModal('#registerModal');
 });
 
@@ -264,10 +242,10 @@ $('#btnCheckId').on('click', function() {
   $.get(ctx + '/system/app-client/check-id', { appId: appId }, function(res) {
     if (res.duplicate) {
       idChecked = false;
-      $('#idCheckMsg').text('이미 사용 중인 ID입니다.').css('color','#ef4444');
+      $('#idCheckMsg').text('이미 사용 중인 ID입니다.').css('color', '#ef4444');
     } else {
       idChecked = true;
-      $('#idCheckMsg').text('사용 가능한 ID입니다.').css('color','#22c55e');
+      $('#idCheckMsg').text('사용 가능한 ID입니다.').css('color', '#22c55e');
     }
   });
 });
@@ -275,12 +253,11 @@ $('#btnCheckId').on('click', function() {
 $('#btnRegSave').on('click', function() {
   var appId = $('#fAppId').val().trim();
   var appNm = $('#fAppNm').val().trim();
-  if (!appId)        { alert('앱 ID를 입력하세요.'); return; }
-  if (!idChecked)    { alert('ID 중복 확인을 해주세요.'); return; }
-  if (!appNm)        { alert('앱 이름을 입력하세요.'); return; }
+  if (!appId)     { alert('앱 ID를 입력하세요.'); return; }
+  if (!idChecked) { alert('ID 중복 확인을 해주세요.'); return; }
+  if (!appNm)     { alert('앱 이름을 입력하세요.'); return; }
   $.ajax({
     url: ctx + '/system/app-client/register', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { appId: appId, appNm: appNm, useYn: $('#fUseYn').val(), memo: $('#fMemo').val() },
     success: function(res) {
       closeModal('#registerModal');
@@ -290,7 +267,6 @@ $('#btnRegSave').on('click', function() {
   });
 });
 
-/* ── 발급 완료 (secret 표시) ────────────────────── */
 function showSecret(appId, secret) {
   $('#secretAppId').text(appId);
   $('#secretValue').text(secret);
@@ -311,7 +287,6 @@ $('#btnCopySecret').on('click', function() {
 
 $('#btnSecretConfirm, #btnSecretClose').on('click', function() { closeModal('#secretModal'); });
 
-/* ── 수정 ────────────────────────────────────────── */
 $(document).on('click', '.btn-edit', function() {
   var appId = $(this).data('id');
   $.get(ctx + '/system/app-client/one', { appId: appId }, function(data) {
@@ -327,45 +302,36 @@ $('#btnEditSave').on('click', function() {
   if (!$('#eAppNm').val().trim()) { alert('앱 이름을 입력하세요.'); return; }
   $.ajax({
     url: ctx + '/system/app-client/modify', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { appId: $('#eAppId').val(), appNm: $('#eAppNm').val(),
             useYn: $('#eUseYn').val(), memo: $('#eMemo').val() },
     success: function() { closeModal('#editModal'); loadTable(); }
   });
 });
 
-/* ── Secret 재발급 ──────────────────────────────── */
 $(document).on('click', '.btn-reissue', function() {
   var appId = $(this).data('id');
   if (!confirm('[' + appId + '] 의 Secret 을 재발급합니다.\n기존 Secret 은 즉시 무효화됩니다. 계속하시겠습니까?')) return;
   $.ajax({
     url: ctx + '/system/app-client/reissue', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { appId: appId },
     success: function(res) { showSecret(res.appId, res.appSecret); }
   });
 });
 
-/* ── 삭제 ────────────────────────────────────────── */
 $(document).on('click', '.btn-delete', function() {
   var appId = $(this).data('id');
   if (!confirm('[' + appId + '] 클라이언트를 삭제하시겠습니까?')) return;
   $.ajax({
     url: ctx + '/system/app-client/delete', method: 'POST',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: { appId: appId },
     success: function() { loadTable(); }
   });
 });
 
-/* ── 모달 공통 ──────────────────────────────────── */
-$('#btnRegClose, #btnRegModalClose').on('click', function()  { closeModal('#registerModal'); });
+$('#btnRegClose, #btnRegModalClose').on('click', function()   { closeModal('#registerModal'); });
 $('#btnEditClose, #btnEditModalClose').on('click', function() { closeModal('#editModal'); });
 $('#registerModal').on('click', function(e) { if ($(e.target).is('#registerModal')) closeModal('#registerModal'); });
 $('#editModal').on('click',     function(e) { if ($(e.target).is('#editModal'))     closeModal('#editModal'); });
-
-function openModal(sel)  { $(sel).addClass('open'); }
-function closeModal(sel) { $(sel).removeClass('open'); }
 
 $(document).ready(loadTable);
 </script>

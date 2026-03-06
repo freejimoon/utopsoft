@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>문의 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -104,21 +98,8 @@
 <%@ include file="/WEB-INF/views/cmm/layout/footer.jsp" %>
 
 <script>
-var ctx  = '${ctx}';
-var csrf = {
-  header: $('meta[name="_csrf_header"]').attr('content'),
-  token:  $('meta[name="_csrf"]').attr('content')
-};
-
+var ctx = '${ctx}';
 var table;
-var BADGE_CLS = {
-  DONE:'badge-success', WAIT:'badge-warning',
-  ACTIVE:'badge-success', EXPIRED:'badge-danger', CANCELED:'badge-danger'
-};
-function badgeHtml(code, nm) {
-  var cls = BADGE_CLS[code] || 'badge-default';
-  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
-}
 
 function loadTable() {
   if (table) { table.destroy(); $('#inquiryTable tbody').empty(); }
@@ -130,34 +111,25 @@ function loadTable() {
     table = $('#inquiryTable').DataTable({
       data: data,
       columns: [
-        { data: 'inqNo', className: 'dt-center' },
+        { data: 'inqNo',       className: 'dt-center' },
         { data: 'title',
           render: function(d, t, row) {
             return '<a href="javascript:void(0)" class="link-title" data-no="' + row.inqNo + '">' + d + '</a>';
           }
         },
-        { data: 'memberEmail',  className: 'dt-center', defaultContent: '-' },
-        { data: 'memberNm',     className: 'dt-center', defaultContent: '-' },
-        { data: 'createdAt',    className: 'dt-center',
-          render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
+        { data: 'memberEmail', className: 'dt-center', defaultContent: '-' },
+        { data: 'memberNm',    className: 'dt-center', defaultContent: '-' },
+        { data: 'createdAt',   className: 'dt-center',
+          render: function(d) { return fmtDt(d, 16); }
         },
-        { data: 'inqStatusNm',  className: 'dt-center', defaultContent: '-',
+        { data: 'inqStatusNm', className: 'dt-center', defaultContent: '-',
           render: function(d, t, row) { return badgeHtml(row.inqStatusCd, d); }
         },
-        { data: 'updatedAt',    className: 'dt-center',
-          render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
+        { data: 'updatedAt',   className: 'dt-center',
+          render: function(d) { return fmtDt(d, 16); }
         }
       ],
-      autoWidth: false,
-      order: [[0, 'desc']],
-      pageLength: 10,
-      language: {
-        emptyTable: '조회된 데이터가 없습니다.',
-        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-        infoEmpty: '데이터 없음',
-        lengthMenu: '_MENU_ 건씩 보기',
-        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
-      }
+      order: [[0, 'desc']]
     });
   })
   .fail(function(xhr) {
@@ -180,7 +152,7 @@ $(document).on('click', '.link-title', function() {
     $('#dStatus').html(badgeHtml(data.inqStatusCd, data.inqStatusNm));
     $('#dEmail').text(data.memberEmail || '-');
     $('#dNickname').text(data.memberNm || '-');
-    $('#dCreatedAt').text(data.createdAt ? data.createdAt.replace('T', ' ').substring(0, 16) : '-');
+    $('#dCreatedAt').text(fmtDt(data.createdAt, 16));
     $('#dContent').text(data.content || '');
     $('#dReplyContent').val(data.replyContent || '');
     if (data.inqStatusCd === 'DONE') {
@@ -200,7 +172,6 @@ $('#btnReply').on('click', function() {
   $.ajax({
     url: ctx + '/board/inquiry/reply', method: 'POST',
     contentType: 'application/json',
-    beforeSend: function(xhr) { xhr.setRequestHeader(csrf.header, csrf.token); },
     data: JSON.stringify({ inqNo: $('#dInqNo').val(), replyContent: replyContent }),
     success: function(res) {
       if (res.result === 'success') { closeModal(); loadTable(); }
@@ -208,9 +179,6 @@ $('#btnReply').on('click', function() {
     }
   });
 });
-
-function openModal()  { $('#modalOverlay').addClass('open'); }
-function closeModal() { $('#modalOverlay').removeClass('open'); }
 
 $('#btnClose, #btnModalClose').on('click', closeModal);
 $('#modalOverlay').on('click', function(e) { if ($(e.target).is('#modalOverlay')) closeModal(); });

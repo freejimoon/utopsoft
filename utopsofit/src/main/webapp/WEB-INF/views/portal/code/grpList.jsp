@@ -5,13 +5,7 @@
 <html>
 <head>
 <title>공통코드 그룹 관리</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="_csrf"        content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta name="_csrf_param"  content="${_csrf.parameterName}"/>
-<link rel="stylesheet" href="${ctx}/css/style.css">
-<link rel="stylesheet" href="${ctx}/js/jquery.dataTables.min.css">
+<%@ include file="/WEB-INF/views/cmm/layout/head.jsp" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/cmm/layout/header.jsp" %>
@@ -52,29 +46,16 @@
 
 <script>
 (function () {
-  var ctx       = '${ctx}';
-  var csrfParam = $('meta[name="_csrf_param"]').attr('content');
-  var csrfToken = $('meta[name="_csrf"]').attr('content');
+  var ctx = '${ctx}';
 
-  var DT_LANG = {
-    emptyTable: '조회된 데이터가 없습니다.',
-    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
-    infoEmpty:  '데이터 없음',
-    lengthMenu: '_MENU_ 건씩 보기',
-    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
-  };
-
-  function csrf() {
-    return '<input type="hidden" name="' + csrfParam + '" value="' + csrfToken + '">';
+  function csrfInput() {
+    return '<input type="hidden" name="' + CSRF_PARAM + '" value="' + CSRF_TOKEN + '">';
   }
 
   $('#grpTable').DataTable({
     processing: true,
-    autoWidth: false,
-    pageLength: 10,
     ajax: { url: ctx + '/code/grp/list/json', dataSrc: '' },
     order: [[4, 'asc']],
-    language: DT_LANG,
     columns: [
       { data: 'grpCd' },
       {
@@ -84,7 +65,7 @@
           return '<form method="post" action="' + ctx + '/code/list" style="display:inline;">' +
                    '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
                    '<input type="hidden" name="page"  value="1">' +
-                   csrf() +
+                   csrfInput() +
                    '<button type="submit" class="link-btn">' + data + '</button>' +
                  '</form>';
         }
@@ -105,21 +86,21 @@
           var edit =
             '<form method="post" action="' + ctx + '/code/grp/form" style="display:inline;">' +
             '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
-            csrf() +
+            csrfInput() +
             '<button type="submit" class="btn btn-sm btn-outline">수정</button></form>';
 
           var del =
             '<form method="post" action="' + ctx + '/code/grp/delete" style="display:inline;"' +
             ' onsubmit="return confirm(\'삭제하시겠습니까?\');">' +
             '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
-            csrf() +
+            csrfInput() +
             '<button type="submit" class="btn btn-sm btn-danger">삭제</button></form>';
 
           var codes =
             '<form method="post" action="' + ctx + '/code/list" style="display:inline;">' +
             '<input type="hidden" name="grpCd" value="' + row.grpCd + '">' +
             '<input type="hidden" name="page"  value="1">' +
-            csrf() +
+            csrfInput() +
             '<button type="submit" class="btn btn-sm btn-primary">코드관리</button></form>';
 
           return edit + ' ' + del + ' ' + codes;
