@@ -50,8 +50,8 @@ public class SecurityConfig {
                         /* Swagger UI */
                         "/swagger-ui/**", "/swagger-ui.html",
                         "/v3/api-docs/**", "/v3/api-docs",
-                        /* 토큰 발급은 인증 불필요 */
-                        "/api/token"
+                        /* 토큰 발급 / 검증은 인증 불필요 */
+                        "/api/token", "/api/token/verify"
                 ).permitAll()
                 /* /api/faq/** 등 나머지 API 는 JWT 인증 필요 */
                 .requestMatchers("/api/**").authenticated()

@@ -1,6 +1,8 @@
 package com.utopsofit.project.cmm.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,5 +59,36 @@ public class JwtUtil {
     /** appId 추출 */
     public String getAppId(String token) {
         return parse(token).getSubject();
+    }
+
+    /**
+     * 만료된 토큰도 포함하여 Claims 파싱
+     * - 유효한 토큰: Claims 반환
+     * - 만료된 토큰: ExpiredJwtException 의 Claims 반환
+     * - 위변조 등 그 외 오류: JwtException 발생
+     */
+    public Claims parseIgnoreExpiry(String token) {
+        try {
+            return parse(token);
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
+    /**
+     * 토큰 검증 결과 반환
+     * - "OK"      : 유효
+     * - "EXPIRED" : 만료
+     * - "INVALID" : 위변조 / 형식 오류
+     */
+    public String verify(String token) {
+        try {
+            parse(token);
+            return "OK";
+        } catch (ExpiredJwtException e) {
+            return "EXPIRED";
+        } catch (JwtException | IllegalArgumentException e) {
+            return "INVALID";
+        }
     }
 }
