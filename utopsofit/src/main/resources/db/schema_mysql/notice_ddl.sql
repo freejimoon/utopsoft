@@ -4,8 +4,8 @@
 
 USE `utopsoft`;
 
-DROP TABLE IF EXISTS `notice`;
-CREATE TABLE `notice` (
+DROP TABLE IF EXISTS `tb_notice`;
+CREATE TABLE `tb_notice` (
     `notice_no`     BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT         COMMENT '공지번호 (PK)',
     `title`         VARCHAR(300)     NOT NULL                        COMMENT '제목',
     `content`       TEXT             NOT NULL                        COMMENT '내용',
@@ -28,11 +28,11 @@ CREATE TABLE `notice` (
 -- =====================================================
 -- 공통코드 INSERT (NOTICE_TYPE)
 -- =====================================================
-INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
+INSERT INTO `tb_com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
 VALUES ('NOTICE_TYPE_CD', '공지 유형', '공지사항 유형 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
 ('NOTICE_TYPE_CD', 'GENERAL', '일반',   '일반 공지사항',  'Y', 1, 'system'),
 ('NOTICE_TYPE_CD', 'URGENT',  '긴급',   '긴급 공지사항',  'Y', 2, 'system'),
@@ -42,7 +42,7 @@ ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 -- =====================================================
 -- 샘플 데이터
 -- =====================================================
-INSERT INTO `notice` (`title`, `content`, `notice_cd`, `pin_yn`, `use_yn`, `created_by`)
+INSERT INTO `tb_notice` (`title`, `content`, `notice_cd`, `pin_yn`, `use_yn`, `created_by`)
 VALUES
 ('[긴급] 서버 점검 안내 (3/10 02:00~04:00)',  '원활한 서비스 제공을 위해 서버 점검을 진행합니다.\n점검 시간: 2026-03-10 02:00 ~ 04:00\n점검 중에는 앱 이용이 불가합니다.',                   'URGENT',  'Y', 'Y', 'admin'),
 ('앱 v2.5.0 업데이트 안내',                   '새로운 버전 2.5.0이 출시되었습니다.\n주요 변경 사항:\n- UI 개선\n- 성능 최적화\n- 버그 수정',                                          'GENERAL', 'Y', 'Y', 'admin'),

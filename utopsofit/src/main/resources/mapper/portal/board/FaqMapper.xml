@@ -27,8 +27,8 @@
                f.use_yn,
                f.created_at,
                f.created_by
-        FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
+        FROM   tb_faq f
+               LEFT JOIN tb_com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         WHERE  f.use_yn = 'Y'
         <if test="searchCategory != null and searchCategory != ''">
             AND f.category_cd = #{searchCategory}
@@ -49,22 +49,22 @@
                f.sort_ord,
                f.created_at,
                f.created_by
-        FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
+        FROM   tb_faq f
+               LEFT JOIN tb_com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         WHERE  f.faq_no = #{faqNo}
     </select>
 
     <!-- 등록 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="faqNo">
-        INSERT INTO faq (category_cd, question, answer, sort_ord, use_yn, created_by)
+        INSERT INTO tb_faq (category_cd, question, answer, sort_ord, use_yn, created_by)
         VALUES (#{categoryCd}, #{question}, #{answer},
-                (SELECT COALESCE(MAX(sort_ord), 0) + 1 FROM faq f2),
+                (SELECT COALESCE(MAX(sort_ord), 0) + 1 FROM tb_faq f2),
                 'Y', #{createdBy})
     </insert>
 
     <!-- 수정 -->
     <update id="update">
-        UPDATE faq
+        UPDATE tb_faq
         SET    category_cd = #{categoryCd},
                question    = #{question},
                answer      = #{answer},
@@ -75,7 +75,7 @@
 
     <!-- 삭제 (논리 삭제) -->
     <update id="delete">
-        UPDATE faq
+        UPDATE tb_faq
         SET    use_yn     = 'N',
                updated_at = NOW()
         WHERE  faq_no = #{faqNo}
@@ -94,15 +94,15 @@
                c.code_nm AS category_nm,
                f.question, f.answer, f.sort_ord, f.use_yn,
                f.created_at, f.created_by, f.updated_at, f.updated_by
-        FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
+        FROM   tb_faq f
+               LEFT JOIN tb_com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         <include refid="apiWhere"/>
         ORDER BY f.sort_ord ASC, f.faq_no ASC
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <select id="selectTotalCount" resultType="long">
-        SELECT COUNT(*) FROM faq f
+        SELECT COUNT(*) FROM tb_faq f
         <include refid="apiWhere"/>
     </select>
 

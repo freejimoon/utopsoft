@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.login.dao.UsrMapper">
 
@@ -25,25 +25,25 @@
         SELECT usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd,
                use_yn, pwd_chg_dt, last_login_dt, login_fail_cnt, lock_yn,
                created_at, created_by, updated_at, updated_by
-        FROM usr
+        FROM tb_usr
         WHERE usr_id = #{usrId}
     </select>
 
     <update id="updateLastLogin">
-        UPDATE usr
+        UPDATE tb_usr
         SET last_login_dt = NOW(),
             login_fail_cnt = 0
         WHERE usr_id = #{usrId}
     </update>
 
     <update id="updateLoginFailCnt">
-        UPDATE usr
+        UPDATE tb_usr
         SET login_fail_cnt = #{loginFailCnt}
         WHERE usr_id = #{usrId}
     </update>
 
     <update id="updateLockYn">
-        UPDATE usr
+        UPDATE tb_usr
         SET lock_yn = #{lockYn}
         WHERE usr_id = #{usrId}
     </update>
@@ -51,7 +51,7 @@
     <!-- 마지막 로그인이 inactiveDays일 이상 경과한 미잠금 사용자 조회 -->
     <select id="selectInactiveUsrs" resultMap="UsrResult">
         SELECT usr_id, usr_nm, last_login_dt, lock_yn, use_yn
-        FROM   usr
+        FROM   tb_usr
         WHERE  use_yn       = 'Y'
           AND  lock_yn      = 'N'
           AND  last_login_dt IS NOT NULL
@@ -61,7 +61,7 @@
 
     <!-- 마지막 로그인이 inactiveDays일 이상 경과한 사용자 일괄 잠금 -->
     <update id="lockInactiveUsrs">
-        UPDATE usr
+        UPDATE tb_usr
         SET    lock_yn     = 'Y',
                updated_at  = NOW(),
                updated_by  = 'BATCH'

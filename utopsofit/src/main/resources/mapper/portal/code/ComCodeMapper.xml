@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.code.dao.ComCodeMapper">
 
@@ -33,7 +33,7 @@
     <!-- 그룹 목록 -->
     <select id="selectCodeGrpList" resultMap="ComCodeGrpResult">
         SELECT grp_cd, grp_nm, grp_desc, use_yn, sort_ord, created_at, created_by, updated_at, updated_by
-        FROM com_code_grp
+        FROM tb_com_code_grp
         <where>
             <if test="grpCd != null and grpCd != ''">
                 AND grp_cd LIKE CONCAT('%', #{grpCd}, '%')
@@ -49,7 +49,7 @@
     </select>
 
     <select id="countCodeGrpList" resultType="long">
-        SELECT COUNT(*) FROM com_code_grp
+        SELECT COUNT(*) FROM tb_com_code_grp
         <where>
             <if test="grpCd != null and grpCd != ''">
                 AND grp_cd LIKE CONCAT('%', #{grpCd}, '%')
@@ -65,7 +65,7 @@
 
     <select id="selectCodeGrpListPaging" resultMap="ComCodeGrpResult">
         SELECT grp_cd, grp_nm, grp_desc, use_yn, sort_ord, created_at, created_by, updated_at, updated_by
-        FROM com_code_grp
+        FROM tb_com_code_grp
         <where>
             <if test="condition.grpCd != null and condition.grpCd != ''">
                 AND grp_cd LIKE CONCAT('%', #{condition.grpCd}, '%')
@@ -84,40 +84,40 @@
     <!-- 그룹 단건 -->
     <select id="selectCodeGrpByPk" resultMap="ComCodeGrpResult">
         SELECT grp_cd, grp_nm, grp_desc, use_yn, sort_ord, created_at, created_by, updated_at, updated_by
-        FROM com_code_grp
+        FROM tb_com_code_grp
         WHERE grp_cd = #{grpCd}
     </select>
 
     <insert id="insertCodeGrp">
-        INSERT INTO com_code_grp (grp_cd, grp_nm, grp_desc, use_yn, sort_ord, created_by)
+        INSERT INTO tb_com_code_grp (grp_cd, grp_nm, grp_desc, use_yn, sort_ord, created_by)
         VALUES (#{grpCd}, #{grpNm}, #{grpDesc}, #{useYn}, #{sortOrd}, #{createdBy})
     </insert>
 
     <update id="updateCodeGrp">
-        UPDATE com_code_grp
+        UPDATE tb_com_code_grp
         SET grp_nm = #{grpNm}, grp_desc = #{grpDesc}, use_yn = #{useYn}, sort_ord = #{sortOrd}, updated_by = #{updatedBy}
         WHERE grp_cd = #{grpCd}
     </update>
 
     <delete id="deleteCodeGrp">
-        DELETE FROM com_code_grp WHERE grp_cd = #{grpCd}
+        DELETE FROM tb_com_code_grp WHERE grp_cd = #{grpCd}
     </delete>
 
     <!-- 코드 목록 (그룹별) -->
     <select id="selectCodeListByGrp" resultMap="ComCodeResult">
         SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
-        FROM com_code
+        FROM tb_com_code
         WHERE grp_cd = #{grpCd}
         ORDER BY sort_ord, code
     </select>
 
     <select id="countCodeListByGrp" resultType="long">
-        SELECT COUNT(*) FROM com_code WHERE grp_cd = #{grpCd}
+        SELECT COUNT(*) FROM tb_com_code WHERE grp_cd = #{grpCd}
     </select>
 
     <select id="selectCodeListByGrpPaging" resultMap="ComCodeResult">
         SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
-        FROM com_code
+        FROM tb_com_code
         WHERE grp_cd = #{grpCd}
         ORDER BY sort_ord, code
         LIMIT #{offset}, #{limit}
@@ -126,23 +126,23 @@
     <!-- 코드 단건 -->
     <select id="selectCodeByPk" resultMap="ComCodeResult">
         SELECT grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_at, created_by, updated_at, updated_by
-        FROM com_code
+        FROM tb_com_code
         WHERE grp_cd = #{grpCd} AND code = #{code}
     </select>
 
     <insert id="insertCode">
-        INSERT INTO com_code (grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_by)
+        INSERT INTO tb_com_code (grp_cd, code, code_nm, code_desc, use_yn, sort_ord, attr1, attr2, attr3, created_by)
         VALUES (#{grpCd}, #{code}, #{codeNm}, #{codeDesc}, #{useYn}, #{sortOrd}, #{attr1}, #{attr2}, #{attr3}, #{createdBy})
     </insert>
 
     <update id="updateCode">
-        UPDATE com_code
+        UPDATE tb_com_code
         SET code_nm = #{codeNm}, code_desc = #{codeDesc}, use_yn = #{useYn}, sort_ord = #{sortOrd},
             attr1 = #{attr1}, attr2 = #{attr2}, attr3 = #{attr3}, updated_by = #{updatedBy}
         WHERE grp_cd = #{grpCd} AND code = #{code}
     </update>
 
     <delete id="deleteCode">
-        DELETE FROM com_code WHERE grp_cd = #{grpCd} AND code = #{code}
+        DELETE FROM tb_com_code WHERE grp_cd = #{grpCd} AND code = #{code}
     </delete>
 </mapper>

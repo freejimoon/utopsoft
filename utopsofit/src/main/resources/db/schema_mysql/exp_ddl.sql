@@ -1,24 +1,24 @@
--- =====================================================
+﻿-- =====================================================
 -- 경험치 DDL (MySQL 8.x)
 -- 스키마: utopsoft
 --
 -- [경험치 ⭐ — 성장 지표]
 --   활동(학습·챌린지·출석)으로 누적되어 레벨업에 사용.
 --   차감 없이 오직 증가만 하며, 일정 수치 도달 시 레벨 상승.
---   exp_level_def : 레벨별 필요 경험치 + 달성 보상 정의
---   exp_bal       : 회원별 현재 누적 경험치 + 레벨 (member.exp_total/exp_level 캐시와 동기화)
---   exp_hist      : 경험치 획득 이력
+--   tb_exp_level_def : 레벨별 필요 경험치 + 달성 보상 정의
+--   tb_exp_bal       : 회원별 현재 누적 경험치 + 레벨 (tb_member.exp_total/exp_level 캐시와 동기화)
+--   tb_exp_hist      : 경험치 획득 이력
 -- =====================================================
 
 USE `utopsoft`;
 
 
 -- -----------------------------------------------------
--- 1. 레벨 정의 (exp_level_def)
+-- 1. 레벨 정의 (tb_exp_level_def)
 --    각 레벨에 필요한 누적 경험치 기준 정의
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `exp_level_def`;
-CREATE TABLE `exp_level_def` (
+DROP TABLE IF EXISTS `tb_exp_level_def`;
+CREATE TABLE `tb_exp_level_def` (
     `level`         SMALLINT UNSIGNED NOT NULL              COMMENT '레벨 (PK)',
     `level_nm`      VARCHAR(50)       NOT NULL              COMMENT '레벨명 (예: 입문 / 초급 / 중급 / 고급 / 마스터)',
     `req_exp`       INT UNSIGNED      NOT NULL              COMMENT '해당 레벨 달성에 필요한 누적 경험치',
@@ -32,12 +32,12 @@ CREATE TABLE `exp_level_def` (
 
 
 -- -----------------------------------------------------
--- 2. 경험치 잔액 (exp_bal)
+-- 2. 경험치 잔액 (tb_exp_bal)
 --    회원당 1행 — 누적 경험치 + 현재 레벨의 단일 진실 공급원
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `exp_bal`;
-CREATE TABLE `exp_bal` (
-    `member_no`      BIGINT UNSIGNED   NOT NULL                COMMENT '회원번호 (PK, FK → member)',
+DROP TABLE IF EXISTS `tb_exp_bal`;
+CREATE TABLE `tb_exp_bal` (
+    `member_no`      BIGINT UNSIGNED   NOT NULL                COMMENT '회원번호 (PK, FK → tb_member)',
     `exp_total`      INT UNSIGNED      NOT NULL DEFAULT 0      COMMENT '누적 경험치 합계',
     `exp_level`      SMALLINT UNSIGNED NOT NULL DEFAULT 1      COMMENT '현재 레벨',
     `next_level_exp` INT UNSIGNED      DEFAULT NULL            COMMENT '다음 레벨까지 필요 경험치 (NULL이면 최고 레벨)',
@@ -46,20 +46,20 @@ CREATE TABLE `exp_bal` (
     PRIMARY KEY (`member_no`),
     KEY `idx_exp_bal_level`   (`exp_level`),
     KEY `idx_exp_bal_total`   (`exp_total` DESC),
-    CONSTRAINT `fk_exp_bal_member`    FOREIGN KEY (`member_no`) REFERENCES `member`        (`member_no`) ON DELETE CASCADE,
-    CONSTRAINT `fk_exp_bal_level_def` FOREIGN KEY (`exp_level`) REFERENCES `exp_level_def` (`level`)     ON DELETE RESTRICT
+    CONSTRAINT `fk_exp_bal_member`    FOREIGN KEY (`member_no`) REFERENCES `tb_member`        (`member_no`) ON DELETE CASCADE,
+    CONSTRAINT `fk_exp_bal_level_def` FOREIGN KEY (`exp_level`) REFERENCES `tb_exp_level_def` (`level`)     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='경험치 잔액';
 
 
 -- -----------------------------------------------------
--- 3. 경험치 이력 (exp_hist)
+-- 3. 경험치 이력 (tb_exp_hist)
 --    경험치는 차감 없이 오직 획득(EARN)만 기록
 --    레벨업 시 level_before / level_after 에 변경 내역 기록
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `exp_hist`;
-CREATE TABLE `exp_hist` (
+DROP TABLE IF EXISTS `tb_exp_hist`;
+CREATE TABLE `tb_exp_hist` (
     `exp_seq`         BIGINT UNSIGNED   NOT NULL AUTO_INCREMENT COMMENT '경험치 이력 순번 (PK)',
-    `member_no`       BIGINT UNSIGNED   NOT NULL                COMMENT '회원번호 (FK → member)',
+    `member_no`       BIGINT UNSIGNED   NOT NULL                COMMENT '회원번호 (FK → tb_member)',
 
     -- 경험치 획득
     `exp_amt`         INT UNSIGNED      NOT NULL                COMMENT '획득 경험치',
@@ -83,7 +83,7 @@ CREATE TABLE `exp_hist` (
     KEY `idx_exp_hist_earn_type` (`earn_type`),
     KEY `idx_exp_hist_level_up`  (`member_no`, `is_level_up`),
     KEY `idx_exp_hist_created`   (`created_at`),
-    CONSTRAINT `fk_exp_hist_member` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`) ON DELETE RESTRICT
+    CONSTRAINT `fk_exp_hist_member` FOREIGN KEY (`member_no`) REFERENCES `tb_member` (`member_no`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='경험치 이력';
 
 
@@ -96,11 +96,11 @@ CREATE TABLE `exp_hist` (
 -- =====================================================
 
 -- 경험치 획득원인 유형 (EXP_EARN_TYPE_CD)
-INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
-VALUES ('EXP_EARN_TYPE_CD', '경험치 획득원인', 'exp_hist.earn_type — 경험치 획득 원인 구분', 'Y', 63, 'system')
+INSERT INTO `tb_com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES ('EXP_EARN_TYPE_CD', '경험치 획득원인', 'tb_exp_hist.earn_type — 경험치 획득 원인 구분', 'Y', 63, 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
 ('EXP_EARN_TYPE_CD', 'LESSON',    '학습완료', '강좌·레슨 완료로 인한 경험치 획득',    'Y', 1, 'system'),
 ('EXP_EARN_TYPE_CD', 'CHALLENGE', '챌린지',   '챌린지 달성으로 인한 경험치 획득',     'Y', 2, 'system'),
@@ -111,8 +111,8 @@ VALUES
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 
--- exp_level_def: 레벨 정의
-INSERT INTO `exp_level_def` (`level`, `level_nm`, `req_exp`, `point_reward`, `description`) VALUES
+-- tb_exp_level_def: 레벨 정의
+INSERT INTO `tb_exp_level_def` (`level`, `level_nm`, `req_exp`, `point_reward`, `description`) VALUES
 ( 1, '입문',    0,       0,   '학습을 시작한 단계'),
 ( 2, '초급1',   300,    50,   '기초 학습 완료'),
 ( 3, '초급2',   700,    50,   '초급 과정 진행 중'),
@@ -124,16 +124,16 @@ INSERT INTO `exp_level_def` (`level`, `level_nm`, `req_exp`, `point_reward`, `de
 (25, '최고급', 22000,  500,   '최고급 과정 시작'),
 (30, '마스터', 35000, 1000,   '모든 과정 마스터');
 
--- exp_bal: 회원별 경험치 잔액
-INSERT INTO `exp_bal` (`member_no`, `exp_total`, `exp_level`, `next_level_exp`) VALUES
+-- tb_exp_bal: 회원별 경험치 잔액
+INSERT INTO `tb_exp_bal` (`member_no`, `exp_total`, `exp_level`, `next_level_exp`) VALUES
 (1,   750,  5,  1250),
 (2,  3200, 12,   800),
 (3, 18000, 30,  NULL),
 (4,   200,  2,   500),
 (5,     0,  1,   300);
 
--- exp_hist: 경험치 이력 샘플
-INSERT INTO `exp_hist` (`member_no`, `exp_amt`, `exp_total_after`, `level_before`, `level_after`, `is_level_up`, `earn_type`, `ref_id`, `remark`, `created_by`) VALUES
+-- tb_exp_hist: 경험치 이력 샘플
+INSERT INTO `tb_exp_hist` (`member_no`, `exp_amt`, `exp_total_after`, `level_before`, `level_after`, `is_level_up`, `earn_type`, `ref_id`, `remark`, `created_by`) VALUES
 (1,   50,   50, 1, 1, 'N', 'ATTEND',    NULL,   '출석 경험치',            'system'),
 (1,  200,  250, 1, 1, 'N', 'LESSON',    'L001', '강좌 완료 경험치',       'system'),
 (1,  100,  350, 1, 2, 'Y', 'QUIZ',      'Q001', '퀴즈 완료 + 레벨업',     'system'),

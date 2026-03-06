@@ -15,10 +15,10 @@
 
     <!-- 공통 코드 JOIN -->
     <sql id="codeJoins">
-        LEFT JOIN com_code c_sns ON c_sns.grp_cd = 'SOCIAL_TYPE_CD'     AND c_sns.code = m.social_cd
-        LEFT JOIN com_code c_mem ON c_mem.grp_cd = 'MEMBERSHIP_TYPE_CD' AND c_mem.code = m.membership_cd
-        LEFT JOIN com_code c_sub ON c_sub.grp_cd = 'SUB_STATUS_CD'      AND c_sub.code = m.sub_status_cd
-        LEFT JOIN com_code c_grd ON c_grd.grp_cd = 'MEMBER_GRADE_CD'    AND c_grd.code = m.grade_cd
+        LEFT JOIN tb_com_code c_sns ON c_sns.grp_cd = 'SOCIAL_TYPE_CD'     AND c_sns.code = m.social_cd
+        LEFT JOIN tb_com_code c_mem ON c_mem.grp_cd = 'MEMBERSHIP_TYPE_CD' AND c_mem.code = m.membership_cd
+        LEFT JOIN tb_com_code c_sub ON c_sub.grp_cd = 'SUB_STATUS_CD'      AND c_sub.code = m.sub_status_cd
+        LEFT JOIN tb_com_code c_grd ON c_grd.grp_cd = 'MEMBER_GRADE_CD'    AND c_grd.code = m.grade_cd
     </sql>
 
     <!-- 공통 검색 조건 -->
@@ -51,8 +51,8 @@
     <!-- 회원 현황 (ACTIVE) -->
     <select id="selectActiveList" resultMap="MemberResult">
         SELECT <include refid="selectColumns"/>
-        FROM   member m
-               LEFT JOIN member_group g ON g.group_no = m.group_no
+        FROM   tb_member m
+               LEFT JOIN tb_member_group g ON g.group_no = m.group_no
                <include refid="codeJoins"/>
         WHERE  m.status_cd = 'ACTIVE'
         <include refid="searchWhere"/>
@@ -62,8 +62,8 @@
     <!-- 탈퇴 회원 (WITHDRAWN) -->
     <select id="selectWithdrawList" resultMap="MemberResult">
         SELECT <include refid="selectColumns"/>
-        FROM   member m
-               LEFT JOIN member_group g ON g.group_no = m.group_no
+        FROM   tb_member m
+               LEFT JOIN tb_member_group g ON g.group_no = m.group_no
                <include refid="codeJoins"/>
         WHERE  m.status_cd = 'WITHDRAWN'
         <include refid="searchWhere"/>
@@ -73,8 +73,8 @@
     <!-- 휴면 회원 (DORMANT) -->
     <select id="selectDormantList" resultMap="MemberResult">
         SELECT <include refid="selectColumns"/>
-        FROM   member m
-               LEFT JOIN member_group g ON g.group_no = m.group_no
+        FROM   tb_member m
+               LEFT JOIN tb_member_group g ON g.group_no = m.group_no
                <include refid="codeJoins"/>
         WHERE  m.status_cd = 'DORMANT'
         <include refid="searchWhere"/>

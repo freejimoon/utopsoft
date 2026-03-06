@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.system.dao.UsrAuthMapper">
 
@@ -26,14 +26,14 @@
     <!-- 관리자 목록 -->
     <select id="selectUsrList" resultMap="UsrResult">
         SELECT usr_id, usr_nm, dept_nm, role_cd, use_yn, last_login_dt
-        FROM usr
+        FROM tb_usr
         ORDER BY usr_nm
     </select>
 
     <!-- 전체 메뉴 목록 -->
     <select id="selectMenuList" resultMap="MenuResult">
         SELECT menu_no, parent_menu_no, menu_nm, menu_url, menu_icon, menu_type, sort_ord, use_yn
-        FROM menu
+        FROM tb_menu
         WHERE use_yn = 'Y'
         ORDER BY sort_ord, menu_no
     </select>
@@ -42,8 +42,8 @@
     <select id="selectMenuListWithAuth" resultMap="MenuResult">
         SELECT m.menu_no, m.parent_menu_no, m.menu_nm, m.menu_url, m.menu_icon, m.menu_type, m.sort_ord, m.use_yn,
                IFNULL(a.access_yn, 'N') AS access_yn
-        FROM menu m
-        LEFT JOIN usr_menu_auth a
+        FROM tb_menu m
+        LEFT JOIN tb_usr_menu_auth a
             ON a.menu_no = m.menu_no
            AND a.usr_id  = #{usrId}
         WHERE m.use_yn = 'Y'
@@ -52,12 +52,12 @@
 
     <!-- 사용자 권한 전체 삭제 -->
     <delete id="deleteUsrMenuAuth">
-        DELETE FROM usr_menu_auth WHERE usr_id = #{usrId}
+        DELETE FROM tb_usr_menu_auth WHERE usr_id = #{usrId}
     </delete>
 
     <!-- 권한 단건 등록 -->
     <insert id="insertUsrMenuAuth">
-        INSERT INTO usr_menu_auth (usr_id, menu_no, access_yn, created_by)
+        INSERT INTO tb_usr_menu_auth (usr_id, menu_no, access_yn, created_by)
         VALUES (#{usrId}, #{menuNo}, #{accessYn}, #{usrId})
     </insert>
 

@@ -30,8 +30,8 @@
                u.last_login_dt, u.login_fail_cnt, u.lock_yn,
                u.created_at, u.created_by, u.updated_at, u.updated_by,
                c.code_nm AS role_nm
-        FROM usr u
-        LEFT JOIN com_code c ON c.grp_cd = 'USR_ROLE_CD' AND c.code = u.role_cd
+        FROM tb_usr u
+        LEFT JOIN tb_com_code c ON c.grp_cd = 'USR_ROLE_CD' AND c.code = u.role_cd
         <where>
             <if test="searchKeyword != null and searchKeyword != ''">
                 AND (u.usr_id LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -55,14 +55,14 @@
                u.last_login_dt, u.login_fail_cnt, u.lock_yn,
                u.created_at, u.created_by, u.updated_at, u.updated_by,
                c.code_nm AS role_nm
-        FROM usr u
-        LEFT JOIN com_code c ON c.grp_cd = 'USR_ROLE_CD' AND c.code = u.role_cd
+        FROM tb_usr u
+        LEFT JOIN tb_com_code c ON c.grp_cd = 'USR_ROLE_CD' AND c.code = u.role_cd
         WHERE u.usr_id = #{usrId}
     </select>
 
     <!-- 등록 -->
     <insert id="insert">
-        INSERT INTO usr
+        INSERT INTO tb_usr
             (usr_id, usr_nm, usr_pw, email, phone, dept_nm, role_cd, use_yn, lock_yn, created_by)
         VALUES
             (#{usrId}, #{usrNm}, #{usrPw}, #{email}, #{phone}, #{deptNm},
@@ -71,7 +71,7 @@
 
     <!-- 수정 -->
     <update id="update">
-        UPDATE usr
+        UPDATE tb_usr
         SET usr_nm     = #{usrNm},
             email      = #{email},
             phone      = #{phone},
@@ -85,12 +85,12 @@
 
     <!-- 삭제 -->
     <delete id="delete">
-        DELETE FROM usr WHERE usr_id = #{usrId}
+        DELETE FROM tb_usr WHERE usr_id = #{usrId}
     </delete>
 
     <!-- 비밀번호 초기화 -->
     <update id="resetPassword">
-        UPDATE usr
+        UPDATE tb_usr
         SET usr_pw     = #{usrPw},
             pwd_chg_dt = NULL,
             updated_at = NOW()
@@ -99,7 +99,7 @@
 
     <!-- ID 중복 체크 -->
     <select id="countById" resultType="int">
-        SELECT COUNT(*) FROM usr WHERE usr_id = #{usrId}
+        SELECT COUNT(*) FROM tb_usr WHERE usr_id = #{usrId}
     </select>
 
 </mapper>

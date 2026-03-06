@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -17,7 +17,7 @@
                cg.code_nm AS group_cd_nm,
                g.represent_nm, g.manager_nm, g.manager_phone, g.manager_email,
                (SELECT COUNT(*)
-                FROM   member m
+                FROM   tb_member m
                 WHERE  m.group_no  = g.group_no
                   AND  m.status_cd != 'WITHDRAWN') AS current_member_cnt,
                g.max_member_cnt,
@@ -26,9 +26,9 @@
                DATE_FORMAT(g.contract_start_dt, '%Y-%m-%d') AS contract_start_dt,
                DATE_FORMAT(g.contract_end_dt,   '%Y-%m-%d') AS contract_end_dt,
                g.monthly_fee
-        FROM   member_group g
-               LEFT JOIN com_code cg ON cg.grp_cd = 'GROUP_TYPE_CD'      AND cg.code = g.group_cd
-               LEFT JOIN com_code cs ON cs.grp_cd = 'CONTRACT_STATUS_CD' AND cs.code = g.contract_status_cd
+        FROM   tb_member_group g
+               LEFT JOIN tb_com_code cg ON cg.grp_cd = 'GROUP_TYPE_CD'      AND cg.code = g.group_cd
+               LEFT JOIN tb_com_code cs ON cs.grp_cd = 'CONTRACT_STATUS_CD' AND cs.code = g.contract_status_cd
         WHERE  1 = 1
         <if test="searchGroupCd  != null and searchGroupCd  != ''"> AND g.group_cd = #{searchGroupCd}</if>
         <if test="searchKeyword  != null and searchKeyword  != ''">

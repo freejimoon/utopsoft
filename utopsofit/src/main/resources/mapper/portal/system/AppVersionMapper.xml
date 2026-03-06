@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.system.dao.AppVersionMapper">
 
@@ -28,9 +28,9 @@
                v.created_at, v.created_by, v.updated_at, v.updated_by,
                at_cd.code_nm AS app_type_nm,
                st_cd.code_nm AS store_type_nm
-        FROM app_version v
-        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE_CD'   AND at_cd.code = v.app_cd
-        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE_CD' AND st_cd.code = v.store_cd
+        FROM tb_app_version v
+        LEFT JOIN tb_com_code at_cd ON at_cd.grp_cd = 'APP_TYPE_CD'   AND at_cd.code = v.app_cd
+        LEFT JOIN tb_com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE_CD' AND st_cd.code = v.store_cd
         <where>
             <if test="searchAppCd   != null and searchAppCd   != ''">
                 AND v.app_cd   = #{searchAppCd}
@@ -47,13 +47,13 @@
         SELECT version_no, app_cd, store_cd, version, app_code,
                release_dt, force_update_yn, use_yn, note,
                created_at, created_by, updated_at, updated_by
-        FROM app_version
+        FROM tb_app_version
         WHERE version_no = #{versionNo}
     </select>
 
     <!-- 등록 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="versionNo">
-        INSERT INTO app_version
+        INSERT INTO tb_app_version
             (app_cd, store_cd, version, app_code, release_dt, force_update_yn, use_yn, note, created_by)
         VALUES
             (#{appCd}, #{storeCd}, #{version}, #{appCode}, #{releaseDt}, #{forceUpdateYn}, #{useYn}, #{note}, #{createdBy})
@@ -61,7 +61,7 @@
 
     <!-- 수정 -->
     <update id="update">
-        UPDATE app_version
+        UPDATE tb_app_version
         SET app_cd        = #{appCd},
             store_cd      = #{storeCd},
             version         = #{version},
@@ -76,7 +76,7 @@
 
     <!-- 삭제 -->
     <delete id="delete">
-        DELETE FROM app_version WHERE version_no = #{versionNo}
+        DELETE FROM tb_app_version WHERE version_no = #{versionNo}
     </delete>
 
 </mapper>

@@ -3,7 +3,7 @@
 -- 스키마: utopsoft
 --
 -- [테이블]
---   app_version : 앱 버전 마스터
+--   tb_app_version : 앱 버전 마스터
 --
 -- [앱 구분]
 --   ANDROID : 안드로이드 앱
@@ -19,10 +19,10 @@ USE `utopsoft`;
 
 
 -- =====================================================
--- 앱 버전 (app_version)
+-- 앱 버전 (tb_app_version)
 -- =====================================================
-DROP TABLE IF EXISTS `app_version`;
-CREATE TABLE `app_version` (
+DROP TABLE IF EXISTS `tb_app_version`;
+CREATE TABLE `tb_app_version` (
     `version_no`       BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT         COMMENT '버전번호 (PK)',
 
     -- 앱 구분 / 스토어
@@ -65,17 +65,17 @@ CREATE TABLE `app_version` (
 -- sort_ord 32번부터 이어서 추가
 -- =====================================================
 
-INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`) VALUES
-('APP_TYPE_CD',   '앱 구분',   'app_version.app_cd   — 안드로이드/iOS 구분',       'Y', 32),
-('STORE_TYPE_CD', '스토어 구분', 'app_version.store_cd — 앱 배포 스토어 구분',     'Y', 33);
+INSERT INTO `tb_com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`) VALUES
+('APP_TYPE_CD',   '앱 구분',   'tb_app_version.app_cd   — 안드로이드/iOS 구분',       'Y', 32),
+('STORE_TYPE_CD', '스토어 구분', 'tb_app_version.store_cd — 앱 배포 스토어 구분',     'Y', 33);
 
 -- APP_TYPE
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
 ('APP_TYPE_CD', 'ANDROID', '안드로이드', '안드로이드 앱 (Google Play / ONE Store)', 'Y', 1),
 ('APP_TYPE_CD', 'IOS',     'iOS',        'Apple App Store 앱',                       'Y', 2);
 
 -- STORE_TYPE
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
 ('STORE_TYPE_CD', 'GOOGLE_PLAY', '구글 플레이', 'Google Play Store',   'Y', 1),
 ('STORE_TYPE_CD', 'APP_STORE',   '앱 스토어',   'Apple App Store',      'Y', 2),
 ('STORE_TYPE_CD', 'ONE_STORE',   '원스토어',    '원스토어 (국내)',       'Y', 3);
@@ -85,7 +85,7 @@ INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sor
 -- 샘플 데이터
 -- =====================================================
 
-INSERT INTO `app_version`
+INSERT INTO `tb_app_version`
     (`app_cd`, `store_cd`, `version`, `app_code`, `release_dt`, `force_update_yn`, `use_yn`, `note`, `created_by`)
 VALUES
 -- 안드로이드 - 구글 플레이

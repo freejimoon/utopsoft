@@ -30,9 +30,9 @@
                t.use_yn,
                t.created_at,
                t.created_by
-        FROM   terms t
-               LEFT JOIN com_code a  ON a.grp_cd  = 'TERMS_APP_TYPE_CD' AND a.code  = t.app_type_cd
-               LEFT JOIN com_code tt ON tt.grp_cd = 'TERMS_TYPE_CD'     AND tt.code = t.terms_type_cd
+        FROM   tb_terms t
+               LEFT JOIN tb_com_code a  ON a.grp_cd  = 'TERMS_APP_TYPE_CD' AND a.code  = t.app_type_cd
+               LEFT JOIN tb_com_code tt ON tt.grp_cd = 'TERMS_TYPE_CD'     AND tt.code = t.terms_type_cd
         WHERE  t.use_yn = 'Y'
         <if test="searchAppType != null and searchAppType != ''">
             AND t.app_type_cd = #{searchAppType}
@@ -53,19 +53,19 @@
                t.content,
                t.created_at,
                t.created_by
-        FROM   terms t
+        FROM   tb_terms t
         WHERE  t.terms_no = #{termsNo}
     </select>
 
     <!-- 등록 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="termsNo">
-        INSERT INTO terms (app_type_cd, terms_type_cd, required_yn, version, content, use_yn, created_by)
+        INSERT INTO tb_terms (app_type_cd, terms_type_cd, required_yn, version, content, use_yn, created_by)
         VALUES (#{appTypeCd}, #{termsTypeCd}, #{requiredYn}, #{version}, #{content}, 'Y', #{createdBy})
     </insert>
 
     <!-- 수정 -->
     <update id="update">
-        UPDATE terms
+        UPDATE tb_terms
         SET    app_type_cd   = #{appTypeCd},
                terms_type_cd = #{termsTypeCd},
                required_yn   = #{requiredYn},
@@ -78,7 +78,7 @@
 
     <!-- 삭제 (논리 삭제) -->
     <update id="delete">
-        UPDATE terms
+        UPDATE tb_terms
         SET    use_yn     = 'N',
                updated_at = NOW()
         WHERE  terms_no = #{termsNo}

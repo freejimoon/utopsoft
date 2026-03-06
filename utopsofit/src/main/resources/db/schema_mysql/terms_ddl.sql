@@ -4,8 +4,8 @@
 
 USE `utopsoft`;
 
-DROP TABLE IF EXISTS `terms`;
-CREATE TABLE `terms` (
+DROP TABLE IF EXISTS `tb_terms`;
+CREATE TABLE `tb_terms` (
     `terms_no`      BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT        COMMENT '약관번호 (PK)',
     `app_type_cd`   VARCHAR(20)      NOT NULL DEFAULT 'MAIN'        COMMENT '앱 구분 (공통코드 TERMS_APP_TYPE)',
     `terms_type_cd` VARCHAR(20)      NOT NULL                       COMMENT '약관 유형 (공통코드 TERMS_TYPE)',
@@ -28,22 +28,22 @@ CREATE TABLE `terms` (
 -- 공통코드 INSERT
 -- =====================================================
 -- 앱 구분 (TERMS_APP_TYPE)
-INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
+INSERT INTO `tb_com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
 VALUES ('TERMS_APP_TYPE_CD', '약관 앱 구분', '약관이 적용되는 앱 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
 ('TERMS_APP_TYPE_CD', 'MAIN', '메인 앱', 'Y', 1, 'system'),
 ('TERMS_APP_TYPE_CD', 'CP',   'CP',      'Y', 2, 'system')
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 -- 약관 유형 (TERMS_TYPE)
-INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
+INSERT INTO `tb_com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
 VALUES ('TERMS_TYPE_CD', '약관 유형', '약관 종류 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
-INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
+INSERT INTO `tb_com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
 ('TERMS_TYPE_CD', 'USE',       '이용약관',               'Y', 1, 'system'),
 ('TERMS_TYPE_CD', 'PRIVACY',   '개인정보 수집·이용동의', 'Y', 2, 'system'),
@@ -53,7 +53,7 @@ ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 -- =====================================================
 -- 샘플 데이터
 -- =====================================================
-INSERT INTO `terms` (`app_type_cd`, `terms_type_cd`, `required_yn`, `version`, `content`, `created_by`)
+INSERT INTO `tb_terms` (`app_type_cd`, `terms_type_cd`, `required_yn`, `version`, `content`, `created_by`)
 VALUES
 ('MAIN', 'USE',       'Y', 8, '제1조(목적)\n이 약관은 서비스 이용에 관한 조건 및 절차를 규정합니다.', 'admin'),
 ('MAIN', 'PRIVACY',   'Y', 7, '개인정보 수집 및 이용에 관한 동의입니다.\n수집항목: 이메일, 닉네임 등', 'admin'),

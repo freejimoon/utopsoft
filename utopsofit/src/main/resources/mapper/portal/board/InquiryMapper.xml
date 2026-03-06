@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.board.inquiry.dao.InquiryMapper">
 
@@ -35,10 +35,10 @@
                m.member_nm,
                cc.code_nm    AS inq_category_nm,
                cs.code_nm    AS inq_status_nm
-        FROM   inquiry i
-               LEFT JOIN member   m  ON i.member_no      = m.member_no
-               LEFT JOIN com_code cc ON cc.grp_cd = 'INQ_CATEGORY_CD' AND cc.code = i.inq_category_cd
-               LEFT JOIN com_code cs ON cs.grp_cd = 'INQ_STATUS_CD'   AND cs.code = i.inq_status_cd
+        FROM   tb_inquiry i
+               LEFT JOIN tb_member   m  ON i.member_no      = m.member_no
+               LEFT JOIN tb_com_code cc ON cc.grp_cd = 'INQ_CATEGORY_CD' AND cc.code = i.inq_category_cd
+               LEFT JOIN tb_com_code cs ON cs.grp_cd = 'INQ_STATUS_CD'   AND cs.code = i.inq_status_cd
         <where>
             <if test="memberNo != null">
                 AND i.member_no = #{memberNo}
@@ -77,23 +77,23 @@
                m.member_nm,
                cc.code_nm    AS inq_category_nm,
                cs.code_nm    AS inq_status_nm
-        FROM   inquiry i
-               LEFT JOIN member   m  ON i.member_no      = m.member_no
-               LEFT JOIN com_code cc ON cc.grp_cd = 'INQ_CATEGORY_CD' AND cc.code = i.inq_category_cd
-               LEFT JOIN com_code cs ON cs.grp_cd = 'INQ_STATUS_CD'   AND cs.code = i.inq_status_cd
+        FROM   tb_inquiry i
+               LEFT JOIN tb_member   m  ON i.member_no      = m.member_no
+               LEFT JOIN tb_com_code cc ON cc.grp_cd = 'INQ_CATEGORY_CD' AND cc.code = i.inq_category_cd
+               LEFT JOIN tb_com_code cs ON cs.grp_cd = 'INQ_STATUS_CD'   AND cs.code = i.inq_status_cd
         WHERE  i.inq_no = #{inqNo}
     </select>
 
     <!-- 문의 등록 (앱 API) -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="inqNo">
-        INSERT INTO inquiry (member_no, title, content, inq_category_cd, inq_status_cd)
+        INSERT INTO tb_inquiry (member_no, title, content, inq_category_cd, inq_status_cd)
         VALUES (#{memberNo}, #{title}, #{content},
                 COALESCE(#{inqCategoryCd}, 'GENERAL'), 'WAIT')
     </insert>
 
     <!-- 답변 등록 -->
     <update id="updateReply">
-        UPDATE inquiry
+        UPDATE tb_inquiry
         SET    reply_content = #{replyContent},
                reply_dt      = NOW(),
                reply_by      = #{replyBy},

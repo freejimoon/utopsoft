@@ -27,8 +27,8 @@
                n.view_cnt,
                n.created_at,
                n.created_by
-        FROM   notice n
-               LEFT JOIN com_code c ON c.grp_cd = 'NOTICE_TYPE_CD' AND c.code = n.notice_cd
+        FROM   tb_notice n
+               LEFT JOIN tb_com_code c ON c.grp_cd = 'NOTICE_TYPE_CD' AND c.code = n.notice_cd
         WHERE  n.use_yn = 'Y'
         <if test="searchType != null and searchType != ''">
             AND n.notice_cd = #{searchType}
@@ -50,20 +50,20 @@
                n.view_cnt,
                n.created_at,
                n.created_by
-        FROM   notice n
-               LEFT JOIN com_code c ON c.grp_cd = 'NOTICE_TYPE_CD' AND c.code = n.notice_cd
+        FROM   tb_notice n
+               LEFT JOIN tb_com_code c ON c.grp_cd = 'NOTICE_TYPE_CD' AND c.code = n.notice_cd
         WHERE  n.notice_no = #{noticeNo}
     </select>
 
     <!-- 등록 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="noticeNo">
-        INSERT INTO notice (title, content, notice_cd, pin_yn, use_yn, created_by)
+        INSERT INTO tb_notice (title, content, notice_cd, pin_yn, use_yn, created_by)
         VALUES (#{title}, #{content}, #{noticeCd}, #{pinYn}, 'Y', #{createdBy})
     </insert>
 
     <!-- 수정 -->
     <update id="update">
-        UPDATE notice
+        UPDATE tb_notice
         SET    title       = #{title},
                content     = #{content},
                notice_cd = #{noticeCd},
@@ -75,7 +75,7 @@
 
     <!-- 삭제 (논리 삭제) -->
     <update id="delete">
-        UPDATE notice
+        UPDATE tb_notice
         SET    use_yn = 'N',
                updated_at = NOW()
         WHERE  notice_no = #{noticeNo}
