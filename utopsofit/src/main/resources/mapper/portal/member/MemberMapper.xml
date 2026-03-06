@@ -40,6 +40,7 @@
         m.membership_cd, m.sub_status_cd, m.sub_plan_cd, m.sub_start_dt, m.sub_end_dt, m.sub_auto_yn,
         m.group_no, g.group_nm, m.group_role_cd,
         m.status_cd, m.grade_cd,
+        m.point_bal, m.exp_total, m.exp_level,
         m.join_dt, m.last_login_dt, m.withdraw_dt, m.updated_at,
         c_sns.code_nm AS social_nm,
         c_mem.code_nm AS membership_nm,

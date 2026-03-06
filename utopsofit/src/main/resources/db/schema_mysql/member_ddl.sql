@@ -108,6 +108,11 @@ CREATE TABLE `member` (
     `status_cd`         VARCHAR(20)      NOT NULL DEFAULT 'ACTIVE'      COMMENT '계정상태 → com_code MEMBER_STATUS (ACTIVE/INACTIVE/DORMANT/WITHDRAWN)',
     `grade_cd`          VARCHAR(20)      NOT NULL DEFAULT 'NORMAL'      COMMENT '등급 → com_code MEMBER_GRADE (NORMAL/SILVER/GOLD/VIP)',
 
+    -- 포인트 / 경험치 캐시 (point_bal, exp_bal 테이블과 동기화)
+    `point_bal`         INT UNSIGNED     NOT NULL DEFAULT 0             COMMENT '포인트 잔액 캐시 (point_bal.bal_amt 동기화)',
+    `exp_total`         INT UNSIGNED     NOT NULL DEFAULT 0             COMMENT '누적 경험치 캐시 (exp_bal.exp_total 동기화)',
+    `exp_level`         SMALLINT UNSIGNED NOT NULL DEFAULT 1            COMMENT '현재 레벨 캐시 (exp_bal.exp_level 동기화)',
+
     -- 마케팅 동의
     `mkt_agree_yn`      CHAR(1)          NOT NULL DEFAULT 'N'           COMMENT '마케팅 수신 동의 (Y/N)',
     `mkt_agree_dt`      DATETIME         DEFAULT NULL                   COMMENT '마케팅 동의 일시',

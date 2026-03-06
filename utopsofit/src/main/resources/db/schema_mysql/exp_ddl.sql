@@ -91,6 +91,26 @@ CREATE TABLE `exp_hist` (
 -- 샘플 데이터
 -- -----------------------------------------------------
 
+-- =====================================================
+-- 공통코드 INSERT
+-- =====================================================
+
+-- 경험치 획득원인 유형 (EXP_EARN_TYPE_CD)
+INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES ('EXP_EARN_TYPE_CD', '경험치 획득원인', 'exp_hist.earn_type — 경험치 획득 원인 구분', 'Y', 63, 'system')
+ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
+
+INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES
+('EXP_EARN_TYPE_CD', 'LESSON',    '학습완료', '강좌·레슨 완료로 인한 경험치 획득',    'Y', 1, 'system'),
+('EXP_EARN_TYPE_CD', 'CHALLENGE', '챌린지',   '챌린지 달성으로 인한 경험치 획득',     'Y', 2, 'system'),
+('EXP_EARN_TYPE_CD', 'ATTEND',    '출석',     '출석 보상 경험치 획득',                'Y', 3, 'system'),
+('EXP_EARN_TYPE_CD', 'QUIZ',      '퀴즈',     '퀴즈 완료로 인한 경험치 획득',         'Y', 4, 'system'),
+('EXP_EARN_TYPE_CD', 'REVIEW',    '복습',     '복습 활동으로 인한 경험치 획득',       'Y', 5, 'system'),
+('EXP_EARN_TYPE_CD', 'ADMIN',     '관리자조정','관리자가 직접 조정한 경험치',          'Y', 6, 'system')
+ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
+
+
 -- exp_level_def: 레벨 정의
 INSERT INTO `exp_level_def` (`level`, `level_nm`, `req_exp`, `point_reward`, `description`) VALUES
 ( 1, '입문',    0,       0,   '학습을 시작한 단계'),

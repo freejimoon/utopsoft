@@ -43,6 +43,11 @@ public class MemberVO {
     private String        groupNm;          // 소속 단체명 (JOIN)
     private String        groupRoleCd;      // 단체 내 역할 → GROUP_ROLE (ADMIN/MEMBER)
 
+    /* 포인트 / 경험치 캐시 */
+    private Integer       pointBal;         // 포인트 잔액
+    private Integer       expTotal;         // 누적 경험치
+    private Integer       expLevel;         // 현재 레벨
+
     /* 계정 상태 */
     private String        statusCd;         // 계정상태 → MEMBER_STATUS_CD
     private String        gradeCd;          // 등급 → MEMBER_GRADE_CD

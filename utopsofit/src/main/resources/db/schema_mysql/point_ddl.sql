@@ -77,6 +77,40 @@ INSERT INTO `point_bal` (`member_no`, `bal_amt`, `total_earn`, `total_use`) VALU
 (4,   50,  200,  150),
 (5,    0,  100,  100);
 
+-- =====================================================
+-- 공통코드 INSERT
+-- =====================================================
+
+-- 포인트 거래 유형 (POINT_TRAN_TYPE_CD)
+INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES ('POINT_TRAN_TYPE_CD', '포인트 거래유형', 'point_hist.tran_type — 포인트 적립/사용/만료/취소 유형', 'Y', 61, 'system')
+ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
+
+INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES
+('POINT_TRAN_TYPE_CD', 'EARN',   '적립', '포인트 적립 (양수)',               'Y', 1, 'system'),
+('POINT_TRAN_TYPE_CD', 'USE',    '사용', '포인트 사용 (음수)',               'Y', 2, 'system'),
+('POINT_TRAN_TYPE_CD', 'EXPIRE', '만료', '포인트 만료 처리 (음수)',          'Y', 3, 'system'),
+('POINT_TRAN_TYPE_CD', 'CANCEL', '취소', '적립/사용 취소 (역부호)',          'Y', 4, 'system')
+ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
+
+
+-- 포인트 발생원인 유형 (POINT_REF_TYPE_CD)
+INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES ('POINT_REF_TYPE_CD', '포인트 발생원인', 'point_hist.ref_type — 포인트 발생 원인 구분', 'Y', 62, 'system')
+ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
+
+INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES
+('POINT_REF_TYPE_CD', 'LESSON',    '학습완료',    '강좌·레슨 완료로 인한 적립',      'Y', 1, 'system'),
+('POINT_REF_TYPE_CD', 'CHALLENGE', '챌린지',      '챌린지 달성으로 인한 적립',       'Y', 2, 'system'),
+('POINT_REF_TYPE_CD', 'ATTEND',    '출석',        '출석 보상 적립',                  'Y', 3, 'system'),
+('POINT_REF_TYPE_CD', 'PURCHASE',  '구매사용',    '강좌·아이템 구매 사용',           'Y', 4, 'system'),
+('POINT_REF_TYPE_CD', 'ADMIN',     '관리자조정',  '관리자가 직접 조정한 포인트',     'Y', 5, 'system'),
+('POINT_REF_TYPE_CD', 'EXPIRE',    '기간만료',    '보유 기간 초과로 인한 자동 만료', 'Y', 6, 'system')
+ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
+
+
 -- point_hist: 포인트 이력 샘플
 INSERT INTO `point_hist` (`member_no`, `tran_type`, `point_amt`, `bal_after`, `ref_type`, `ref_id`, `expire_dt`, `remark`, `created_by`) VALUES
 (1, 'EARN',   100,  100, 'ATTEND',    NULL,   DATE_ADD(CURDATE(), INTERVAL 90 DAY), '출석 보상',          'system'),

@@ -23,7 +23,8 @@ public class InquiryController {
     /** 목록 화면 */
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("statusCodes", comCodeMapper.selectCodeListByGrp("INQ_STATUS_CD"));
+        model.addAttribute("categoryCodes", comCodeMapper.selectCodeListByGrp("INQ_CATEGORY_CD"));
+        model.addAttribute("statusCodes",   comCodeMapper.selectCodeListByGrp("INQ_STATUS_CD"));
         return "portal/board/inquiry/inquiryList";
     }
 

@@ -16,6 +16,7 @@ public class InquiryVO {
     private Long          memberNo;
     private String        title;
     private String        content;
+    private String        inqCategoryCd;
     private String        inqStatusCd;
     private String        replyContent;
     private LocalDateTime replyDt;
@@ -28,9 +29,11 @@ public class InquiryVO {
     private String memberNm;
 
     /* 공통코드 명칭 */
+    private String inqCategoryNm;
     private String inqStatusNm;
 
     /* 검색 조건 */
+    private String searchCategory;
     private String searchStatus;
     private String searchKeyword;
 }

@@ -20,6 +20,16 @@
 
   <div class="search-box">
     <div class="search-item">
+      <span class="search-label">유형</span>
+      <select id="filterCategory" class="search-select">
+        <option value="">전체</option>
+        <c:forEach var="code" items="${categoryCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
+      </select>
+    </div>
+    <div class="search-divider"></div>
+    <div class="search-item">
       <span class="search-label">상태</span>
       <select id="filterStatus" class="search-select">
         <option value="">전체</option>
@@ -44,6 +54,7 @@
       <tr>
         <th style="width:60px;">No</th>
         <th>제목</th>
+        <th style="width:90px;">유형</th>
         <th style="width:180px;">등록계정</th>
         <th style="width:130px;">닉네임</th>
         <th style="width:150px;">등록일시</th>
@@ -104,8 +115,9 @@ var table;
 function loadTable() {
   if (table) { table.destroy(); $('#inquiryTable tbody').empty(); }
   $.get(ctx + '/board/inquiry/list/json', {
-    searchStatus:  $('#filterStatus').val(),
-    searchKeyword: $('#filterKeyword').val()
+    searchCategory: $('#filterCategory').val(),
+    searchStatus:   $('#filterStatus').val(),
+    searchKeyword:  $('#filterKeyword').val()
   })
   .done(function(data) {
     table = $('#inquiryTable').DataTable({
@@ -116,6 +128,9 @@ function loadTable() {
           render: function(d, t, row) {
             return '<a href="javascript:void(0)" class="link-title" data-no="' + row.inqNo + '">' + d + '</a>';
           }
+        },
+        { data: 'inqCategoryNm', className: 'dt-center', defaultContent: '-',
+          render: function(d) { return d ? '<span class="badge badge-default">' + d + '</span>' : '-'; }
         },
         { data: 'memberEmail', className: 'dt-center', defaultContent: '-' },
         { data: 'memberNm',    className: 'dt-center', defaultContent: '-' },
@@ -141,7 +156,7 @@ function loadTable() {
 $('#btnSearch').on('click', loadTable);
 $('#filterKeyword').on('keydown', function(e) { if (e.key === 'Enter') loadTable(); });
 $('#btnReset').on('click', function() {
-  $('#filterStatus').val(''); $('#filterKeyword').val(''); loadTable();
+  $('#filterCategory, #filterStatus').val(''); $('#filterKeyword').val(''); loadTable();
 });
 
 $(document).on('click', '.link-title', function() {
