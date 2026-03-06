@@ -1,6 +1,6 @@
 package com.utopsofit.project.portal.member.controller;
 
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import com.utopsofit.project.portal.member.domain.GroupMemberVO;
 import com.utopsofit.project.portal.member.service.GroupMemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ import java.util.List;
 public class GroupMemberController {
 
     private final GroupMemberService groupMemberService;
-    private final ComCodeMapper      comCodeMapper;
+    private final ComCodeService     comCodeService;
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("groupTypeCodes", comCodeMapper.selectCodeListByGrp("GROUP_TYPE_CD"));
+        model.addAttribute("groupTypeCodes", comCodeService.getCodeList("GROUP_TYPE_CD"));
         return "portal/member/groupMemberList";
     }
 

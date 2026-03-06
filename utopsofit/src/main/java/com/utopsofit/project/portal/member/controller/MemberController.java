@@ -1,6 +1,6 @@
 package com.utopsofit.project.portal.member.controller;
 
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import com.utopsofit.project.portal.member.domain.MemberVO;
 import com.utopsofit.project.portal.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +26,11 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService  memberService;
-    private final ComCodeMapper  comCodeMapper;
+    private final ComCodeService comCodeService;
 
     private void addSearchCodes(Model model) {
-        model.addAttribute("membershipCodes", comCodeMapper.selectCodeListByGrp("MEMBERSHIP_TYPE_CD"));
-        model.addAttribute("socialCodes",     comCodeMapper.selectCodeListByGrp("SOCIAL_TYPE_CD"));
+        model.addAttribute("membershipCodes", comCodeService.getCodeList("MEMBERSHIP_TYPE_CD"));
+        model.addAttribute("socialCodes",     comCodeService.getCodeList("SOCIAL_TYPE_CD"));
     }
 
     /* ── 회원 현황 ───────────────────────────── */

@@ -2,7 +2,7 @@ package com.utopsofit.project.portal.board.inquiry.controller;
 
 import com.utopsofit.project.portal.board.inquiry.domain.InquiryVO;
 import com.utopsofit.project.portal.board.inquiry.service.InquiryService;
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,13 +18,13 @@ import java.util.Map;
 public class InquiryController {
 
     private final InquiryService  inquiryService;
-    private final ComCodeMapper   comCodeMapper;
+    private final ComCodeService  comCodeService;
 
     /** 목록 화면 */
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("categoryCodes", comCodeMapper.selectCodeListByGrp("INQ_CATEGORY_CD"));
-        model.addAttribute("statusCodes",   comCodeMapper.selectCodeListByGrp("INQ_STATUS_CD"));
+        model.addAttribute("categoryCodes", comCodeService.getCodeList("INQ_CATEGORY_CD"));
+        model.addAttribute("statusCodes",   comCodeService.getCodeList("INQ_STATUS_CD"));
         return "portal/board/inquiry/inquiryList";
     }
 

@@ -69,8 +69,8 @@ function fmtDt(d, len) {
    openModal()           → #modalOverlay
    openModal('#myModal') → #myModal
    ─────────────────────────────────────────────────────── */
-function openModal(sel)  { $(sel || '#modalOverlay').addClass('open'); }
-function closeModal(sel) { $(sel || '#modalOverlay').removeClass('close').removeClass('open'); }
+function openModal(sel)  { $(typeof sel === 'string' ? sel : '#modalOverlay').addClass('open'); }
+function closeModal(sel) { $(typeof sel === 'string' ? sel : '#modalOverlay').removeClass('close').removeClass('open'); }
 
 /* ── DataTables 전역 기본값 ─────────────────────────────
    dom : '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>'

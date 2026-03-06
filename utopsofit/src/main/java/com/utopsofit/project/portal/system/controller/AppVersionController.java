@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
-import com.utopsofit.project.portal.code.domain.ComCode;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import com.utopsofit.project.portal.system.domain.AppVersionVO;
 import com.utopsofit.project.portal.system.service.AppVersionService;
 
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class AppVersionController {
 
     private final AppVersionService appVersionService;
-    private final ComCodeMapper     comCodeMapper;
+    private final ComCodeService    comCodeService;
 
     /**
      * 버전 목록 페이지
@@ -36,10 +35,8 @@ public class AppVersionController {
      */
     @GetMapping("/list")
     public String list(Model model) {
-        List<ComCode> appTypes   = comCodeMapper.selectCodeListByGrp("APP_TYPE_CD");
-        List<ComCode> storeTypes = comCodeMapper.selectCodeListByGrp("STORE_TYPE_CD");
-        model.addAttribute("appTypes",   appTypes);
-        model.addAttribute("storeTypes", storeTypes);
+        model.addAttribute("appTypes",   comCodeService.getCodeList("APP_TYPE_CD"));
+        model.addAttribute("storeTypes", comCodeService.getCodeList("STORE_TYPE_CD"));
         return "portal/system/appVersionList";
     }
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.utopsofit.project.cmm.file.dao.FileAttachMapper">
+
+    <resultMap id="FileAttachResult" type="com.utopsofit.project.cmm.file.domain.FileAttachVO">
+        <id  property="attachNo"  column="attach_no"/>
+        <result property="refType"    column="ref_type"/>
+        <result property="refNo"      column="ref_no"/>
+        <result property="origNm"     column="orig_nm"/>
+        <result property="saveNm"     column="save_nm"/>
+        <result property="filePath"   column="file_path"/>
+        <result property="fileSize"   column="file_size"/>
+        <result property="fileExt"    column="file_ext"/>
+        <result property="createdAt"  column="created_at"/>
+        <result property="createdBy"  column="created_by"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="FileAttachResult">
+        SELECT attach_no, ref_type, ref_no, orig_nm, save_nm, file_path, file_size, file_ext, created_at, created_by
+        FROM   tb_file_attach
+        WHERE  ref_type = #{refType} AND ref_no = #{refNo}
+        ORDER BY attach_no ASC
+    </select>
+
+    <select id="countByRef" resultType="int">
+        SELECT COUNT(*) FROM tb_file_attach
+        WHERE  ref_type = #{refType} AND ref_no = #{refNo}
+    </select>
+
+    <select id="selectOne" resultMap="FileAttachResult">
+        SELECT attach_no, ref_type, ref_no, orig_nm, save_nm, file_path, file_size, file_ext, created_at, created_by
+        FROM   tb_file_attach
+        WHERE  attach_no = #{attachNo}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="attachNo">
+        INSERT INTO tb_file_attach (ref_type, ref_no, orig_nm, save_nm, file_path, file_size, file_ext, created_by)
+        VALUES (#{refType}, #{refNo}, #{origNm}, #{saveNm}, #{filePath}, #{fileSize}, #{fileExt}, #{createdBy})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tb_file_attach WHERE attach_no = #{attachNo}
+    </delete>
+
+    <delete id="deleteByRef">
+        DELETE FROM tb_file_attach WHERE ref_type = #{refType} AND ref_no = #{refNo}
+    </delete>
+
+</mapper>

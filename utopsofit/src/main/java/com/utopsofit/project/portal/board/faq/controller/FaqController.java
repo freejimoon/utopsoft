@@ -1,8 +1,9 @@
 package com.utopsofit.project.portal.board.faq.controller;
 
+import com.utopsofit.project.cmm.file.service.FileAttachService;
 import com.utopsofit.project.portal.board.faq.domain.FaqVO;
 import com.utopsofit.project.portal.board.faq.service.FaqService;
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +26,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FaqController {
 
-    private final FaqService    faqService;
-    private final ComCodeMapper comCodeMapper;
+    private final FaqService        faqService;
+    private final ComCodeService    comCodeService;
+    private final FileAttachService fileAttachService;
+
+    private static final String REF_TYPE = "FAQ";
 
     /* ── 목록 뷰 ─────────────────────────────────────── */
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("categoryCodes", comCodeMapper.selectCodeListByGrp("FAQ_CATEGORY_CD"));
+        model.addAttribute("categoryCodes", comCodeService.getCodeList("FAQ_CATEGORY_CD"));
         return "portal/board/faq/faqList";
     }
 
@@ -52,16 +56,21 @@ public class FaqController {
     @GetMapping("/one")
     @ResponseBody
     public FaqVO one(@RequestParam Long faqNo) {
-        return faqService.getOne(faqNo);
+        FaqVO vo = faqService.getOne(faqNo);
+        if (vo != null) {
+            vo.setAttachList(fileAttachService.getList(REF_TYPE, faqNo));
+        }
+        return vo;
     }
 
     /* ── 저장 (등록/수정) ────────────────────────────── */
     @PostMapping("/save")
     @ResponseBody
-    public Map<String, String> save(@RequestBody FaqVO vo) {
+    public Map<String, Object> save(@RequestBody FaqVO vo) {
         faqService.save(vo);
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("result", "success");
+        result.put("faqNo", vo.getFaqNo());
         return result;
     }
 

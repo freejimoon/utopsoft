@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.utopsofit.project.portal.code.dao.ComCodeMapper;
-import com.utopsofit.project.portal.code.domain.ComCode;
+import com.utopsofit.project.portal.code.service.ComCodeService;
 import com.utopsofit.project.portal.system.domain.AdminVO;
 import com.utopsofit.project.portal.system.service.AdminService;
 
@@ -30,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 
     private final AdminService   adminService;
-    private final ComCodeMapper  comCodeMapper;
+    private final ComCodeService comCodeService;
 
     /**
      * 목록 페이지
@@ -38,8 +37,7 @@ public class AdminController {
      */
     @GetMapping("/list")
     public String list(Model model) {
-        List<ComCode> roles = comCodeMapper.selectCodeListByGrp("USR_ROLE_CD");
-        model.addAttribute("roles", roles);
+        model.addAttribute("roles", comCodeService.getCodeList("USR_ROLE_CD"));
         return "portal/system/adminList";
     }
 

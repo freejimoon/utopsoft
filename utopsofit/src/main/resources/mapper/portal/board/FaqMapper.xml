@@ -1,15 +1,16 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.board.faq.dao.FaqMapper">
 
     <resultMap id="FaqResult" type="com.utopsofit.project.portal.board.faq.domain.FaqVO">
-        <id  property="faqNo"       column="faq_no"/>
+        <id  property="faqNo"          column="faq_no"/>
         <result property="categoryCd"  column="category_cd"/>
         <result property="categoryNm"  column="category_nm"/>
         <result property="question"    column="question"/>
         <result property="answer"      column="answer"/>
         <result property="sortOrd"     column="sort_ord"/>
         <result property="useYn"       column="use_yn"/>
+        <result property="attachCount" column="attach_count"/>
         <result property="createdAt"   column="created_at"/>
         <result property="createdBy"   column="created_by"/>
         <result property="updatedAt"   column="updated_at"/>
@@ -25,6 +26,7 @@
                f.answer,
                f.sort_ord,
                f.use_yn,
+               (SELECT COUNT(*) FROM tb_file_attach a WHERE a.ref_type = 'FAQ' AND a.ref_no = f.faq_no) AS attach_count,
                f.created_at,
                f.created_by
         FROM   tb_faq f

@@ -50,6 +50,7 @@
         <th style="width:60px;">순번</th>
         <th style="width:90px;">분류</th>
         <th>질문</th>
+        <th style="width:60px;">첨부</th>
         <th style="width:100px;">등록자</th>
         <th style="width:150px;">등록일시</th>
       </tr>
@@ -58,6 +59,7 @@
 
 </div>
 
+<!-- ── FAQ 등록/수정 모달 ──────────────────────────── -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box modal-sm">
     <div class="modal-header">
@@ -94,6 +96,22 @@
             <textarea id="fAnswer" class="form-control" rows="8" placeholder="답변을 입력하세요..."></textarea>
           </td>
         </tr>
+        <tr>
+          <th>첨부파일</th>
+          <td colspan="3">
+            <!-- 기존 첨부파일 목록 -->
+            <div id="attachList" style="margin-bottom:8px;"></div>
+            <!-- 파일 선택 -->
+            <div id="newFileArea">
+              <input type="file" id="fFileInput" multiple style="display:none;">
+              <button type="button" class="btn btn-outline btn-sm" id="btnFileAdd"
+                      style="font-size:12px;padding:4px 12px;">파일 추가</button>
+              <span style="font-size:11px;color:#94a3b8;margin-left:8px;">최대 10MB / 파일당</span>
+              <!-- 선택된 새 파일 미리보기 -->
+              <div id="newFileList" style="margin-top:6px;"></div>
+            </div>
+          </td>
+        </tr>
       </table>
     </div>
     <div class="modal-footer">
@@ -108,7 +126,9 @@
 <script>
 var ctx = '${ctx}';
 var table;
+var selectedFiles = []; // 저장 전 선택된 새 파일 목록
 
+/* ── 목록 로드 ─────────────────────────────────────── */
 function loadTable() {
   if (table) { table.destroy(); $('#faqTable tbody').empty(); }
   $.get(ctx + '/board/faq/list/json', {
@@ -135,6 +155,11 @@ function loadTable() {
             return '<a href="javascript:void(0)" class="link-row" data-no="' + row.faqNo + '">' + d + '</a>';
           }
         },
+        { data: 'attachCount', className: 'dt-center',
+          render: function(d) {
+            return d > 0 ? '<span class="badge badge-default">📎 ' + d + '</span>' : '-';
+          }
+        },
         { data: 'createdBy', className: 'dt-center', defaultContent: '-' },
         { data: 'createdAt', className: 'dt-center',
           render: function(d) { return fmtDt(d, 16); }
@@ -146,6 +171,7 @@ function loadTable() {
   .fail(function(xhr) { console.error('[FAQ 목록 조회 실패]', xhr.status, xhr.responseText); });
 }
 
+/* ── 검색 ─────────────────────────────────────────── */
 $('#chkAll').on('change', function() {
   $('.chk-row').prop('checked', $(this).is(':checked'));
 });
@@ -155,10 +181,12 @@ $('#btnReset').on('click', function() {
   $('#filterCategory').val(''); $('#filterKeyword').val(''); loadTable();
 });
 
+/* ── 추가 버튼 ─────────────────────────────────────── */
 $('#btnAdd').on('click', function() {
   clearForm(); $('#modalTitle').text('FAQ 등록'); openModal();
 });
 
+/* ── 행 클릭 (수정) ────────────────────────────────── */
 $(document).on('click', '.link-row', function() {
   var faqNo = $(this).data('no');
   $.get(ctx + '/board/faq/one', { faqNo: faqNo }, function(data) {
@@ -167,10 +195,12 @@ $(document).on('click', '.link-row', function() {
     $('#fQuestion').val(data.question);
     $('#fAnswer').val(data.answer);
     $('#modalTitle').text('FAQ 수정');
+    renderAttachList(data.attachList || []);
     openModal();
   });
 });
 
+/* ── 삭제 버튼 ─────────────────────────────────────── */
 $('#btnDelete').on('click', function() {
   var checked = $('.chk-row:checked');
   if (checked.length === 0) { alert('삭제할 항목을 선택하세요.'); return; }
@@ -183,11 +213,13 @@ $('#btnDelete').on('click', function() {
   $.when.apply($, promises).done(function() { loadTable(); });
 });
 
+/* ── 저장 버튼 ─────────────────────────────────────── */
 $('#btnSave').on('click', function() {
   var question = $('#fQuestion').val().trim();
   var answer   = $('#fAnswer').val().trim();
   if (!question) { alert('질문을 입력하세요.'); return; }
   if (!answer)   { alert('답변을 입력하세요.'); return; }
+
   var faqNo   = $('#fFaqNo').val();
   var payload = {
     faqNo:      faqNo ? Number(faqNo) : null,
@@ -195,23 +227,130 @@ $('#btnSave').on('click', function() {
     question:   question,
     answer:     answer
   };
+
   $.ajax({
     url: ctx + '/board/faq/save', method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(payload),
     success: function(res) {
-      if (res.result === 'success') { closeModal(); loadTable(); }
-      else { alert('처리 중 오류가 발생했습니다.'); }
+      if (res.result === 'success') {
+        var savedFaqNo = res.faqNo;
+        if (selectedFiles.length > 0) {
+          uploadFiles(savedFaqNo, function() {
+            closeModal(); loadTable();
+          });
+        } else {
+          closeModal(); loadTable();
+        }
+      } else {
+        alert('처리 중 오류가 발생했습니다.');
+      }
     }
   });
 });
 
+/* ── 파일 추가 버튼 ────────────────────────────────── */
+$('#btnFileAdd').on('click', function() { $('#fFileInput').click(); });
+$('#fFileInput').on('change', function() {
+  $.each(this.files, function(i, f) {
+    if (f.size > 10 * 1024 * 1024) { alert(f.name + ' 파일이 10MB를 초과합니다.'); return; }
+    selectedFiles.push(f);
+  });
+  this.value = '';
+  renderNewFileList();
+});
+
+/* ── 선택된 새 파일 목록 렌더링 ───────────────────── */
+function renderNewFileList() {
+  var html = '';
+  $.each(selectedFiles, function(i, f) {
+    html += '<div class="attach-item" style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">' +
+            '<span style="font-size:12px;color:#374151;flex:1;">📄 ' + escapeHtml(f.name) +
+            ' <span style="color:#94a3b8;">(' + formatSize(f.size) + ')</span></span>' +
+            '<button type="button" class="btn-attach-del-new" data-idx="' + i + '" ' +
+            'style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;padding:0 4px;">&times;</button>' +
+            '</div>';
+  });
+  $('#newFileList').html(html);
+}
+
+/* ── 기존 첨부파일 목록 렌더링 ─────────────────────── */
+function renderAttachList(list) {
+  var html = '';
+  $.each(list, function(i, a) {
+    html += '<div class="attach-item" style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">' +
+            '<a href="' + ctx + '/attach/download?attachNo=' + a.attachNo + '" ' +
+            'style="font-size:12px;color:#3b82f6;flex:1;text-decoration:none;" download>' +
+            '📎 ' + escapeHtml(a.origNm) +
+            ' <span style="color:#94a3b8;">(' + formatSize(a.fileSize) + ')</span>' +
+            '</a>' +
+            '<button type="button" class="btn-attach-del" data-no="' + a.attachNo + '" ' +
+            'style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;padding:0 4px;">&times;</button>' +
+            '</div>';
+  });
+  $('#attachList').html(html);
+}
+
+/* ── 새 파일 제거 ──────────────────────────────────── */
+$(document).on('click', '.btn-attach-del-new', function() {
+  var idx = $(this).data('idx');
+  selectedFiles.splice(idx, 1);
+  renderNewFileList();
+});
+
+/* ── 기존 파일 삭제 ────────────────────────────────── */
+$(document).on('click', '.btn-attach-del', function() {
+  var no  = $(this).data('no');
+  var $el = $(this).closest('.attach-item');
+  if (!confirm('첨부파일을 삭제하시겠습니까?')) return;
+  $.post(ctx + '/attach/delete', { attachNo: no }, function(res) {
+    if (res.result === 'success') $el.remove();
+    else alert('파일 삭제에 실패했습니다.');
+  });
+});
+
+/* ── 파일 업로드 (순차) ────────────────────────────── */
+function uploadFiles(faqNo, callback) {
+  var queue = selectedFiles.slice();
+  function next() {
+    if (queue.length === 0) { selectedFiles = []; renderNewFileList(); callback(); return; }
+    var f  = queue.shift();
+    var fd = new FormData();
+    fd.append('refType', 'FAQ');
+    fd.append('refNo',   faqNo);
+    fd.append('file',    f);
+    $.ajax({
+      url: ctx + '/attach/upload', method: 'POST',
+      data: fd, processData: false, contentType: false,
+      success: function() { next(); },
+      error: function() { alert(f.name + ' 업로드에 실패했습니다.'); next(); }
+    });
+  }
+  next();
+}
+
+/* ── 폼 초기화 ─────────────────────────────────────── */
 function clearForm() {
   $('#fFaqNo').val('');
   $('#fCategory').val($('#fCategory option:first').val());
-  $('#fQuestion').val(''); $('#fAnswer').val('');
+  $('#fQuestion').val('');
+  $('#fAnswer').val('');
+  $('#attachList').empty();
+  $('#newFileList').empty();
+  selectedFiles = [];
 }
 
+/* ── 유틸 ──────────────────────────────────────────── */
+function escapeHtml(s) {
+  return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+}
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + 'KB';
+  return (bytes / 1024 / 1024).toFixed(1) + 'MB';
+}
+
+/* ── 모달 닫기 ─────────────────────────────────────── */
 $('#btnClose, #btnModalClose').on('click', closeModal);
 $('#modalOverlay').on('click', function(e) { if ($(e.target).is('#modalOverlay')) closeModal(); });
 

@@ -42,7 +42,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             /* REST API 는 세션/CSRF 불필요 — /api/** 경로만 예외 적용 */
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**")
+                .ignoringRequestMatchers("/api/**", "/attach/**")
             )
             /* JWT 필터: UsernamePasswordAuthenticationFilter 앞에 실행 */
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
