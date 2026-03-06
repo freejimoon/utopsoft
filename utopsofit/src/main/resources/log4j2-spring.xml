@@ -3,7 +3,11 @@
 
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
-        <Property name="LOG_DIR">logs</Property>
+        <!-- application.properties: app.log.dir -->
+        <Property name="LOG_DIR">${spring:app.log.dir:-logs}</Property>
+        <!-- application.properties: app.log.file.level (ALL | DEBUG | INFO | OFF) -->
+        <!-- OFF 로 설정하면 파일 로깅 전체 비활성화 -->
+        <Property name="LOG_FILE_LEVEL">${spring:app.log.file.level:-ALL}</Property>
     </Properties>
 
     <Appenders>
@@ -41,60 +45,60 @@
         <!-- 애플리케이션 로그 -->
         <Logger name="com.utopsofit" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="FileAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- MyBatis SQL 로그 (DEBUG: SQL 출력, TRACE: 파라미터·결과 출력) -->
         <Logger name="com.utopsofit.project.portal" level="TRACE" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
         <Logger name="org.mybatis" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
         <Logger name="org.apache.ibatis" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
         <!-- MyBatis Mapper SQL 실행 로그 -->
         <Logger name="com.utopsofit.project.portal.code.dao" level="TRACE" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
         <Logger name="com.utopsofit.project.portal.login.dao" level="TRACE" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- P6Spy SQL 로그 -->
         <Logger name="p6spy" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="SqlAppender"/>
+            <AppenderRef ref="SqlAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- HikariCP 커넥션 풀 로그 -->
         <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="FileAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- Spring Security 로그 -->
         <Logger name="org.springframework.security" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="FileAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- Spring Framework 로그 -->
         <Logger name="org.springframework" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="FileAppender" level="${LOG_FILE_LEVEL}"/>
         </Logger>
 
         <!-- Root 로그 -->
         <Root level="WARN">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="FileAppender" level="${LOG_FILE_LEVEL}"/>
         </Root>
     </Loggers>
 

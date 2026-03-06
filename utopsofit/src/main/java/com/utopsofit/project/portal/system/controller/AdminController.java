@@ -38,7 +38,7 @@ public class AdminController {
      */
     @GetMapping("/list")
     public String list(Model model) {
-        List<ComCode> roles = comCodeMapper.selectCodeListByGrp("USR_ROLE");
+        List<ComCode> roles = comCodeMapper.selectCodeListByGrp("USR_ROLE_CD");
         model.addAttribute("roles", roles);
         return "portal/system/adminList";
     }

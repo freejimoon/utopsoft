@@ -22,7 +22,7 @@
       <h1>공통코드 그룹 관리</h1>
       <p class="page-desc">코드 그룹을 등록하고 관리합니다.</p>
     </div>
-    <div class="page-actions">
+    <div class="page-header-actions">
       <form method="post" action="${ctx}/code/grp/form">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <button type="submit" class="btn btn-primary">+ 그룹 등록</button>
@@ -57,15 +57,11 @@
   var csrfToken = $('meta[name="_csrf"]').attr('content');
 
   var DT_LANG = {
-    processing:   '처리중...',
-    search:       '',
-    searchPlaceholder: '검색...',
-    lengthMenu:   '_MENU_ 건씩 보기',
-    info:         '_TOTAL_건 중 _START_ – _END_',
-    infoEmpty:    '0건',
-    infoFiltered: '(전체 _MAX_건 중 필터링)',
-    zeroRecords:  '등록된 그룹이 없습니다.',
-    paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
+    emptyTable: '조회된 데이터가 없습니다.',
+    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+    infoEmpty:  '데이터 없음',
+    lengthMenu: '_MENU_ 건씩 보기',
+    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
   };
 
   function csrf() {
@@ -74,6 +70,8 @@
 
   $('#grpTable').DataTable({
     processing: true,
+    autoWidth: false,
+    pageLength: 10,
     ajax: { url: ctx + '/code/grp/list/json', dataSrc: '' },
     order: [[4, 'asc']],
     language: DT_LANG,

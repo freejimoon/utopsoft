@@ -7,7 +7,7 @@
         <result property="memberNo"      column="member_no"/>
         <result property="title"         column="title"/>
         <result property="content"       column="content"/>
-        <result property="inqStatus"     column="inq_status"/>
+        <result property="inqStatusCd"     column="inq_status_cd"/>
         <result property="replyContent"  column="reply_content"/>
         <result property="replyDt"       column="reply_dt"/>
         <result property="replyBy"       column="reply_by"/>
@@ -24,7 +24,7 @@
         SELECT i.inq_no,
                i.member_no,
                i.title,
-               i.inq_status,
+               i.inq_status_cd,
                i.reply_dt,
                i.created_at,
                i.updated_at,
@@ -33,13 +33,13 @@
                c.code_nm  AS inq_status_nm
         FROM   inquiry i
                LEFT JOIN member   m ON i.member_no  = m.member_no
-               LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS' AND c.code = i.inq_status
+               LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS_CD' AND c.code = i.inq_status_cd
         <where>
             <if test="memberNo != null">
                 AND i.member_no = #{memberNo}
             </if>
             <if test="searchStatus != null and searchStatus != ''">
-                AND i.inq_status = #{searchStatus}
+                AND i.inq_status_cd = #{searchStatus}
             </if>
             <if test="searchKeyword != null and searchKeyword != ''">
                 AND (
@@ -58,7 +58,7 @@
                i.member_no,
                i.title,
                i.content,
-               i.inq_status,
+               i.inq_status_cd,
                i.reply_content,
                i.reply_dt,
                i.reply_by,
@@ -69,13 +69,13 @@
                c.code_nm   AS inq_status_nm
         FROM   inquiry i
                LEFT JOIN member   m ON i.member_no  = m.member_no
-               LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS' AND c.code = i.inq_status
+               LEFT JOIN com_code c ON c.grp_cd = 'INQ_STATUS_CD' AND c.code = i.inq_status_cd
         WHERE  i.inq_no = #{inqNo}
     </select>
 
     <!-- 문의 등록 (앱 API) -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="inqNo">
-        INSERT INTO inquiry (member_no, title, content, inq_status)
+        INSERT INTO inquiry (member_no, title, content, inq_status_cd)
         VALUES (#{memberNo}, #{title}, #{content}, 'WAIT')
     </insert>
 
@@ -85,7 +85,7 @@
         SET    reply_content = #{replyContent},
                reply_dt      = NOW(),
                reply_by      = #{replyBy},
-               inq_status    = 'DONE',
+               inq_status_cd = 'DONE',
                updated_at    = NOW()
         WHERE  inq_no = #{inqNo}
     </update>

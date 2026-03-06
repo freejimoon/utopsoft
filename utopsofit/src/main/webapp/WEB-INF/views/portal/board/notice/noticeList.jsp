@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
@@ -33,9 +33,9 @@
       <span class="search-label">분류</span>
       <select id="filterType" class="search-select">
         <option value="">전체</option>
-        <option value="GENERAL">일반</option>
-        <option value="URGENT">긴급</option>
-        <option value="EVENT">이벤트</option>
+        <c:forEach var="code" items="${noticeTypeCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
       </select>
     </div>
     <div class="search-divider"></div>
@@ -87,9 +87,9 @@
           <th>분류 <span class="req">*</span></th>
           <td colspan="3">
             <select id="fNoticeType" class="form-control" style="width:150px;">
-              <option value="GENERAL">일반</option>
-              <option value="URGENT">긴급</option>
-              <option value="EVENT">이벤트</option>
+              <c:forEach var="code" items="${noticeTypeCodes}">
+                <option value="${code.code}">${code.codeNm}</option>
+              </c:forEach>
             </select>
           </td>
         </tr>
@@ -122,6 +122,15 @@ var csrf = {
 };
 
 var table;
+var BADGE_CLS = {
+  URGENT:'badge-danger', EVENT:'badge-primary',
+  ACTIVE:'badge-success', EXPIRED:'badge-danger', CANCELED:'badge-danger',
+  WAIT:'badge-default', DONE:'badge-success'
+};
+function badgeHtml(code, nm) {
+  var cls = BADGE_CLS[code] || 'badge-default';
+  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
+}
 
 function loadTable() {
   if (table) { table.destroy(); $('#noticeTable tbody').empty(); }
@@ -140,12 +149,7 @@ function loadTable() {
         },
         { data: 'noticeNo', className: 'dt-center' },
         { data: 'noticeTypeNm', className: 'dt-center', defaultContent: '-',
-          render: function(d, t, row) {
-            var cls = row.noticeType === 'URGENT' ? 'badge-danger'
-                    : row.noticeType === 'EVENT'  ? 'badge-primary'
-                    : 'badge-default';
-            return '<span class="badge ' + cls + '">' + (d || '-') + '</span>';
-          }
+          render: function(d, t, row) { return badgeHtml(row.noticeCd, d); }
         },
         { data: 'title',
           render: function(d, t, row) {
@@ -163,8 +167,16 @@ function loadTable() {
           render: function(d) { return d ? d.replace('T',' ').substring(0,16) : '-'; }
         }
       ],
+      autoWidth: false,
       order: [[1, 'desc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   })
   .fail(function(xhr) {
@@ -189,7 +201,7 @@ $(document).on('click', '.link-title', function() {
   var noticeNo = $(this).data('no');
   $.get(ctx + '/board/notice/one', { noticeNo: noticeNo }, function(data) {
     $('#fNoticeNo').val(data.noticeNo);
-    $('#fNoticeType').val(data.noticeType);
+    $('#fNoticeType').val(data.noticeCd);
     $('#fTitle').val(data.title);
     $('#fContent').val(data.content);
     $('#fPinYn').prop('checked', data.pinYn === 'Y');
@@ -222,7 +234,7 @@ $('#btnSave').on('click', function() {
   var noticeNo = $('#fNoticeNo').val();
   var payload  = {
     noticeNo:   noticeNo ? Number(noticeNo) : null,
-    noticeType: $('#fNoticeType').val(),
+    noticeCd: $('#fNoticeType').val(),
     title:      title,
     content:    content,
     pinYn:      $('#fPinYn').is(':checked') ? 'Y' : 'N'
@@ -242,7 +254,8 @@ $('#btnSave').on('click', function() {
 function openModal()  { $('#modalOverlay').addClass('open'); }
 function closeModal() { $('#modalOverlay').removeClass('open'); }
 function clearForm()  {
-  $('#fNoticeNo').val(''); $('#fNoticeType').val('GENERAL');
+  $('#fNoticeNo').val('');
+  $('#fNoticeType').val($('#fNoticeType option:first').val());
   $('#fTitle').val(''); $('#fContent').val(''); $('#fPinYn').prop('checked', false);
 }
 

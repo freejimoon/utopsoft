@@ -1,4 +1,4 @@
--- =====================================================
+﻿-- =====================================================
 -- 약관 DDL (MySQL 8.x)
 -- =====================================================
 
@@ -29,25 +29,25 @@ CREATE TABLE `terms` (
 -- =====================================================
 -- 앱 구분 (TERMS_APP_TYPE)
 INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
-VALUES ('TERMS_APP_TYPE', '약관 앱 구분', '약관이 적용되는 앱 구분', 'Y', 'system')
+VALUES ('TERMS_APP_TYPE_CD', '약관 앱 구분', '약관이 적용되는 앱 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
-('TERMS_APP_TYPE', 'MAIN', '메인 앱', 'Y', 1, 'system'),
-('TERMS_APP_TYPE', 'CP',   'CP',      'Y', 2, 'system')
+('TERMS_APP_TYPE_CD', 'MAIN', '메인 앱', 'Y', 1, 'system'),
+('TERMS_APP_TYPE_CD', 'CP',   'CP',      'Y', 2, 'system')
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 -- 약관 유형 (TERMS_TYPE)
 INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
-VALUES ('TERMS_TYPE', '약관 유형', '약관 종류 구분', 'Y', 'system')
+VALUES ('TERMS_TYPE_CD', '약관 유형', '약관 종류 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
-('TERMS_TYPE', 'USE',       '이용약관',               'Y', 1, 'system'),
-('TERMS_TYPE', 'PRIVACY',   '개인정보 수집·이용동의', 'Y', 2, 'system'),
-('TERMS_TYPE', 'MARKETING', '마케팅 수신동의',        'Y', 3, 'system')
+('TERMS_TYPE_CD', 'USE',       '이용약관',               'Y', 1, 'system'),
+('TERMS_TYPE_CD', 'PRIVACY',   '개인정보 수집·이용동의', 'Y', 2, 'system'),
+('TERMS_TYPE_CD', 'MARKETING', '마케팅 수신동의',        'Y', 3, 'system')
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 -- =====================================================

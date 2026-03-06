@@ -2,6 +2,7 @@ package com.utopsofit.project.portal.board.faq.controller;
 
 import com.utopsofit.project.portal.board.faq.domain.FaqVO;
 import com.utopsofit.project.portal.board.faq.service.FaqService;
+import com.utopsofit.project.portal.code.dao.ComCodeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +25,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FaqController {
 
-    private final FaqService faqService;
+    private final FaqService    faqService;
+    private final ComCodeMapper comCodeMapper;
 
     /* ── 목록 뷰 ─────────────────────────────────────── */
     @GetMapping("/list")
     public String list(Model model) {
+        model.addAttribute("categoryCodes", comCodeMapper.selectCodeListByGrp("FAQ_CATEGORY_CD"));
         return "portal/board/faq/faqList";
     }
 

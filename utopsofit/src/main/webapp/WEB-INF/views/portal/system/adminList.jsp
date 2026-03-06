@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
@@ -213,8 +213,16 @@ function loadTable() {
           }
         }
       ],
+      autoWidth: false,
       order: [[4, 'desc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   })
   .fail(function(xhr) { console.error('[관리자 목록 조회 실패]', xhr.status); });

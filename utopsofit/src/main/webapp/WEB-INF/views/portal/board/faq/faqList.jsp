@@ -35,11 +35,9 @@
       <span class="search-label">분류</span>
       <select id="filterCategory" class="search-select">
         <option value="">전체</option>
-        <option value="GENERAL">일반</option>
-        <option value="PAYMENT">결제/환불</option>
-        <option value="ACCOUNT">계정</option>
-        <option value="SERVICE">서비스</option>
-        <option value="ETC">기타</option>
+        <c:forEach var="code" items="${categoryCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
       </select>
     </div>
     <div class="search-divider"></div>
@@ -89,11 +87,9 @@
           <th>분류 <span class="req">*</span></th>
           <td colspan="3">
             <select id="fCategory" class="form-control" style="width:160px;">
-              <option value="GENERAL">일반</option>
-              <option value="PAYMENT">결제/환불</option>
-              <option value="ACCOUNT">계정</option>
-              <option value="SERVICE">서비스</option>
-              <option value="ETC">기타</option>
+              <c:forEach var="code" items="${categoryCodes}">
+                <option value="${code.code}">${code.codeNm}</option>
+              </c:forEach>
             </select>
           </td>
         </tr>
@@ -163,14 +159,16 @@ function loadTable() {
           render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
         }
       ],
-      language: {
-        emptyTable: '등록된 FAQ가 없습니다.', info: '_TOTAL_ 건 중 _START_ - _END_',
-        infoEmpty: '0 건', lengthMenu: '_MENU_ 건씩 보기',
-        search: '검색:', zeroRecords: '검색 결과가 없습니다.',
-        paginate: { first: '«', previous: '‹', next: '›', last: '»' }
-      },
+      autoWidth: false,
       order: [[1, 'asc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   })
   .fail(function(xhr) {
@@ -267,7 +265,7 @@ function closeModal() { $('#modalOverlay').removeClass('open'); }
 
 function clearForm() {
   $('#fFaqNo').val('');
-  $('#fCategory').val('GENERAL');
+  $('#fCategory').val($('#fCategory option:first').val());
   $('#fQuestion').val('');
   $('#fAnswer').val('');
 }

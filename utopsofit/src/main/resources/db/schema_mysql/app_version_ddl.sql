@@ -1,4 +1,4 @@
--- =====================================================
+﻿-- =====================================================
 -- 앱 버전 관리 DDL (MySQL 8.x)
 -- 스키마: utopsoft
 --
@@ -26,8 +26,8 @@ CREATE TABLE `app_version` (
     `version_no`       BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT         COMMENT '버전번호 (PK)',
 
     -- 앱 구분 / 스토어
-    `app_type`         VARCHAR(20)      NOT NULL                        COMMENT '앱 구분 (ANDROID:안드로이드 / IOS:iOS)',
-    `store_type`       VARCHAR(20)      NOT NULL                        COMMENT '스토어 (GOOGLE_PLAY:구글플레이 / APP_STORE:앱스토어 / ONE_STORE:원스토어)',
+    `app_cd`         VARCHAR(20)      NOT NULL                        COMMENT '앱 구분 (ANDROID:안드로이드 / IOS:iOS)',
+    `store_cd`       VARCHAR(20)      NOT NULL                        COMMENT '스토어 (GOOGLE_PLAY:구글플레이 / APP_STORE:앱스토어 / ONE_STORE:원스토어)',
 
     -- 버전 정보
     `version`          VARCHAR(30)      NOT NULL                        COMMENT '버전명 (예: 1.0.0 / 1.0.0a)',
@@ -50,9 +50,9 @@ CREATE TABLE `app_version` (
     `updated_by`       VARCHAR(50)      DEFAULT NULL                                                   COMMENT '수정자',
 
     PRIMARY KEY (`version_no`),
-    UNIQUE KEY `uq_app_version`              (`app_type`, `store_type`, `version`),
-    KEY `idx_app_version_app_type`           (`app_type`),
-    KEY `idx_app_version_store_type`         (`store_type`),
+    UNIQUE KEY `uq_app_version`              (`app_cd`, `store_cd`, `version`),
+    KEY `idx_app_version_app_cd`           (`app_cd`),
+    KEY `idx_app_version_store_cd`         (`store_cd`),
     KEY `idx_app_version_release_dt`         (`release_dt`),
     KEY `idx_app_version_force_update_yn`    (`force_update_yn`),
     KEY `idx_app_version_use_yn`             (`use_yn`)
@@ -66,19 +66,19 @@ CREATE TABLE `app_version` (
 -- =====================================================
 
 INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`) VALUES
-('APP_TYPE',   '앱 구분',   'app_version.app_type   — 안드로이드/iOS 구분',       'Y', 32),
-('STORE_TYPE', '스토어 구분', 'app_version.store_type — 앱 배포 스토어 구분',     'Y', 33);
+('APP_TYPE_CD',   '앱 구분',   'app_version.app_cd   — 안드로이드/iOS 구분',       'Y', 32),
+('STORE_TYPE_CD', '스토어 구분', 'app_version.store_cd — 앱 배포 스토어 구분',     'Y', 33);
 
 -- APP_TYPE
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
-('APP_TYPE', 'ANDROID', '안드로이드', '안드로이드 앱 (Google Play / ONE Store)', 'Y', 1),
-('APP_TYPE', 'IOS',     'iOS',        'Apple App Store 앱',                       'Y', 2);
+('APP_TYPE_CD', 'ANDROID', '안드로이드', '안드로이드 앱 (Google Play / ONE Store)', 'Y', 1),
+('APP_TYPE_CD', 'IOS',     'iOS',        'Apple App Store 앱',                       'Y', 2);
 
 -- STORE_TYPE
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`) VALUES
-('STORE_TYPE', 'GOOGLE_PLAY', '구글 플레이', 'Google Play Store',   'Y', 1),
-('STORE_TYPE', 'APP_STORE',   '앱 스토어',   'Apple App Store',      'Y', 2),
-('STORE_TYPE', 'ONE_STORE',   '원스토어',    '원스토어 (국내)',       'Y', 3);
+('STORE_TYPE_CD', 'GOOGLE_PLAY', '구글 플레이', 'Google Play Store',   'Y', 1),
+('STORE_TYPE_CD', 'APP_STORE',   '앱 스토어',   'Apple App Store',      'Y', 2),
+('STORE_TYPE_CD', 'ONE_STORE',   '원스토어',    '원스토어 (국내)',       'Y', 3);
 
 
 -- =====================================================
@@ -86,7 +86,7 @@ INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sor
 -- =====================================================
 
 INSERT INTO `app_version`
-    (`app_type`, `store_type`, `version`, `app_code`, `release_dt`, `force_update_yn`, `use_yn`, `note`, `created_by`)
+    (`app_cd`, `store_cd`, `version`, `app_code`, `release_dt`, `force_update_yn`, `use_yn`, `note`, `created_by`)
 VALUES
 -- 안드로이드 - 구글 플레이
 ('ANDROID', 'GOOGLE_PLAY', '1.0.0',  '100', '2025-01-01', 'N', 'Y', '최초 출시',           'admin'),

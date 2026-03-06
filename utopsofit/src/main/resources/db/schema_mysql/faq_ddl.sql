@@ -1,4 +1,4 @@
--- =====================================================
+﻿-- =====================================================
 -- FAQ DDL (MySQL 8.x)
 -- =====================================================
 
@@ -27,16 +27,16 @@ CREATE TABLE `faq` (
 -- 공통코드 INSERT (FAQ_CATEGORY)
 -- =====================================================
 INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `created_by`)
-VALUES ('FAQ_CATEGORY', 'FAQ 분류', 'FAQ 카테고리 구분', 'Y', 'system')
+VALUES ('FAQ_CATEGORY_CD', 'FAQ 분류', 'FAQ 카테고리 구분', 'Y', 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
-('FAQ_CATEGORY', 'GENERAL',  '일반',      '일반 FAQ',      'Y', 1, 'system'),
-('FAQ_CATEGORY', 'PAYMENT',  '결제/환불', '결제/환불 FAQ', 'Y', 2, 'system'),
-('FAQ_CATEGORY', 'ACCOUNT',  '계정',      '계정 관련 FAQ', 'Y', 3, 'system'),
-('FAQ_CATEGORY', 'SERVICE',  '서비스',    '서비스 이용 FAQ','Y', 4, 'system'),
-('FAQ_CATEGORY', 'ETC',      '기타',      '기타 FAQ',      'Y', 5, 'system')
+('FAQ_CATEGORY_CD', 'GENERAL',  '일반',      '일반 FAQ',      'Y', 1, 'system'),
+('FAQ_CATEGORY_CD', 'PAYMENT',  '결제/환불', '결제/환불 FAQ', 'Y', 2, 'system'),
+('FAQ_CATEGORY_CD', 'ACCOUNT',  '계정',      '계정 관련 FAQ', 'Y', 3, 'system'),
+('FAQ_CATEGORY_CD', 'SERVICE',  '서비스',    '서비스 이용 FAQ','Y', 4, 'system'),
+('FAQ_CATEGORY_CD', 'ETC',      '기타',      '기타 FAQ',      'Y', 5, 'system')
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 -- =====================================================

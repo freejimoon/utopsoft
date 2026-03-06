@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
@@ -111,6 +111,14 @@ var csrf = {
 };
 
 var table;
+var BADGE_CLS = {
+  DONE:'badge-success', WAIT:'badge-warning',
+  ACTIVE:'badge-success', EXPIRED:'badge-danger', CANCELED:'badge-danger'
+};
+function badgeHtml(code, nm) {
+  var cls = BADGE_CLS[code] || 'badge-default';
+  return nm ? '<span class="badge ' + cls + '">' + nm + '</span>' : (code || '-');
+}
 
 function loadTable() {
   if (table) { table.destroy(); $('#inquiryTable tbody').empty(); }
@@ -134,19 +142,22 @@ function loadTable() {
           render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
         },
         { data: 'inqStatusNm',  className: 'dt-center', defaultContent: '-',
-          render: function(d, t, row) {
-            var nm = d || row.inqStatus || '-';
-            return row.inqStatus === 'DONE'
-              ? '<span class="badge badge-success">' + nm + '</span>'
-              : '<span class="badge badge-warning">' + nm + '</span>';
-          }
+          render: function(d, t, row) { return badgeHtml(row.inqStatusCd, d); }
         },
         { data: 'updatedAt',    className: 'dt-center',
           render: function(d) { return d ? d.replace('T', ' ').substring(0, 16) : '-'; }
         }
       ],
+      autoWidth: false,
       order: [[0, 'desc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   })
   .fail(function(xhr) {
@@ -166,16 +177,13 @@ $(document).on('click', '.link-title', function() {
   $.get(ctx + '/board/inquiry/one', { inqNo: inqNo }, function(data) {
     $('#dInqNo').val(data.inqNo);
     $('#dTitle').text(data.title);
-    var statusNm = data.inqStatusNm || data.inqStatus || '-';
-    $('#dStatus').html(data.inqStatus === 'DONE'
-      ? '<span class="badge badge-success">' + statusNm + '</span>'
-      : '<span class="badge badge-warning">' + statusNm + '</span>');
+    $('#dStatus').html(badgeHtml(data.inqStatusCd, data.inqStatusNm));
     $('#dEmail').text(data.memberEmail || '-');
     $('#dNickname').text(data.memberNm || '-');
     $('#dCreatedAt').text(data.createdAt ? data.createdAt.replace('T', ' ').substring(0, 16) : '-');
     $('#dContent').text(data.content || '');
     $('#dReplyContent').val(data.replyContent || '');
-    if (data.inqStatus === 'DONE') {
+    if (data.inqStatusCd === 'DONE') {
       $('#dReplyContent').prop('readonly', true);
       $('#btnReply').hide();
     } else {

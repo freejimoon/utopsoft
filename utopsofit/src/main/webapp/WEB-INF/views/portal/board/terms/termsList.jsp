@@ -34,8 +34,9 @@
       <span class="search-label">구분</span>
       <select id="filterAppType" class="search-select">
         <option value="">전체</option>
-        <option value="MAIN">메인 앱</option>
-        <option value="CP">CP</option>
+        <c:forEach var="code" items="${appTypeCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
       </select>
     </div>
     <div class="search-divider"></div>
@@ -43,14 +44,14 @@
       <span class="search-label">형태</span>
       <select id="filterTermsType" class="search-select">
         <option value="">전체</option>
-        <option value="USE">이용약관</option>
-        <option value="PRIVACY">개인정보 수집·이용동의</option>
-        <option value="MARKETING">마케팅 수신동의</option>
+        <c:forEach var="code" items="${termsTypeCodes}">
+          <option value="${code.code}">${code.codeNm}</option>
+        </c:forEach>
       </select>
     </div>
     <div class="search-btns">
+      <button type="button" class="btn btn-primary" id="btnSearch">조회</button>
       <button type="button" class="btn btn-outline" id="btnReset">초기화</button>
-      <button type="button" class="btn btn-primary" id="btnSearch">검색</button>
     </div>
   </div>
 
@@ -83,16 +84,17 @@
           <th>구분</th>
           <td>
             <select id="fAppType" class="form-control" style="width:160px;">
-              <option value="MAIN">메인 앱</option>
-              <option value="CP">CP</option>
+              <c:forEach var="code" items="${appTypeCodes}">
+                <option value="${code.code}">${code.codeNm}</option>
+              </c:forEach>
             </select>
           </td>
           <th>형태</th>
           <td>
             <select id="fTermsType" class="form-control" style="width:200px;">
-              <option value="USE">이용약관</option>
-              <option value="PRIVACY">개인정보 수집·이용동의</option>
-              <option value="MARKETING">마케팅 수신동의</option>
+              <c:forEach var="code" items="${termsTypeCodes}">
+                <option value="${code.code}">${code.codeNm}</option>
+              </c:forEach>
             </select>
           </td>
         </tr>
@@ -173,14 +175,16 @@ function loadTable() {
           }
         }
       ],
-      language: {
-        emptyTable: '등록된 약관이 없습니다.', info: '_TOTAL_ 건 중 _START_ - _END_',
-        infoEmpty: '0 건', lengthMenu: '_MENU_ 건씩 보기',
-        search: '검색:', zeroRecords: '검색 결과가 없습니다.',
-        paginate: { first: '«', previous: '‹', next: '›', last: '»' }
-      },
+      autoWidth: false,
       order: [[0, 'asc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   })
   .fail(function(xhr) {
@@ -254,8 +258,8 @@ function closeModal() { $('#modalOverlay').removeClass('open'); }
 
 function clearForm() {
   $('#fTermsNo').val('');
-  $('#fAppType').val('MAIN');
-  $('#fTermsType').val('USE');
+  $('#fAppType').val($('#fAppType option:first').val());
+  $('#fTermsType').val($('#fTermsType option:first').val());
   $('#fRequiredYn').val('Y');
   $('#fVersion').val('1');
   $('#fContent').val('');

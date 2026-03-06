@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.utopsofit.project.portal.member.dao.MemberMapper">
+
+    <!-- mapUnderscoreToCamelCase=true 로 snake_case → camelCase 자동 변환 -->
+    <resultMap id="MemberResult" type="com.utopsofit.project.portal.member.domain.MemberVO">
+        <result property="groupNm"      column="group_nm"/>
+        <result property="socialNm"     column="social_nm"/>
+        <result property="membershipNm" column="membership_nm"/>
+        <result property="subStatusNm"  column="sub_status_nm"/>
+        <result property="gradeNm"      column="grade_nm"/>
+    </resultMap>
+
+    <!-- 공통 코드 JOIN -->
+    <sql id="codeJoins">
+        LEFT JOIN com_code c_sns ON c_sns.grp_cd = 'SOCIAL_TYPE_CD'     AND c_sns.code = m.social_cd
+        LEFT JOIN com_code c_mem ON c_mem.grp_cd = 'MEMBERSHIP_TYPE_CD' AND c_mem.code = m.membership_cd
+        LEFT JOIN com_code c_sub ON c_sub.grp_cd = 'SUB_STATUS_CD'      AND c_sub.code = m.sub_status_cd
+        LEFT JOIN com_code c_grd ON c_grd.grp_cd = 'MEMBER_GRADE_CD'    AND c_grd.code = m.grade_cd
+    </sql>
+
+    <!-- 공통 검색 조건 -->
+    <sql id="searchWhere">
+        <if test="searchMemberId    != null and searchMemberId    != ''"> AND m.member_id   LIKE CONCAT('%', #{searchMemberId},    '%')</if>
+        <if test="searchMemberNm    != null and searchMemberNm    != ''"> AND m.member_nm   LIKE CONCAT('%', #{searchMemberNm},    '%')</if>
+        <if test="searchEmail       != null and searchEmail       != ''"> AND m.email        LIKE CONCAT('%', #{searchEmail},       '%')</if>
+        <if test="searchGroupNm     != null and searchGroupNm     != ''"> AND g.group_nm     LIKE CONCAT('%', #{searchGroupNm},     '%')</if>
+        <if test="searchMembershipCd != null and searchMembershipCd != ''"> AND m.membership_cd = #{searchMembershipCd}</if>
+        <if test="searchSocialCd    != null and searchSocialCd    != ''"> AND m.social_cd    = #{searchSocialCd}</if>
+        <if test="searchJoinFrom    != null and searchJoinFrom    != ''"> AND m.join_dt     &gt;= #{searchJoinFrom}</if>
+        <if test="searchJoinTo      != null and searchJoinTo      != ''"> AND m.join_dt     &lt;= CONCAT(#{searchJoinTo}, ' 23:59:59')</if>
+    </sql>
+
+    <!-- 공통 SELECT 컬럼 -->
+    <sql id="selectColumns">
+        m.member_no, m.member_id, m.member_nm, m.real_nm, m.email, m.phone,
+        m.gender_cd, m.birth_dt, m.social_cd,
+        m.membership_cd, m.sub_status_cd, m.sub_plan_cd, m.sub_start_dt, m.sub_end_dt, m.sub_auto_yn,
+        m.group_no, g.group_nm, m.group_role_cd,
+        m.status_cd, m.grade_cd,
+        m.join_dt, m.last_login_dt, m.withdraw_dt, m.updated_at,
+        c_sns.code_nm AS social_nm,
+        c_mem.code_nm AS membership_nm,
+        c_sub.code_nm AS sub_status_nm,
+        c_grd.code_nm AS grade_nm
+    </sql>
+
+    <!-- 회원 현황 (ACTIVE) -->
+    <select id="selectActiveList" resultMap="MemberResult">
+        SELECT <include refid="selectColumns"/>
+        FROM   member m
+               LEFT JOIN member_group g ON g.group_no = m.group_no
+               <include refid="codeJoins"/>
+        WHERE  m.status_cd = 'ACTIVE'
+        <include refid="searchWhere"/>
+        ORDER BY m.join_dt DESC
+    </select>
+
+    <!-- 탈퇴 회원 (WITHDRAWN) -->
+    <select id="selectWithdrawList" resultMap="MemberResult">
+        SELECT <include refid="selectColumns"/>
+        FROM   member m
+               LEFT JOIN member_group g ON g.group_no = m.group_no
+               <include refid="codeJoins"/>
+        WHERE  m.status_cd = 'WITHDRAWN'
+        <include refid="searchWhere"/>
+        ORDER BY m.withdraw_dt DESC
+    </select>
+
+    <!-- 휴면 회원 (DORMANT) -->
+    <select id="selectDormantList" resultMap="MemberResult">
+        SELECT <include refid="selectColumns"/>
+        FROM   member m
+               LEFT JOIN member_group g ON g.group_no = m.group_no
+               <include refid="codeJoins"/>
+        WHERE  m.status_cd = 'DORMANT'
+        <include refid="searchWhere"/>
+        ORDER BY m.updated_at DESC
+    </select>
+
+</mapper>

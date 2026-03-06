@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class FaqApiRequest {
 
-    /** FAQ 카테고리 코드 (com_code.grp_cd = 'FAQ_CATEGORY') — 미전달 시 전체 조회 */
+    /** FAQ 카테고리 코드 (com_code.grp_cd = 'FAQ_CATEGORY_CD') — 미전달 시 전체 조회 */
     private String categoryCd;
 
     /** 요청 페이지 번호 (1-based, 기본값 1) */

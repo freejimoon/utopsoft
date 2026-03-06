@@ -22,7 +22,7 @@
       <h1>공통코드 관리</h1>
       <p class="page-desc">그룹: <strong>${grp.grpNm}</strong> (${grp.grpCd})</p>
     </div>
-    <div class="page-actions">
+    <div class="page-header-actions">
       <form method="post" action="${ctx}/code/grp/list">
         <input type="hidden" name="page" value="1"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -64,15 +64,11 @@
   var csrfToken = $('meta[name="_csrf"]').attr('content');
 
   var DT_LANG = {
-    processing:   '처리중...',
-    search:       '',
-    searchPlaceholder: '검색...',
-    lengthMenu:   '_MENU_ 건씩 보기',
-    info:         '_TOTAL_건 중 _START_ – _END_',
-    infoEmpty:    '0건',
-    infoFiltered: '(전체 _MAX_건 중 필터링)',
-    zeroRecords:  '등록된 코드가 없습니다.',
-    paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
+    emptyTable: '조회된 데이터가 없습니다.',
+    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+    infoEmpty:  '데이터 없음',
+    lengthMenu: '_MENU_ 건씩 보기',
+    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
   };
 
   function csrf() {
@@ -81,6 +77,8 @@
 
   $('#codeTable').DataTable({
     processing: true,
+    autoWidth: false,
+    pageLength: 10,
     ajax: { url: ctx + '/code/list/json', data: { grpCd: grpCd }, dataSrc: '' },
     language: DT_LANG,
     columns: [

@@ -2,6 +2,7 @@ package com.utopsofit.project.portal.board.notice.controller;
 
 import com.utopsofit.project.portal.board.notice.domain.NoticeVO;
 import com.utopsofit.project.portal.board.notice.service.NoticeService;
+import com.utopsofit.project.portal.code.dao.ComCodeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,10 +30,12 @@ import java.util.Map;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final ComCodeMapper comCodeMapper;
 
     /* ── 관리자 목록 뷰 ─────────────────────────────── */
     @GetMapping("/list")
     public String list(Model model) {
+        model.addAttribute("noticeTypeCodes", comCodeMapper.selectCodeListByGrp("NOTICE_TYPE_CD"));
         return "portal/board/notice/noticeList";
     }
 

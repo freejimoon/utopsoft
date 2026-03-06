@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.utopsofit.project.portal.board.faq.dao.FaqMapper">
 
@@ -28,7 +28,7 @@
                f.created_at,
                f.created_by
         FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY' AND c.code = f.category_cd
+               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         WHERE  f.use_yn = 'Y'
         <if test="searchCategory != null and searchCategory != ''">
             AND f.category_cd = #{searchCategory}
@@ -50,7 +50,7 @@
                f.created_at,
                f.created_by
         FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY' AND c.code = f.category_cd
+               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         WHERE  f.faq_no = #{faqNo}
     </select>
 
@@ -95,7 +95,7 @@
                f.question, f.answer, f.sort_ord, f.use_yn,
                f.created_at, f.created_by, f.updated_at, f.updated_by
         FROM   faq f
-               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY' AND c.code = f.category_cd
+               LEFT JOIN com_code c ON c.grp_cd = 'FAQ_CATEGORY_CD' AND c.code = f.category_cd
         <include refid="apiWhere"/>
         ORDER BY f.sort_ord ASC, f.faq_no ASC
         LIMIT #{limit} OFFSET #{offset}

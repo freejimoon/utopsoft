@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Swagger / OpenAPI 설정
- * UI 접근: http://localhost:8080/swagger-ui/index.html
+ * UI 접근: http://localhost:22020/swagger-ui/index.html
  */
 @Configuration
 public class SwaggerConfig {
@@ -23,7 +23,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-        		.addServersItem(new Server().url("http://172.16.12.103:8080").description("개발 서버"))
+                .addServersItem(new Server().url("/").description("현재 서버"))
                 //.addServersItem(new Server().url("https://172.16.12.103").description("운영 서버"))
                 .info(new Info()
                         .title("Utopsoft 앱 API")

@@ -4,8 +4,8 @@
 
     <resultMap id="AppVersionResult" type="com.utopsofit.project.portal.system.domain.AppVersionVO">
         <id  property="versionNo"     column="version_no"/>
-        <result property="appType"        column="app_type"/>
-        <result property="storeType"      column="store_type"/>
+        <result property="appCd"        column="app_cd"/>
+        <result property="storeCd"      column="store_cd"/>
         <result property="version"        column="version"/>
         <result property="appCode"        column="app_code"/>
         <result property="releaseDt"      column="release_dt"/>
@@ -23,28 +23,28 @@
 
     <!-- 목록 조회 (공통코드 명칭 LEFT JOIN) -->
     <select id="selectList" resultMap="AppVersionResult">
-        SELECT v.version_no, v.app_type, v.store_type, v.version, v.app_code,
+        SELECT v.version_no, v.app_cd, v.store_cd, v.version, v.app_code,
                v.release_dt, v.force_update_yn, v.use_yn, v.note,
                v.created_at, v.created_by, v.updated_at, v.updated_by,
                at_cd.code_nm AS app_type_nm,
                st_cd.code_nm AS store_type_nm
         FROM app_version v
-        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE'   AND at_cd.code = v.app_type
-        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE' AND st_cd.code = v.store_type
+        LEFT JOIN com_code at_cd ON at_cd.grp_cd = 'APP_TYPE_CD'   AND at_cd.code = v.app_cd
+        LEFT JOIN com_code st_cd ON st_cd.grp_cd = 'STORE_TYPE_CD' AND st_cd.code = v.store_cd
         <where>
-            <if test="searchAppType   != null and searchAppType   != ''">
-                AND v.app_type   = #{searchAppType}
+            <if test="searchAppCd   != null and searchAppCd   != ''">
+                AND v.app_cd   = #{searchAppCd}
             </if>
-            <if test="searchStoreType != null and searchStoreType != ''">
-                AND v.store_type = #{searchStoreType}
+            <if test="searchStoreCd != null and searchStoreCd != ''">
+                AND v.store_cd = #{searchStoreCd}
             </if>
         </where>
-        ORDER BY v.app_type, v.store_type, v.release_dt DESC, v.version_no DESC
+        ORDER BY v.app_cd, v.store_cd, v.release_dt DESC, v.version_no DESC
     </select>
 
     <!-- 단건 조회 -->
     <select id="selectByPk" resultMap="AppVersionResult">
-        SELECT version_no, app_type, store_type, version, app_code,
+        SELECT version_no, app_cd, store_cd, version, app_code,
                release_dt, force_update_yn, use_yn, note,
                created_at, created_by, updated_at, updated_by
         FROM app_version
@@ -54,16 +54,16 @@
     <!-- 등록 -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="versionNo">
         INSERT INTO app_version
-            (app_type, store_type, version, app_code, release_dt, force_update_yn, use_yn, note, created_by)
+            (app_cd, store_cd, version, app_code, release_dt, force_update_yn, use_yn, note, created_by)
         VALUES
-            (#{appType}, #{storeType}, #{version}, #{appCode}, #{releaseDt}, #{forceUpdateYn}, #{useYn}, #{note}, #{createdBy})
+            (#{appCd}, #{storeCd}, #{version}, #{appCode}, #{releaseDt}, #{forceUpdateYn}, #{useYn}, #{note}, #{createdBy})
     </insert>
 
     <!-- 수정 -->
     <update id="update">
         UPDATE app_version
-        SET app_type        = #{appType},
-            store_type      = #{storeType},
+        SET app_cd        = #{appCd},
+            store_cd      = #{storeCd},
             version         = #{version},
             app_code        = #{appCode},
             release_dt      = #{releaseDt},

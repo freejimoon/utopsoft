@@ -47,28 +47,40 @@
         </ul>
       </li>
 
-      <!-- 사용자 관리 그룹 -->
-      <li class="nav-group <c:if test="${fn:contains(reqUri, '/user')}">open</c:if>">
+      <!-- 회원 관리 그룹 -->
+      <li class="nav-group <c:if test="${fn:contains(reqUri, '/member')}">open</c:if>">
         <div class="nav-group-header">
           <svg class="nav-svg" viewBox="0 0 20 20" fill="currentColor">
             <path d="M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm8 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM9.415 13.012C8.83 12.395 8 11.61 8 11a4 4 0 0 0-8 0v1a2 2 0 0 0 2 2h5.086a5.476 5.476 0 0 1 2.329-1v-.988zM18 12a4 4 0 0 0-8 0v1a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-1z"/>
           </svg>
-          <span>회원 관리</span>
+          <span>회원관리</span>
           <svg class="nav-arrow" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z" clip-rule="evenodd"/>
           </svg>
         </div>
         <ul class="nav-sub">
           <li>
-            <a href="${ctx}/user/list"
-               class="nav-sub-link" data-nav-key="user-list">
-              사용자 목록
+            <a href="${ctx}/member/active/list"
+               class="nav-sub-link" data-nav-key="member-active-list">
+              회원 현황
             </a>
           </li>
           <li>
-            <a href="${ctx}/user/form"
-               class="nav-sub-link" data-nav-key="user-form">
-              사용자 등록
+            <a href="${ctx}/member/withdraw/list"
+               class="nav-sub-link" data-nav-key="member-withdraw-list">
+              탈퇴 회원
+            </a>
+          </li>
+          <li>
+            <a href="${ctx}/member/dormant/list"
+               class="nav-sub-link" data-nav-key="member-dormant-list">
+              휴면 회원
+            </a>
+          </li>
+          <li>
+            <a href="${ctx}/member/group/list"
+               class="nav-sub-link" data-nav-key="member-group-list">
+              단체 회원
             </a>
           </li>
         </ul>

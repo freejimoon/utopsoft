@@ -228,8 +228,16 @@ function loadTable() {
           }
         }
       ],
+      autoWidth: false,
       order: [[4, 'desc']],
-      pageLength: 10
+      pageLength: 10,
+      language: {
+        emptyTable: '조회된 데이터가 없습니다.',
+        info: '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+        infoEmpty: '데이터 없음',
+        lengthMenu: '_MENU_ 건씩 보기',
+        paginate: { first:'«', previous:'‹', next:'›', last:'»' }
+      }
     });
   }).fail(function(xhr) { console.error('[앱 클라이언트 목록 오류]', xhr.status); });
 }

@@ -1,4 +1,4 @@
--- =============================================================
+﻿-- =============================================================
 --  문의 관리 DDL  (MySQL 8.x / InnoDB)
 --  스키마: utopsoft
 -- =============================================================
@@ -14,7 +14,7 @@ CREATE TABLE `inquiry` (
     `member_no`     BIGINT        NOT NULL                 COMMENT '회원 번호 (FK → member.member_no)',
     `title`         VARCHAR(200)  NOT NULL                 COMMENT '문의 제목',
     `content`       TEXT          NOT NULL                 COMMENT '문의 내용',
-    `inq_status`    VARCHAR(20)   NOT NULL DEFAULT 'WAIT'  COMMENT '상태 (WAIT:대기중 / DONE:답변완료)',
+    `inq_status_cd`    VARCHAR(20)   NOT NULL DEFAULT 'WAIT'  COMMENT '상태 (WAIT:대기중 / DONE:답변완료)',
     `reply_content` TEXT                                   COMMENT '답변 내용',
     `reply_dt`      DATETIME                               COMMENT '답변 등록 일시',
     `reply_by`      VARCHAR(50)                            COMMENT '답변 등록자 (관리자 usr_id)',
@@ -22,7 +22,7 @@ CREATE TABLE `inquiry` (
     `updated_at`    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
     PRIMARY KEY (`inq_no`),
     KEY `idx_inquiry_member`  (`member_no`),
-    KEY `idx_inquiry_status`  (`inq_status`),
+    KEY `idx_inquiry_status`  (`inq_status_cd`),
     KEY `idx_inquiry_created` (`created_at` DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='문의';
 
@@ -30,19 +30,19 @@ CREATE TABLE `inquiry` (
 --  공통 코드 추가 — 문의 상태 (INQ_STATUS)
 -- -----------------------------------------------------
 INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
-VALUES ('INQ_STATUS', '문의 상태', '문의 처리 상태 코드', 'Y', 50, 'system')
+VALUES ('INQ_STATUS_CD', '문의 상태', '문의 처리 상태 코드', 'Y', 50, 'system')
 ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
 
 INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
 VALUES
-    ('INQ_STATUS', 'WAIT', '대기중',   '답변 대기 중인 문의', 'Y', 1, 'system'),
-    ('INQ_STATUS', 'DONE', '답변완료', '답변이 완료된 문의',  'Y', 2, 'system')
+    ('INQ_STATUS_CD', 'WAIT', '대기중',   '답변 대기 중인 문의', 'Y', 1, 'system'),
+    ('INQ_STATUS_CD', 'DONE', '답변완료', '답변이 완료된 문의',  'Y', 2, 'system')
 ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);
 
 -- -----------------------------------------------------
 --  샘플 데이터 (member_no 1~5 가 존재한다고 가정)
 -- -----------------------------------------------------
-INSERT INTO `inquiry` (`member_no`, `title`, `content`, `inq_status`, `reply_content`, `reply_dt`, `reply_by`, `created_at`) VALUES
+INSERT INTO `inquiry` (`member_no`, `title`, `content`, `inq_status_cd`, `reply_content`, `reply_dt`, `reply_by`, `created_at`) VALUES
 (1, '앱 실행이 안돼요',                '앱을 실행하면 바로 종료됩니다. 아이폰 13 사용중입니다.',               'WAIT', NULL,                                  NULL,                '관리자', '2024-05-25 14:30:00'),
 (2, '결제 취소 요청합니다',            '잘못 결제했습니다. 취소 부탁드립니다.',                               'DONE', '결제 취소 처리 완료되었습니다.',           '2024-05-24 10:15:00','admin',  '2024-05-23 21:05:00'),
 (3, '배송 리스트 선택 문의',           '앱 내 배송지 선택 화면이 보이지 않습니다.',                           'WAIT', NULL,                                  NULL,                'admin',  '2024-05-23 18:20:00'),

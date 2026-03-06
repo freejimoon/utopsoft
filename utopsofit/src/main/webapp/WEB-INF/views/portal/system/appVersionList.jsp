@@ -22,7 +22,7 @@
       <h1>앱 버전 관리</h1>
       <p class="page-desc">앱 스토어별 버전 및 필수 업데이트 여부를 관리합니다.</p>
     </div>
-    <div class="page-actions">
+    <div class="page-header-actions">
       <button type="button" class="btn btn-primary" id="btnAdd">+ 등록</button>
     </div>
   </div>
@@ -151,26 +151,24 @@
   var csrfToken = $('meta[name="_csrf"]').attr('content');
 
   var DT_LANG = {
-    processing:   '처리중...',
-    search:       '',
-    searchPlaceholder: '검색...',
-    lengthMenu:   '_MENU_ 건씩 보기',
-    info:         '_TOTAL_건 중 _START_ – _END_',
-    infoEmpty:    '0건',
-    infoFiltered: '(전체 _MAX_건 중 필터링)',
-    zeroRecords:  '등록된 버전이 없습니다.',
-    paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
+    emptyTable: '조회된 데이터가 없습니다.',
+    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+    infoEmpty:  '데이터 없음',
+    lengthMenu: '_MENU_ 건씩 보기',
+    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
   };
 
   var table = $('#versionTable').DataTable({
     processing: true,
+    autoWidth: false,
+    pageLength: 10,
     ajax: {
       url:     ctx + '/system/version/list/json',
       dataSrc: '',
       data: function () {
         return {
-          searchAppType:   $('#filterAppType').val(),
-          searchStoreType: $('#filterStoreType').val()
+          searchAppCd:   $('#filterAppType').val(),
+          searchStoreCd: $('#filterStoreType').val()
         };
       }
     },
@@ -222,8 +220,8 @@
     var no = $(this).data('no');
     $.get(ctx + '/system/version/one', { versionNo: no }, function (data) {
       $('#fVersionNo').val(data.versionNo);
-      $('#fAppType').val(data.appType);
-      $('#fStoreType').val(data.storeType);
+      $('#fAppType').val(data.appCd);
+      $('#fStoreType').val(data.storeCd);
       $('#fVersion').val(data.version);
       $('#fAppCode').val(data.appCode || '');
       $('#fReleaseDt').val(data.releaseDt || '');
@@ -262,8 +260,8 @@
 
     var data = {
       versionNo:     $('#fVersionNo').val() || null,
-      appType:        appType,
-      storeType:      storeType,
+      appCd:        appType,
+      storeCd:      storeType,
       version:        version,
       appCode:        $.trim($('#fAppCode').val()),
       releaseDt:      releaseDt,

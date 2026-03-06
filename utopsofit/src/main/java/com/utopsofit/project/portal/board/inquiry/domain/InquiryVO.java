@@ -16,7 +16,7 @@ public class InquiryVO {
     private Long          memberNo;
     private String        title;
     private String        content;
-    private String        inqStatus;
+    private String        inqStatusCd;
     private String        replyContent;
     private LocalDateTime replyDt;
     private String        replyBy;

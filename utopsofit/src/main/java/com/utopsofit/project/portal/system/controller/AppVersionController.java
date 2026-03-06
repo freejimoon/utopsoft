@@ -36,8 +36,8 @@ public class AppVersionController {
      */
     @GetMapping("/list")
     public String list(Model model) {
-        List<ComCode> appTypes   = comCodeMapper.selectCodeListByGrp("APP_TYPE");
-        List<ComCode> storeTypes = comCodeMapper.selectCodeListByGrp("STORE_TYPE");
+        List<ComCode> appTypes   = comCodeMapper.selectCodeListByGrp("APP_TYPE_CD");
+        List<ComCode> storeTypes = comCodeMapper.selectCodeListByGrp("STORE_TYPE_CD");
         model.addAttribute("appTypes",   appTypes);
         model.addAttribute("storeTypes", storeTypes);
         return "portal/system/appVersionList";
@@ -50,11 +50,11 @@ public class AppVersionController {
     @GetMapping("/list/json")
     @ResponseBody
     public ResponseEntity<List<AppVersionVO>> listJson(
-            @RequestParam(required = false) String searchAppType,
-            @RequestParam(required = false) String searchStoreType) {
+            @RequestParam(required = false) String searchAppCd,
+            @RequestParam(required = false) String searchStoreCd) {
         AppVersionVO condition = new AppVersionVO();
-        condition.setSearchAppType(searchAppType);
-        condition.setSearchStoreType(searchStoreType);
+        condition.setSearchAppCd(searchAppCd);
+        condition.setSearchStoreCd(searchStoreCd);
         return ResponseEntity.ok(appVersionService.getList(condition));
     }
 

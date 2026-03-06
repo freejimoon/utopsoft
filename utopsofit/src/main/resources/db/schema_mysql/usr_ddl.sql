@@ -1,4 +1,4 @@
--- =====================================================
+﻿-- =====================================================
 -- 사용자 DDL (MySQL 8.x)
 -- 스키마: utopsoft
 -- =====================================================
@@ -41,3 +41,16 @@ INSERT INTO `usr` (`usr_id`, `usr_nm`, `usr_pw`, `email`, `phone`, `dept_nm`, `r
 ('user03', '이영희', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'lee@utopsoft.com',    '010-1111-0004', '기획팀',   'USER',  'Y', 'admin'),
 ('user04', '박민준', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'park@utopsoft.com',   '010-1111-0005', '디자인팀', 'USER',  'Y', 'admin'),
 ('user05', '최지수', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'choi@utopsoft.com',   '010-1111-0006', '운영팀',   'USER',  'N', 'admin');
+
+-- =====================================================
+-- 공통코드 INSERT (USR_ROLE_CD)
+-- =====================================================
+INSERT INTO `com_code_grp` (`grp_cd`, `grp_nm`, `grp_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES ('USR_ROLE_CD', '사용자권한', 'usr.role_cd -- 관리자 권한 구분', 'Y', 40, 'system')
+ON DUPLICATE KEY UPDATE `grp_nm` = VALUES(`grp_nm`);
+
+INSERT INTO `com_code` (`grp_cd`, `code`, `code_nm`, `code_desc`, `use_yn`, `sort_ord`, `created_by`)
+VALUES
+('USR_ROLE_CD', 'ADMIN', '관리자',     '시스템 전체 관리 권한', 'Y', 1, 'system'),
+('USR_ROLE_CD', 'USER',  '일반사용자', '일반 관리 권한',         'Y', 2, 'system')
+ON DUPLICATE KEY UPDATE `code_nm` = VALUES(`code_nm`);

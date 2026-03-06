@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `member_group`;
 CREATE TABLE `member_group` (
     `group_no`          BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT        COMMENT '단체번호 (PK)',
     `group_nm`          VARCHAR(200)     NOT NULL                       COMMENT '단체명 (학교/기업/기관명)',
-    `group_type`        VARCHAR(20)      NOT NULL DEFAULT 'COMPANY'     COMMENT '단체유형 (SCHOOL:학교 / COMPANY:기업 / INSTITUTE:학원 / ORG:기관)',
+    `group_cd`          VARCHAR(20)      NOT NULL DEFAULT 'COMPANY'     COMMENT '단체유형 → com_code GROUP_TYPE (SCHOOL/COMPANY/INSTITUTE/ORG)',
 
     -- 대표자 / 담당자
     `represent_nm`      VARCHAR(100)     DEFAULT NULL                   COMMENT '대표자명',
@@ -37,14 +37,14 @@ CREATE TABLE `member_group` (
     `address`           VARCHAR(500)     DEFAULT NULL                   COMMENT '주소',
 
     -- 계약 / 구독
-    `contract_status`   VARCHAR(20)      NOT NULL DEFAULT 'ACTIVE'      COMMENT '계약상태 (ACTIVE:계약중 / EXPIRED:만료 / CANCELED:해지)',
+    `contract_status_cd` VARCHAR(20)     NOT NULL DEFAULT 'ACTIVE'      COMMENT '계약상태 → com_code CONTRACT_STATUS (ACTIVE/EXPIRED/CANCELED)',
     `contract_start_dt` DATE             DEFAULT NULL                   COMMENT '계약 시작일',
     `contract_end_dt`   DATE             DEFAULT NULL                   COMMENT '계약 만료일',
-    `max_member_cnt`    INT UNSIGNED     NOT NULL DEFAULT 100             COMMENT '최대 구성원 수',
-    `current_member_cnt` INT UNSIGNED    NOT NULL DEFAULT 0             COMMENT '현재 구성원 수',
+    `max_member_cnt`    INT UNSIGNED     NOT NULL DEFAULT 100            COMMENT '최대 구성원 수',
+    `current_member_cnt` INT UNSIGNED   NOT NULL DEFAULT 0              COMMENT '현재 구성원 수',
 
     -- 결제
-    `pay_method_cd`     VARCHAR(20)      DEFAULT NULL                   COMMENT '결제 수단 (CARD/BANK/TRANSFER)',
+    `pay_method_cd`     VARCHAR(20)      DEFAULT NULL                   COMMENT '결제 수단 → com_code PAY_TYPE (CARD/BANK/KAKAO_PAY 등)',
     `monthly_fee`       INT UNSIGNED     NOT NULL DEFAULT 0             COMMENT '월 구독료 (원)',
     `last_pay_dt`       DATETIME         DEFAULT NULL                   COMMENT '최종 결제 일시',
 
@@ -55,10 +55,10 @@ CREATE TABLE `member_group` (
     `updated_by`        VARCHAR(50)      DEFAULT NULL                                              COMMENT '수정자',
 
     PRIMARY KEY (`group_no`),
-    UNIQUE KEY `uq_member_group_business_no` (`business_no`),
-    KEY `idx_member_group_type`              (`group_type`),
-    KEY `idx_member_group_contract_status`   (`contract_status`),
-    KEY `idx_member_group_contract_end_dt`   (`contract_end_dt`)
+    UNIQUE KEY `uq_member_group_business_no`      (`business_no`),
+    KEY `idx_member_group_cd`                     (`group_cd`),
+    KEY `idx_member_group_contract_status_cd`     (`contract_status_cd`),
+    KEY `idx_member_group_contract_end_dt`        (`contract_end_dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='단체 (단체 유료 회원 소속)';
 
 
@@ -74,39 +74,39 @@ CREATE TABLE `member` (
     `real_nm`           VARCHAR(100)     DEFAULT NULL                   COMMENT '실명',
     `email`             VARCHAR(200)     NOT NULL                       COMMENT '이메일',
     `phone`             VARCHAR(20)      DEFAULT NULL                   COMMENT '휴대폰 번호',
-    `gender_cd`         CHAR(1)          DEFAULT NULL                   COMMENT '성별 (M:남 / F:여)',
+    `gender_cd`         CHAR(1)          DEFAULT NULL                   COMMENT '성별 → com_code GENDER (M:남 / F:여)',
     `birth_dt`          DATE             DEFAULT NULL                   COMMENT '생년월일',
     `profile_img_url`   VARCHAR(500)     DEFAULT NULL                   COMMENT '프로필 이미지 URL',
 
     -- 소셜 로그인
-    `social_type`       VARCHAR(20)      NOT NULL DEFAULT 'NONE'        COMMENT '소셜 로그인 유형 (NONE/GOOGLE/APPLE/KAKAO/NAVER)',
+    `social_cd`         VARCHAR(20)      NOT NULL DEFAULT 'NONE'        COMMENT '소셜 로그인 유형 → com_code SOCIAL_TYPE (NONE/GOOGLE/APPLE/KAKAO/NAVER)',
     `social_id`         VARCHAR(200)     DEFAULT NULL                   COMMENT '소셜 로그인 고유 ID',
 
     -- 회원 유형
-    `membership_type`   VARCHAR(20)      NOT NULL DEFAULT 'FREE'        COMMENT '회원유형 (FREE:무료 / PAID:유료개인 / GROUP:단체유료)',
+    `membership_cd`     VARCHAR(20)      NOT NULL DEFAULT 'FREE'        COMMENT '회원유형 → com_code MEMBERSHIP_TYPE (FREE/PAID/GROUP)',
 
     -- 구독 정보 (FREE는 NONE, PAID·GROUP은 ACTIVE/EXPIRED 등)
-    `sub_status`        VARCHAR(20)      NOT NULL DEFAULT 'NONE'        COMMENT '구독상태 (NONE:미구독 / ACTIVE:구독중 / EXPIRED:만료 / CANCELED:해지 / PAUSED:일시정지)',
-    `sub_plan_cd`       VARCHAR(30)      DEFAULT NULL                   COMMENT '구독 플랜 (MONTHLY:월간 / ANNUAL:연간 / TRIAL:체험 / GROUP_MONTHLY:단체월간 / GROUP_ANNUAL:단체연간)',
+    `sub_status_cd`     VARCHAR(20)      NOT NULL DEFAULT 'NONE'        COMMENT '구독상태 → com_code SUB_STATUS (NONE/ACTIVE/EXPIRED/CANCELED/PAUSED)',
+    `sub_plan_cd`       VARCHAR(30)      DEFAULT NULL                   COMMENT '구독 플랜 → com_code SUB_PLAN (MONTHLY/ANNUAL/TRIAL/GROUP_MONTHLY/GROUP_ANNUAL)',
     `sub_start_dt`      DATE             DEFAULT NULL                   COMMENT '구독 시작일',
     `sub_end_dt`        DATE             DEFAULT NULL                   COMMENT '구독 만료일',
-    `sub_auto_yn`       CHAR(1)          NOT NULL DEFAULT 'N'           COMMENT '자동 갱신 여부 (Y/N, 개인 유료만 해당)',
+    `sub_auto_yn`       CHAR(1)          NOT NULL DEFAULT 'N'           COMMENT '자동 갱신 여부 (Y/N)',
     `sub_cancel_dt`     DATETIME         DEFAULT NULL                   COMMENT '구독 해지 일시',
     `sub_cancel_reason` VARCHAR(500)     DEFAULT NULL                   COMMENT '구독 해지 사유',
 
-    -- 개인 결제 정보 (PAID 회원만 해당, GROUP은 단체에서 일괄 결제)
-    `pay_method_cd`     VARCHAR(20)      DEFAULT NULL                   COMMENT '결제 수단 (CARD:카드 / KAKAO_PAY / NAVER_PAY / APPLE_PAY / BANK:계좌이체)',
+    -- 개인 결제 정보 (PAID 회원만 해당)
+    `pay_method_cd`     VARCHAR(20)      DEFAULT NULL                   COMMENT '결제 수단 → com_code PAY_TYPE',
     `last_pay_dt`       DATETIME         DEFAULT NULL                   COMMENT '최종 결제 일시',
     `last_pay_amt`      INT UNSIGNED     DEFAULT NULL                   COMMENT '최종 결제 금액 (원)',
 
     -- 단체 소속 정보 (GROUP 회원만 해당)
-    `group_no`          BIGINT UNSIGNED  DEFAULT NULL                   COMMENT '소속 단체번호 (FK → member_group, GROUP 회원만 값 존재)',
-    `group_role`        VARCHAR(20)      DEFAULT NULL                   COMMENT '단체 내 역할 (ADMIN:단체관리자 / MEMBER:일반구성원)',
+    `group_no`          BIGINT UNSIGNED  DEFAULT NULL                   COMMENT '소속 단체번호 (FK → member_group)',
+    `group_role_cd`     VARCHAR(20)      DEFAULT NULL                   COMMENT '단체 내 역할 → com_code GROUP_ROLE (ADMIN/MEMBER)',
     `group_join_dt`     DATETIME         DEFAULT NULL                   COMMENT '단체 가입 일시',
 
     -- 계정 상태 / 등급
-    `status_cd`         VARCHAR(20)      NOT NULL DEFAULT 'ACTIVE'      COMMENT '계정상태 (ACTIVE:정상 / INACTIVE:비활성 / DORMANT:휴면 / WITHDRAWN:탈퇴)',
-    `grade_cd`          VARCHAR(20)      NOT NULL DEFAULT 'NORMAL'      COMMENT '등급 (NORMAL/SILVER/GOLD/VIP)',
+    `status_cd`         VARCHAR(20)      NOT NULL DEFAULT 'ACTIVE'      COMMENT '계정상태 → com_code MEMBER_STATUS (ACTIVE/INACTIVE/DORMANT/WITHDRAWN)',
+    `grade_cd`          VARCHAR(20)      NOT NULL DEFAULT 'NORMAL'      COMMENT '등급 → com_code MEMBER_GRADE (NORMAL/SILVER/GOLD/VIP)',
 
     -- 마케팅 동의
     `mkt_agree_yn`      CHAR(1)          NOT NULL DEFAULT 'N'           COMMENT '마케팅 수신 동의 (Y/N)',
@@ -132,9 +132,9 @@ CREATE TABLE `member` (
     PRIMARY KEY (`member_no`),
     UNIQUE KEY `uq_member_id`              (`member_id`),
     UNIQUE KEY `uq_member_email`           (`email`),
-    UNIQUE KEY `uq_member_social`          (`social_type`, `social_id`),
-    KEY `idx_member_membership_type`       (`membership_type`),
-    KEY `idx_member_sub_status`            (`sub_status`),
+    UNIQUE KEY `uq_member_social`          (`social_cd`, `social_id`),
+    KEY `idx_member_membership_cd`         (`membership_cd`),
+    KEY `idx_member_sub_status_cd`         (`sub_status_cd`),
     KEY `idx_member_sub_end_dt`            (`sub_end_dt`),
     KEY `idx_member_group_no`              (`group_no`),
     KEY `idx_member_status_cd`             (`status_cd`),
@@ -152,8 +152,8 @@ CREATE TABLE `member` (
 
 -- member_group: 단체 샘플
 INSERT INTO `member_group`
-    (`group_nm`, `group_type`, `represent_nm`, `manager_nm`, `manager_phone`, `manager_email`,
-     `business_no`, `contract_status`, `contract_start_dt`, `contract_end_dt`,
+    (`group_nm`, `group_cd`, `represent_nm`, `manager_nm`, `manager_phone`, `manager_email`,
+     `business_no`, `contract_status_cd`, `contract_start_dt`, `contract_end_dt`,
      `max_member_cnt`, `current_member_cnt`, `pay_method_cd`, `monthly_fee`, `created_by`)
 VALUES
 ('서울한국어학원',   'INSTITUTE', '김원장', '이담당', '02-1234-0001', 'seoul@hakwon.com',  '123-45-67890', 'ACTIVE',   '2025-01-01', '2025-12-31', 30, 25, 'CARD',  500000, 'admin'),
@@ -163,10 +163,10 @@ VALUES
 -- member: 회원 샘플 (유형별)
 INSERT INTO `member`
     (`member_id`, `member_pw`, `member_nm`, `real_nm`, `email`, `phone`,
-     `gender_cd`, `birth_dt`, `social_type`,
-     `membership_type`, `sub_status`, `sub_plan_cd`, `sub_start_dt`, `sub_end_dt`, `sub_auto_yn`,
+     `gender_cd`, `birth_dt`, `social_cd`,
+     `membership_cd`, `sub_status_cd`, `sub_plan_cd`, `sub_start_dt`, `sub_end_dt`, `sub_auto_yn`,
      `pay_method_cd`, `last_pay_dt`, `last_pay_amt`,
-     `group_no`, `group_role`, `group_join_dt`,
+     `group_no`, `group_role_cd`, `group_join_dt`,
      `status_cd`, `grade_cd`, `mkt_agree_yn`, `created_by`)
 VALUES
 -- 무료 회원
@@ -215,4 +215,20 @@ VALUES
  'PAID', 'EXPIRED', 'MONTHLY', '2024-12-01', '2024-12-31', 'N',
  'CARD', '2024-12-01 11:00:00', 9900,
  NULL, NULL, NULL,
- 'ACTIVE', 'NORMAL', 'N', 'system');
+ 'ACTIVE', 'NORMAL', 'N', 'system'),
+
+-- 휴면 회원
+('kang01', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+ '강두식', '강두식', 'kang01@test.com', '010-2000-0007', 'M', '1985-04-10', 'NONE',
+ 'FREE', 'NONE', NULL, NULL, NULL, 'N',
+ NULL, NULL, NULL,
+ NULL, NULL, NULL,
+ 'DORMANT', 'NORMAL', 'N', 'system'),
+
+-- 탈퇴 회원
+('yoon01', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+ '윤지훈', '윤지훈', 'yoon01@test.com', '010-2000-0008', 'M', '1992-08-25', 'NAVER',
+ 'FREE', 'NONE', NULL, NULL, NULL, 'N',
+ NULL, NULL, NULL,
+ NULL, NULL, NULL,
+ 'WITHDRAWN', 'NORMAL', 'N', 'system');

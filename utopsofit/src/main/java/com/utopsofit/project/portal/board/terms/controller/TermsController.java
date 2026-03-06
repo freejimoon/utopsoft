@@ -2,6 +2,7 @@ package com.utopsofit.project.portal.board.terms.controller;
 
 import com.utopsofit.project.portal.board.terms.domain.TermsVO;
 import com.utopsofit.project.portal.board.terms.service.TermsService;
+import com.utopsofit.project.portal.code.dao.ComCodeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +25,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TermsController {
 
-    private final TermsService termsService;
+    private final TermsService  termsService;
+    private final ComCodeMapper comCodeMapper;
 
     /* ── 목록 뷰 ─────────────────────────────────────── */
     @GetMapping("/list")
     public String list(Model model) {
+        model.addAttribute("appTypeCodes",   comCodeMapper.selectCodeListByGrp("TERMS_APP_TYPE_CD"));
+        model.addAttribute("termsTypeCodes", comCodeMapper.selectCodeListByGrp("TERMS_TYPE_CD"));
         return "portal/board/terms/termsList";
     }
 

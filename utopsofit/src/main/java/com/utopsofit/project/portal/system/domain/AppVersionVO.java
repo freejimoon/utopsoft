@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class AppVersionVO {
 
     private Long          versionNo;
-    private String        appType;
-    private String        storeType;
+    private String        appCd;
+    private String        storeCd;
     private String        version;
     private String        appCode;
     private LocalDate     releaseDt;
@@ -32,6 +32,6 @@ public class AppVersionVO {
     private String storeTypeNm;
 
     /* 검색 조건 */
-    private String searchAppType;
-    private String searchStoreType;
+    private String searchAppCd;
+    private String searchStoreCd;
 }

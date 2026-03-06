@@ -23,8 +23,8 @@ public class NoticeVO {
     @Schema(description = "내용")
     private String content;
 
-    @Schema(description = "공지 유형 코드 (GENERAL/URGENT/EVENT)", example = "GENERAL")
-    private String noticeType;
+    @Schema(description = "공지 유형 코드 (GENERAL/URGENT/EVENT) → NOTICE_TYPE_CD", example = "GENERAL")
+    private String noticeCd;
 
     @Schema(description = "공지 유형명", example = "일반")
     private String noticeTypeNm;

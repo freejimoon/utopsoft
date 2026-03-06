@@ -98,19 +98,17 @@
   var currentUsrId = '';
 
   var DT_LANG = {
-    processing:   '처리중...',
-    search:       '',
-    searchPlaceholder: '검색...',
-    lengthMenu:   '_MENU_ 건씩 보기',
-    info:         '_TOTAL_건 중 _START_ – _END_',
-    infoEmpty:    '0건',
-    infoFiltered: '(전체 _MAX_건 중 필터링)',
-    zeroRecords:  '등록된 관리자가 없습니다.',
-    paginate:     { first: '«', previous: '‹', next: '›', last: '»' }
+    emptyTable: '조회된 데이터가 없습니다.',
+    info:       '전체 _TOTAL_ 건 중 _START_ ~ _END_',
+    infoEmpty:  '데이터 없음',
+    lengthMenu: '_MENU_ 건씩 보기',
+    paginate:   { first: '«', previous: '‹', next: '›', last: '»' }
   };
 
   /* ── DataTable 초기화 ── */
   $('#usrTable').DataTable({
+    autoWidth: false,
+    pageLength: 10,
     order: [[0, 'asc']],
     columnDefs: [{ orderable: false, targets: 5 }],
     language: DT_LANG

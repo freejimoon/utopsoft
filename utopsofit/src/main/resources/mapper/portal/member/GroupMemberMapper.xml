@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.utopsofit.project.portal.member.dao.GroupMemberMapper">
+
+    <!-- mapUnderscoreToCamelCase=true 로 snake_case → camelCase 자동 변환 -->
+    <resultMap id="GroupMemberResult" type="com.utopsofit.project.portal.member.domain.GroupMemberVO">
+        <!-- alias 컬럼은 명시적 매핑 필요 -->
+        <result property="groupCdNm"          column="group_cd_nm"/>
+        <result property="contractStatusCd"   column="contract_status_cd"/>
+        <result property="contractStatusNm"   column="contract_status_nm"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="GroupMemberResult">
+        SELECT g.group_no, g.group_nm, g.group_cd,
+               cg.code_nm AS group_cd_nm,
+               g.represent_nm, g.manager_nm, g.manager_phone, g.manager_email,
+               (SELECT COUNT(*)
+                FROM   member m
+                WHERE  m.group_no  = g.group_no
+                  AND  m.status_cd != 'WITHDRAWN') AS current_member_cnt,
+               g.max_member_cnt,
+               g.contract_status_cd,
+               cs.code_nm AS contract_status_nm,
+               DATE_FORMAT(g.contract_start_dt, '%Y-%m-%d') AS contract_start_dt,
+               DATE_FORMAT(g.contract_end_dt,   '%Y-%m-%d') AS contract_end_dt,
+               g.monthly_fee
+        FROM   member_group g
+               LEFT JOIN com_code cg ON cg.grp_cd = 'GROUP_TYPE_CD'      AND cg.code = g.group_cd
+               LEFT JOIN com_code cs ON cs.grp_cd = 'CONTRACT_STATUS_CD' AND cs.code = g.contract_status_cd
+        WHERE  1 = 1
+        <if test="searchGroupCd  != null and searchGroupCd  != ''"> AND g.group_cd = #{searchGroupCd}</if>
+        <if test="searchKeyword  != null and searchKeyword  != ''">
+            AND (g.group_nm      LIKE CONCAT('%', #{searchKeyword}, '%')
+              OR g.represent_nm  LIKE CONCAT('%', #{searchKeyword}, '%')
+              OR g.manager_nm    LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        ORDER BY g.group_no DESC
+    </select>
+
+</mapper>
