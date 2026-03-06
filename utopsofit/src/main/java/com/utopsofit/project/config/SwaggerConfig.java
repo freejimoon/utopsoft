@@ -23,7 +23,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("http://172.16.12.103:8080").description("URL"))
+        		.addServersItem(new Server().url("http://172.16.12.103:8080").description("개발 서버"))
+                //.addServersItem(new Server().url("https://172.16.12.103").description("운영 서버"))
                 .info(new Info()
                         .title("Utopsoft 앱 API")
                         .version("v1.0.0")
